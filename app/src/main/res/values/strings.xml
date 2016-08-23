@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">GeoRent</string>
+    <string name="action_settings">Settings</string>
+    <string name="hint_name">Nome Completo</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Senha</string>
+    <string name="btn_sign_up">Registrar</string>
+    <string name="btn_login">Login</string>
+    <string name="err_msg_name">Digite seu nome completo</string>
+    <string name="err_msg_email">Digite um endereço de email válido</string>
+    <string name="err_msg_password">Digite sua senha</string>
 </resources>
