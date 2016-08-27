@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="videira.ifc.edu.br.georent.LoadActivity"
+    tools:context=".activity.LoadActivity"
     android:weightSum="1"
     android:orientation="vertical">
 
@@ -29,7 +29,7 @@
         android:enabled="false"
         android:textSize="34dp"
         android:layout_marginTop="30dp"
-        android:textColor="@color/colorDark"
+        android:textColor="@color/primary_text"
         android:textStyle="bold" />
 
     <ProgressBar
