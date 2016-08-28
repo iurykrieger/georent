@@ -105,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Cria lista fictícia que no futuro virá do banco de dados
+     * @param qtd
+     * @return
+     */
     public List<User> getSetUserList(int qtd){
         String[] names = new String[] {"Iury Krieger", "José Luiz", "Anderson Rostirolla",
                                         "Klaus Krieger", "Maristela Krieger", "João Silva",
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             User u = new User();
             u.setName(names[i % names.length]);
             u.setEmail(emails[i % emails.length]);
-            u.setPhoto(R.drawable.ic_person_black_24dp);
+            u.setPhoto(R.drawable.logo_no_shadow);
             tmpList.add(u);
         }
         return tmpList;

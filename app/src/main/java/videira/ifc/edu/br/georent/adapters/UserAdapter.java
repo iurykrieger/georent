@@ -76,6 +76,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     /**
      * Faz o cache de views na lista -- Obrigatório
+     * Utilizado pelo RecyclerViewAdapter para gerenciar o cache de itens
      */
     public class UserViewHolder extends RecyclerView.ViewHolder{
 

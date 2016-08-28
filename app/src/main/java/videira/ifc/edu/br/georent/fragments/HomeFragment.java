@@ -2,14 +2,13 @@ package videira.ifc.edu.br.georent.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
@@ -24,6 +23,7 @@ public class HomeFragment extends Fragment {
     //Parâmetros variáveis do fragment
     private int page;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<User> mUserList;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -105,6 +105,17 @@ public class HomeFragment extends Fragment {
         mUserList = ((MainActivity) getActivity()).getSetUserList(10);
         UserAdapter adapter = new UserAdapter(mUserList,getActivity());
         mRecyclerView.setAdapter(adapter);
+
+        /**
+         * Seta o refresh do layout
+         */
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.sr_users);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         /**
          * Retorna a view para preencher a tela
