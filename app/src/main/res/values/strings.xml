@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GeoRent</string>
+    <string name="app_name">GeoRENT</string>
     <string name="action_settings">Settings</string>
     <string name="hint_name">Nome Completo</string>
     <string name="hint_email">Email</string>
