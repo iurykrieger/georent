@@ -2,6 +2,7 @@ package videira.ifc.edu.br.georent.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListenerHack;
 import videira.ifc.edu.br.georent.models.User;
 
 /**
@@ -18,9 +20,17 @@ import videira.ifc.edu.br.georent.models.User;
  */
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
 
+    /**
+     * Atributos
+     */
     private List<User> mUserList;
     private LayoutInflater mLayoutInflater;
 
+    /**
+     * Construtor
+     * @param mUserList
+     * @param context
+     */
     public UserAdapter(List<User> mUserList, Context context) {
         this.mUserList = mUserList;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -68,10 +78,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     /**
      * Adiciona um novo item na lista
+     * @param user
+     * @param position
      */
     public void addListItem(User user, int position){
         mUserList.add(user);
         notifyItemInserted(position);
+    }
+
+    /**
+     * Remove um item da lista
+     * @param position
+     */
+    public void removeListItem(int position){
+        mUserList.remove(position);
+        notifyItemRemoved(position);
     }
 
     /**
