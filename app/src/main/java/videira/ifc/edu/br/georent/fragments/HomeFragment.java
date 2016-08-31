@@ -1,20 +1,24 @@
 package videira.ifc.edu.br.georent.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
@@ -22,9 +26,13 @@ import videira.ifc.edu.br.georent.activities.MainActivity;
 import videira.ifc.edu.br.georent.adapters.UserAdapter;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListenerHack;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
+import videira.ifc.edu.br.georent.models.NetworkObject;
 import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.network.NetworkConnection;
+import videira.ifc.edu.br.georent.network.Transaction;
+import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class HomeFragment extends Fragment implements RecyclerViewOnClickListenerHack{
+public class HomeFragment extends Fragment implements RecyclerViewOnClickListenerHack, Transaction{
     //Parâmetros constantes do fragment
     private static final String ARG_PAGE = "HOME";
 
@@ -35,6 +43,7 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     private List<User> mUserList;
     private LinearLayoutManager mLinearLayoutManager;
     private UserAdapter mUserAdapter;
+    protected ProgressBar mPbLoad;
 
     public static HomeFragment newInstance(int page) {
         HomeFragment fragment = new HomeFragment();
@@ -43,6 +52,10 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         fragment.setArguments(args);
         return fragment;
     }
+
+    /*************************************************************************
+     **                             VIEW                                    **
+     *************************************************************************/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +71,10 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         /**
          * Infla o layout do fragment e pega a view
          */
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        mUserList = new ArrayList<>();
+        mPbLoad = (ProgressBar) view.findViewById(R.id.pb_load_user);
 
         /**
          * Seta as propriedades do LayoutManager para a lista
@@ -76,7 +92,6 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         /**
          * Cria o adapter para amarrar a view aos objetos e seta ele na view
          */
-        mUserList = ((MainActivity) getActivity()).getSetUserList(10);
         mUserAdapter = new UserAdapter(mUserList,getActivity());
         //mUserAdapter.setRecyclerViewOnClickListenerHack(this);
         mRecyclerView.setAdapter(mUserAdapter);
@@ -104,10 +119,7 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
                  * Carrega mais itens se o último já foi exibido
                  */
                 if(mUserList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1){
-                    List<User> tmpList = ((MainActivity) getActivity()).getSetUserList(10);
-                    for (User u : tmpList){
-                        mUserAdapter.addListItem(u, mUserList.size());
-                    }
+                    NetworkConnection.getConnection(getActivity()).execute(HomeFragment.this, HomeFragment.class.getName());
                 }
             }
         });
@@ -119,7 +131,11 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(false);
+                if(NetworkUtil.verifyConnection(getActivity())){
+                    NetworkConnection.getConnection(getActivity()).execute(HomeFragment.this, HomeFragment.class.getName());
+                }else{
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
 
@@ -128,6 +144,24 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
          */
         return view;
     }
+
+    /**
+     * Carrega os dados após a view ser criada
+     * @param savedInstanceState
+     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        /**
+         * Executa a requisição
+         */
+        NetworkConnection.getConnection(getActivity()).execute(this, HomeFragment.class.getName());
+    }
+
+    /*************************************************************************
+     **                             CLICK                                   **
+     *************************************************************************/
 
     /**
      * Ação de click no item da lista a partir da interface
@@ -150,5 +184,58 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     public void onLongClickListener(View view, int position) {
         Toast.makeText(getActivity(),"Position: "+position, Toast.LENGTH_SHORT).show();
         mUserAdapter.removeListItem(position);
+    }
+
+    /*************************************************************************
+     **                             NETWORK                                 **
+     *************************************************************************/
+
+    /**
+     * Prepara a requisição do servidor
+     * @return
+     */
+    @Override
+    public NetworkObject doBefore() {
+        mPbLoad.setVisibility(View.VISIBLE);
+
+        //Verifica conexão com a internet
+        if(NetworkUtil.verifyConnection(getActivity())){
+            User user = new User();
+            return new NetworkObject(user);
+        }
+        return null;
+    }
+
+    /**
+     * Obtém a resposta do servidor
+     * @param jsonArray
+     */
+    @Override
+    public void doAfter(JSONArray jsonArray) {
+
+        mPbLoad.setVisibility(View.GONE);
+
+        if(jsonArray != null) {
+            Gson gson = new Gson();
+            try {
+                for(int i = 0; i < jsonArray.length(); i++){
+                    User u = gson.fromJson(jsonArray.getJSONObject(i).toString(), User.class);
+                    mUserAdapter.addListItem(u, 0);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            Toast.makeText(getActivity(), "Deu pau pizaão.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Cancela todas as requisições
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        NetworkConnection.getConnection(getActivity()).getRequestQueue().cancelAll(HomeFragment.class.getName());
     }
 }

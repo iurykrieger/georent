@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.primary, getTheme()));
 
         /**
          * Adiciona icones e remove textos
@@ -54,24 +55,24 @@ public class MainActivity extends AppCompatActivity {
          */
         for (int i = 0; i < imageResId.length; i++){
             tabLayout.getTabAt(i).setIcon(imageResId[i]);
-            tabLayout.getTabAt(i).getIcon().setTint(getResources().getColor(R.color.icons, getTheme()));
+            tabLayout.getTabAt(i).getIcon().setTint(getResources().getColor(R.color.secondary_text, getTheme()));
             tabLayout.getTabAt(i).setText(null);
-            tabLayout.setSelectedTabIndicatorHeight(6);
+            tabLayout.setSelectedTabIndicatorHeight(getResources().getInteger(R.integer.selected_tab_indicator_height));
         }
 
         /**
          * Troca a cor do icone ao selecionar a aba
          */
-        tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setTint(getResources().getColor(R.color.accent, getTheme()));
+        tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setTint(getResources().getColor(R.color.primary, getTheme()));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(getResources().getColor(R.color.accent, getTheme()));
+                tab.getIcon().setTint(getResources().getColor(R.color.primary, getTheme()));
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(getResources().getColor(R.color.icons, getTheme()));
+                tab.getIcon().setTint(getResources().getColor(R.color.secondary_text, getTheme()));
             }
 
             @Override

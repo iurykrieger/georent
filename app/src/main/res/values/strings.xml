@@ -11,6 +11,11 @@
     <string name="err_msg_password">Digite sua senha</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- CONSTANTES DE CONEXÃO -->
+    <string name="port">80</string>
+    <string name="ip">https://httpbin.org</string>
+    <string name="prefix">post</string>
+    
+    <!-- SERVIÇOS DO SERVIDOR -->
+    <string name="user_service">ServiceUsuario.svc</string>
 </resources>
