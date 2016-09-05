@@ -2,7 +2,6 @@ package videira.ifc.edu.br.georent.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
-import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListenerHack;
 import videira.ifc.edu.br.georent.models.User;
 
 /**
@@ -62,7 +60,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         /**
          * Preenche os valores do objeto no holder baseado na posição da lista
          */
-        holder.ivUser.setImageResource(mUserList.get(position).getPhoto());
+        holder.ivUser.setImageResource(R.drawable.logo_no_shadow);
         holder.tvName.setText(mUserList.get(position).getName());
         holder.tvEmail.setText(mUserList.get(position).getEmail());
     }

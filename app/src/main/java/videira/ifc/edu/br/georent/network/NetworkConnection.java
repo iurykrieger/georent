@@ -3,6 +3,7 @@ package videira.ifc.edu.br.georent.network;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -11,7 +12,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -33,6 +33,7 @@ public class NetworkConnection {
 
     /**
      * Construtor
+     *
      * @param mContext
      */
     public NetworkConnection(Context mContext) {
@@ -42,11 +43,12 @@ public class NetworkConnection {
 
     /**
      * Obtém a conexão baseado no contexto da aplicação
+     *
      * @param context
      * @return
      */
-    public static NetworkConnection getConnection(Context context){
-        if(connection == null){
+    public static NetworkConnection getConnection(Context context) {
+        if (connection == null) {
             connection = new NetworkConnection(context.getApplicationContext());
         }
         return connection;
@@ -54,10 +56,11 @@ public class NetworkConnection {
 
     /**
      * Obtém a fila de requisições baseado no contexto da aplicação
+     *
      * @return
      */
-    public RequestQueue getRequestQueue(){
-        if(mRequestQueue == null){
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(mContext);
         }
         return mRequestQueue;
@@ -65,31 +68,33 @@ public class NetworkConnection {
 
     /**
      * Adiciona uma requisição na fila
+     *
      * @param request
      * @param <T>
      */
-    public <T> void addRequest( Request<T> request){
+    public <T> void addRequest(Request<T> request) {
         getRequestQueue().add(request);
     }
 
     /**
      * Executa a transação da tag
+     *
      * @param transaction
      * @param tag
      */
-    public void execute(final Transaction transaction, String tag){
+    public void execute(final Transaction transaction, String tag) {
         NetworkObject object = transaction.doBefore();
         Gson gson = new Gson();
 
-        if(object == null){
+        if (object == null) {
             return;
         }
 
         HashMap<String, String> params = new HashMap<>();
         params.put("jsonObject", gson.toJson(object));
 
-        CustomRequest request = new CustomRequest(CustomRequest.Method.POST,
-                NetworkUtil.getStringUrl(mContext, R.string.user_service),
+        CustomRequest request = new CustomRequest(CustomRequest.Method.GET,
+                "https://jsonplaceholder.typicode.com/users",
                 params,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -101,11 +106,19 @@ public class NetworkConnection {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("JSON", error.getMessage());
+                        Log.i("JSON", error.toString());
                         transaction.doAfter(null);
                     }
                 });
         request.setTag(tag);
+
+        /**
+         * Retry Policy
+         */
+        request.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         addRequest(request);
     }
 }

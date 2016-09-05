@@ -13,7 +13,7 @@ import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
-import videira.ifc.edu.br.georent.fragments.HomeFragment;
+import videira.ifc.edu.br.georent.fragments.TestFragment;
 import videira.ifc.edu.br.georent.models.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void setupViewPager(ViewPager viewPager){
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment(), "RENT");
-        adapter.addFragment(new HomeFragment(), "CHAT");
-        adapter.addFragment(new HomeFragment(), "PROFILE");
+        adapter.addFragment(new TestFragment(), "RENT");
+        adapter.addFragment(new TestFragment(), "CHAT");
+        adapter.addFragment(new TestFragment(), "PROFILE");
         viewPager.setAdapter(adapter);
     }
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             User u = new User();
             u.setName(names[i % names.length]);
             u.setEmail(emails[i % emails.length]);
-            u.setPhoto(R.drawable.logo_no_shadow);
+            //u.setPhoto(R.drawable.logo_no_shadow);
             tmpList.add(u);
         }
         return tmpList;

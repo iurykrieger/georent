@@ -13,8 +13,8 @@
 
     <!-- CONSTANTES DE CONEXÃO -->
     <string name="port">80</string>
-    <string name="ip">https://httpbin.org</string>
-    <string name="prefix">post</string>
+    <string name="ip">http://192.168.1.100</string>
+    <string name="prefix">Service</string>
     
     <!-- SERVIÇOS DO SERVIDOR -->
     <string name="user_service">ServiceUsuario.svc</string>

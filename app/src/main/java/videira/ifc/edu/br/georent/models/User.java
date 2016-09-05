@@ -10,42 +10,21 @@ public class User {
     /**
      * Atributos
      */
-    private Integer idUser;
+    private Integer id;
     private String name;
-    private Date birthDate;
+    private String username;
     private String email;
+    private Address address;
     private String phone;
-    private String password;
-    private Integer credits;
-    private Integer photo;
+    private String website;
+    private Company company;
 
-    /**
-     * Construtores
-     */
-    public User() {
+    public Integer getId() {
+        return id;
     }
 
-    public User(Integer idUser, String name, Date birthDate, String email, String phone,
-                String password, Integer credits, Integer photo) {
-        this.idUser = idUser;
-        this.name = name;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-        this.credits = credits;
-        this.photo = photo;
-    }
-
-    /**
-     * Getters e Setters
-     */
-    public Integer getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -56,12 +35,12 @@ public class User {
         this.name = name;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public String getUsername() {
+        return username;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -72,6 +51,14 @@ public class User {
         this.email = email;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -80,27 +67,19 @@ public class User {
         this.phone = phone;
     }
 
-    public String getPassword() {
-        return password;
+    public String getWebsite() {
+        return website;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
-    public Integer getCredits() {
-        return credits;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCredits(Integer credits) {
-        this.credits = credits;
-    }
-
-    public Integer getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(Integer photo) {
-        this.photo = photo;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }
