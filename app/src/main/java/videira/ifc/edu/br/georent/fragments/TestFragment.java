@@ -13,11 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +20,11 @@ import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.UserAdapter;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListenerHack;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
-import videira.ifc.edu.br.georent.models.NetworkObject;
 import videira.ifc.edu.br.georent.models.User;
-import videira.ifc.edu.br.georent.network.NetworkConnection;
-import videira.ifc.edu.br.georent.network.Transaction;
+import videira.ifc.edu.br.georent.services.UserService;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class TestFragment extends Fragment implements RecyclerViewOnClickListenerHack, Transaction{
+public class TestFragment extends Fragment implements RecyclerViewOnClickListenerHack{
     //Parâmetros constantes do fragment
     private static final String ARG_PAGE = "HOME";
 
@@ -42,6 +35,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
     private List<User> mUserList;
     private LinearLayoutManager mLinearLayoutManager;
     private UserAdapter mUserAdapter;
+    private UserService mUserService;
     protected ProgressBar mPbLoad;
 
     public static TestFragment newInstance(int page) {
@@ -92,7 +86,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
          * Cria o adapter para amarrar a view aos objetos e seta ele na view
          */
         mUserAdapter = new UserAdapter(mUserList,getActivity());
-        //mUserAdapter.setRecyclerViewOnClickListenerHack(this);
+        mUserService = new UserService(getActivity(), view, mUserAdapter);
         mRecyclerView.setAdapter(mUserAdapter);
         //Adiciona os eventos na lista
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
@@ -118,7 +112,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
                  * Carrega mais itens se o último já foi exibido
                  */
                 if(mUserList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1){
-                    NetworkConnection.getConnection(getActivity()).execute(TestFragment.this, TestFragment.class.getName());
+                    mUserService.getUsers();
                 }
             }
         });
@@ -131,7 +125,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
             @Override
             public void onRefresh() {
                 if(NetworkUtil.verifyConnection(getActivity())) {
-                    NetworkConnection.getConnection(getActivity()).execute(TestFragment.this, TestFragment.class.getName());
+                    mUserService.getUsers();
                 }
             }
         });
@@ -149,11 +143,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        /**
-         * Executa a requisição
-         */
-        NetworkConnection.getConnection(getActivity()).execute(this, TestFragment.class.getName());
+        mUserService.getUsers();
     }
 
     /*************************************************************************
@@ -183,65 +173,12 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
         mUserAdapter.removeListItem(position);
     }
 
-    /*************************************************************************
-     **                             NETWORK                                 **
-     *************************************************************************/
-
-    /**
-     * Prepara a requisição do servidor
-     * @return
-     */
-    @Override
-    public NetworkObject doBefore() {
-        mPbLoad.setVisibility(View.VISIBLE);
-
-        //Verifica conexão com a internet
-        if(NetworkUtil.verifyConnection(getActivity())){
-            User user = new User();
-            return new NetworkObject(user);
-        }
-        return null;
-    }
-
-    /**
-     * Obtém a resposta do servidor
-     * @param jsonArray
-     */
-    @Override
-    public void doAfter(JSONArray jsonArray) {
-
-        boolean isNewer = mSwipeRefreshLayout.isRefreshing();
-        mPbLoad.setVisibility(View.GONE);
-
-        if(jsonArray != null) {
-            Gson gson = new Gson();
-            try {
-                for(int i = 0; i < jsonArray.length(); i++){
-                    User u = gson.fromJson(jsonArray.getJSONObject(i).toString(), User.class);
-                    if(isNewer){
-                        mUserAdapter.addListItem(u, 0);
-                    }else{
-                        mUserAdapter.addListItem(u, mUserList.size());
-                    }
-                }
-                if(isNewer) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    mLinearLayoutManager.smoothScrollToPosition(mRecyclerView, null, 0);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }else{
-            Toast.makeText(getActivity(), "Deu pau pizaão.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     /**
      * Cancela todas as requisições
      */
     @Override
     public void onStop() {
         super.onStop();
-        NetworkConnection.getConnection(getActivity()).getRequestQueue().cancelAll(TestFragment.class.getName());
+        mUserService.cancelRequests();
     }
 }
