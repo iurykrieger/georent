@@ -45,7 +45,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         /**
          * Infla o layout do item e preenche o layout com o holder
          */
-        View view = mLayoutInflater.inflate(R.layout.item_user, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_user_card, parent, false);
         UserViewHolder uvh = new UserViewHolder(view);
         return uvh;
     }
@@ -60,7 +60,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         /**
          * Preenche os valores do objeto no holder baseado na posição da lista
          */
-        holder.ivUser.setImageResource(R.drawable.logo_no_shadow);
+        holder.ivUser.setImageResource(R.drawable.user);
         holder.tvName.setText(mUserList.get(position).getName());
         holder.tvEmail.setText(mUserList.get(position).getEmail());
     }
@@ -106,9 +106,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         public UserViewHolder(View itemView) {
             super(itemView);
 
-            ivUser = (ImageView) itemView.findViewById(R.id.iv_user);
-            tvName = (TextView) itemView.findViewById(R.id.tv_name);
-            tvEmail = (TextView) itemView.findViewById(R.id.tv_email);
+            ivUser = (ImageView) itemView.findViewById(R.id.iv_user_card);
+            tvName = (TextView) itemView.findViewById(R.id.tv_name_card);
+            tvEmail = (TextView) itemView.findViewById(R.id.tv_email_card);
         }
     }
 }

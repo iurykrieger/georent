@@ -49,7 +49,6 @@ public class CustomRequest extends Request<JSONArray> {
 
     @Override
     protected void deliverResponse(JSONArray response) {
-        // TODO Auto-generated method stub
         listener.onResponse(response);
     }
 }
