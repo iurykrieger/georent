@@ -103,7 +103,8 @@
             android:textColor="@color/accent"
             android:textStyle="bold"
             android:nestedScrollingEnabled="false"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+          />
 
     </LinearLayout>
 </LinearLayout>
