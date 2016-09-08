@@ -62,7 +62,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
          */
         holder.ivUser.setImageResource(R.drawable.user);
         holder.tvName.setText(mUserList.get(position).getName());
-        holder.tvEmail.setText(mUserList.get(position).getEmail());
+        holder.tvEmail.setText(mUserList.get(position).getUf());
     }
 
     /**

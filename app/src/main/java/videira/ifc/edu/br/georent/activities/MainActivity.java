@@ -106,29 +106,4 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Cria lista fictícia que no futuro virá do banco de dados
-     * @param qtd
-     * @return
-     */
-    public List<User> getSetUserList(int qtd){
-        String[] names = new String[] {"Iury Krieger", "José Luiz", "Anderson Rostirolla",
-                                        "Klaus Krieger", "Maristela Krieger", "João Silva",
-                                        "Phelipp Silva", "Matheus Mezalira", "Matheus Zanini",
-                                        "Angelita FDP"};
-        String[] emails = new String[] {"iurykrieger96@gmail.com", "joseluiz.27@gmail.com", "andersongay@gmail.com",
-                                        "klaus.krieger@hotmail.com","maristela.krieger@hotmail.com", "joao.silva@suamae.com.br",
-                                        "ph.matador@hotmail.com","teteus.purpurina@star.flower.br","zanini.moto@motocas.com",
-                                        "angelita.deanjontemnada@vtnc.com"};
-        List<User> tmpList = new ArrayList<>();
-        for(int i = 0; i < qtd; i++){
-            User u = new User();
-            u.setName(names[i % names.length]);
-            u.setEmail(emails[i % emails.length]);
-            //u.setPhoto(R.drawable.logo_no_shadow);
-            tmpList.add(u);
-        }
-        return tmpList;
-    }
-
 }

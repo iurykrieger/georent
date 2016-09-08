@@ -7,24 +7,16 @@ import java.util.Date;
  */
 public class User {
 
-    /**
-     * Atributos
-     */
-    private Integer id;
+    private Integer idCity;
     private String name;
-    private String username;
-    private String email;
-    private Address address;
-    private String phone;
-    private String website;
-    private Company company;
+    private String uf;
 
-    public Integer getId() {
-        return id;
+    public Integer getIdCity() {
+        return idCity;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdCity(Integer idCity) {
+        this.idCity = idCity;
     }
 
     public String getName() {
@@ -35,51 +27,11 @@ public class User {
         this.name = name;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUf() {
+        return uf;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setUf(String uf) {
+        this.uf = uf;
     }
 }

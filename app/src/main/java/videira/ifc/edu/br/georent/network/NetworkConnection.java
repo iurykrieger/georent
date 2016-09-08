@@ -94,7 +94,7 @@ public class NetworkConnection {
         params.put("jsonObject", gson.toJson(object));
 
         CustomRequest request = new CustomRequest(CustomRequest.Method.GET,
-                "https://jsonplaceholder.typicode.com/users",
+                "http://192.168.1.102:8000/city",
                 params,
                 new Response.Listener<JSONArray>() {
                     @Override
