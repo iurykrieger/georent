@@ -58,10 +58,10 @@ public class UserService implements Transaction{
      */
     @Override
     public NetworkObject doBefore() {
-
         //Verifica conexão com a internet
         if(NetworkUtil.verifyConnection(mContext)){
             User user = new User();
+            mPbLoad.setVisibility(View.VISIBLE);
             return new NetworkObject(user);
         }
         return null;
@@ -75,7 +75,7 @@ public class UserService implements Transaction{
     public void doAfter(JSONArray jsonArray) {
 
         boolean isNewer = mSwipeRefreshLayout.isRefreshing();
-
+        mPbLoad.setVisibility(View.GONE);
         if(jsonArray != null) {
             Gson gson = new Gson();
             try {
@@ -96,6 +96,7 @@ public class UserService implements Transaction{
         }else{
             Toast.makeText(mContext, "Deu pau piazão.", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     /****************************************************************************************

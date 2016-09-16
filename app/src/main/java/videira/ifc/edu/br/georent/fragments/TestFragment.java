@@ -137,13 +137,13 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
     }
 
     /**
-     * Carrega os dados após a view ser criada
-     * @param savedInstanceState
+     * Carrega os dados ao criar o fragment
      */
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
         mUserService.getUsers();
+        Log.i("LOG","Pegou os usuários!!");
     }
 
     /*************************************************************************

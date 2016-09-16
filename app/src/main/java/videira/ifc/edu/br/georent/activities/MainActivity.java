@@ -2,6 +2,7 @@ package videira.ifc.edu.br.georent.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.primary, getTheme()));
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.primary));
 
         /**
          * Adiciona icones e remove textos
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
          */
         for (int i = 0; i < imageResId.length; i++){
             tabLayout.getTabAt(i).setIcon(imageResId[i]);
-            tabLayout.getTabAt(i).getIcon().setTint(getResources().getColor(R.color.secondary_text, getTheme()));
+            tabLayout.getTabAt(i).getIcon().setTint(ContextCompat.getColor(this, R.color.secondary_text));
             tabLayout.getTabAt(i).setText(null);
             tabLayout.setSelectedTabIndicatorHeight(getResources().getInteger(R.integer.selected_tab_indicator_height));
         }
@@ -63,16 +64,16 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Troca a cor do icone ao selecionar a aba
          */
-        tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setTint(getResources().getColor(R.color.primary, getTheme()));
+        tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(getResources().getColor(R.color.primary, getTheme()));
+                tab.getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(getResources().getColor(R.color.secondary_text, getTheme()));
+                tab.getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.secondary_text));
             }
 
             @Override

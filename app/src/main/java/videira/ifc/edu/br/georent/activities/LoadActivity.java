@@ -3,6 +3,7 @@ package videira.ifc.edu.br.georent.activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,7 +23,7 @@ public class LoadActivity extends AppCompatActivity {
 
         /* Set progress bar color */
         ProgressBar pbLoad = (ProgressBar) findViewById(R.id.pbLoad);
-        pbLoad.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.accent),android.graphics.PorterDuff.Mode.SRC_IN);
+        pbLoad.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent),android.graphics.PorterDuff.Mode.SRC_IN);
 
         /* Set TextView logo font */
         TextView tvLogo = (TextView) findViewById(R.id.tvLogo);
