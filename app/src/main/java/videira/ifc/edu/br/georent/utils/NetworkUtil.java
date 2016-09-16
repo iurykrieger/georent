@@ -35,7 +35,6 @@ public class NetworkUtil {
     public static String getStringUrl(Context context, int idServicePath){
         String url = context.getResources().getString(R.string.ip) + ":" +
                 context.getResources().getString(R.string.port) + "/" +
-                context.getResources().getString(R.string.prefix) + "/" +
                 context.getResources().getString(idServicePath);
         return url;
     }

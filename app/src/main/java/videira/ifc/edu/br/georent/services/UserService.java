@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -16,6 +17,7 @@ import videira.ifc.edu.br.georent.adapters.UserAdapter;
 import videira.ifc.edu.br.georent.fragments.TestFragment;
 import videira.ifc.edu.br.georent.models.NetworkObject;
 import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.network.CustomRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.network.Transaction;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
@@ -28,6 +30,7 @@ public class UserService implements Transaction{
     /**
      * Atributos
      */
+    private String service;
     private Context mContext;
     private View mView;
     private UserAdapter mUserAdapter;
@@ -43,6 +46,7 @@ public class UserService implements Transaction{
         this.mContext = mContext;
         this.mView = view;
         this.mUserAdapter = adapter;
+        this.service = NetworkUtil.getStringUrl(mContext, R.string.city_service);
 
         mPbLoad = (ProgressBar) view.findViewById(R.id.pb_load_user);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.sr_users);
@@ -98,7 +102,7 @@ public class UserService implements Transaction{
      **                             MÉTODOS PERSONALIZADOS                                 **
      ****************************************************************************************/
     public void getUsers(){
-        NetworkConnection.getConnection(mContext).execute(this, mContext.getClass().getName());
+        NetworkConnection.getConnection(mContext).execute(this, mContext.getClass().getName(), CustomRequest.Method.GET, service);
     }
 
     public void cancelRequests(){

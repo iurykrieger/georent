@@ -82,7 +82,7 @@ public class NetworkConnection {
      * @param transaction
      * @param tag
      */
-    public void execute(final Transaction transaction, String tag) {
+    public void execute(final Transaction transaction, String tag, int method, String url) {
         NetworkObject object = transaction.doBefore();
         Gson gson = new Gson();
 
@@ -93,8 +93,8 @@ public class NetworkConnection {
         HashMap<String, String> params = new HashMap<>();
         params.put("jsonObject", gson.toJson(object));
 
-        CustomRequest request = new CustomRequest(CustomRequest.Method.GET,
-                "http://192.168.1.102:8000/city",
+        CustomRequest request = new CustomRequest(method,
+                url,
                 params,
                 new Response.Listener<JSONArray>() {
                     @Override

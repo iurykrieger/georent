@@ -12,10 +12,10 @@
     <string name="title_activity_main">MainActivity</string>
 
     <!-- CONSTANTES DE CONEXÃO -->
-    <string name="port">80</string>
-    <string name="ip">http://192.168.1.100</string>
-    <string name="prefix">Service</string>
+    <string name="port">8000</string>
+    <string name="ip">http://192.168.1.103</string>
     
     <!-- SERVIÇOS DO SERVIDOR -->
-    <string name="user_service">ServiceUsuario.svc</string>
+    <string name="user_service">user</string>
+    <string name="city_service">city</string>
 </resources>

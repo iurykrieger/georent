@@ -35,5 +35,6 @@ dependencies {
     //Json
     compile 'com.google.code.gson:gson:2.3.1'
 
-
+    //Imagens
+    compile 'com.facebook.fresco:fresco:0.13.0'
 }
