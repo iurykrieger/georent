@@ -37,4 +37,5 @@ dependencies {
 
     //Imagens
     compile 'com.facebook.fresco:fresco:0.13.0'
+
 }
