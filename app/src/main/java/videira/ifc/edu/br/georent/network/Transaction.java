@@ -2,6 +2,8 @@ package videira.ifc.edu.br.georent.network;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
+
 import videira.ifc.edu.br.georent.models.NetworkObject;
 
 /**
@@ -9,7 +11,7 @@ import videira.ifc.edu.br.georent.models.NetworkObject;
  */
 public interface Transaction {
 
-    NetworkObject doBefore();
+    HashMap<String,String> doBefore();
 
     void doAfter(JSONArray jsonArray);
 }

@@ -6,7 +6,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListenerHack;
+import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 
 /**
  * Created by iuryk on 29/08/2016.
@@ -18,7 +18,7 @@ public class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListen
 
     private Context mContext;
     private GestureDetector mGestureDetector;
-    private RecyclerViewOnClickListenerHack mRecyclerViewOnClickListenerHack;
+    private RecyclerViewOnClickListener mRecyclerViewOnClickListener;
 
     /**
      * Sobrescreve os metodos do GestureDetector para executar os métodos da interface
@@ -26,9 +26,9 @@ public class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListen
      * @param recyclerView
      * @param recyclerViewOnClickListenerHack
      */
-    public RecyclerViewTouchListener(Context context, final RecyclerView recyclerView, RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack){
+    public RecyclerViewTouchListener(Context context, final RecyclerView recyclerView, RecyclerViewOnClickListener recyclerViewOnClickListenerHack){
         this.mContext = context;
-        this.mRecyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
+        this.mRecyclerViewOnClickListener = recyclerViewOnClickListenerHack;
         this.mGestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener(){
             /**
              * Clique simples no item
@@ -38,8 +38,8 @@ public class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListen
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 View v = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                if(v != null && mRecyclerViewOnClickListenerHack != null){
-                    mRecyclerViewOnClickListenerHack.onClickListener(v, recyclerView.getChildAdapterPosition(v));
+                if(v != null && mRecyclerViewOnClickListener != null){
+                    mRecyclerViewOnClickListener.onClickListener(v, recyclerView.getChildAdapterPosition(v));
                 }
                 return true;
             }
@@ -52,8 +52,8 @@ public class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListen
             public void onLongPress(MotionEvent e) {
                 super.onLongPress(e);
                 View v = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                if(v != null && mRecyclerViewOnClickListenerHack != null){
-                    mRecyclerViewOnClickListenerHack.onLongClickListener(v, recyclerView.getChildAdapterPosition(v));
+                if(v != null && mRecyclerViewOnClickListener != null){
+                    mRecyclerViewOnClickListener.onLongClickListener(v, recyclerView.getChildAdapterPosition(v));
                 }
             }
         });

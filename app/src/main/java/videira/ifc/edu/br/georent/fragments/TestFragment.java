@@ -1,7 +1,6 @@
 package videira.ifc.edu.br.georent.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,13 +17,13 @@ import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.UserAdapter;
-import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListenerHack;
+import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.services.UserService;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class TestFragment extends Fragment implements RecyclerViewOnClickListenerHack{
+public class TestFragment extends Fragment implements RecyclerViewOnClickListener {
     //Parâmetros constantes do fragment
     private static final String ARG_PAGE = "HOME";
 
@@ -136,14 +135,13 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
         return view;
     }
 
-    /**
-     * Carrega os dados ao criar o fragment
-     */
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        /**
+         * Carrega os usuários
+         */
         mUserService.getUsers();
-        Log.i("LOG","Pegou os usuários!!");
+        super.onResume();
     }
 
     /*************************************************************************

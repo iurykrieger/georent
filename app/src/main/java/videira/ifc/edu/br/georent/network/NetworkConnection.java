@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 
@@ -83,15 +84,12 @@ public class NetworkConnection {
      * @param tag
      */
     public void execute(final Transaction transaction, String tag, int method, String url) {
-        NetworkObject object = transaction.doBefore();
-        Gson gson = new Gson();
+        HashMap<String,String> params = transaction.doBefore();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
-        if (object == null) {
+        if (params == null) {
             return;
         }
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("jsonObject", gson.toJson(object));
 
         CustomRequest request = new CustomRequest(method,
                 url,
