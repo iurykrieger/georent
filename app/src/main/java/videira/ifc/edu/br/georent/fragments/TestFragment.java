@@ -1,6 +1,8 @@
 package videira.ifc.edu.br.georent.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.activities.ShowResidenceActivity;
 import videira.ifc.edu.br.georent.adapters.UserAdapter;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
@@ -31,6 +34,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
     private int page;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FloatingActionButton mFloatingActionButton;
     private List<User> mUserList;
     private LinearLayoutManager mLinearLayoutManager;
     private UserAdapter mUserAdapter;
@@ -67,6 +71,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
 
         mUserList = new ArrayList<>();
         mPbLoad = (ProgressBar) view.findViewById(R.id.pb_load_user);
+        mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fb_new_residence);
 
         /**
          * Seta as propriedades do LayoutManager para a lista
@@ -126,6 +131,17 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
                 if(NetworkUtil.verifyConnection(getActivity())) {
                     mUserService.getUsers();
                 }
+            }
+        });
+
+        /**
+         * Seta o click do botão
+         */
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), ShowResidenceActivity.class);
+                startActivity(i);
             }
         });
 
