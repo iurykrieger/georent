@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,13 +46,13 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
     public static TestFragment newInstance(int page) {
         TestFragment fragment = new TestFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE,page);
+        args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
         return fragment;
     }
 
     /*************************************************************************
-     **                             VIEW                                    **
+     * *                             VIEW                                    **
      *************************************************************************/
 
     @Override
@@ -89,8 +91,8 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
         /**
          * Cria o adapter para amarrar a view aos objetos e seta ele na view
          */
-        mUserAdapter = new UserAdapter(mUserList,getActivity());
-        mUserService = new UserService(getActivity(), view, mUserAdapter);
+        mUserAdapter = new UserAdapter(mUserList, getActivity());
+        mUserService = new UserService(this);
         mRecyclerView.setAdapter(mUserAdapter);
         //Adiciona os eventos na lista
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
@@ -115,7 +117,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
                 /**
                  * Carrega mais itens se o último já foi exibido
                  */
-                if(mUserList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1){
+                if (mUserList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
                     mUserService.getUsers();
                 }
             }
@@ -128,7 +130,7 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(NetworkUtil.verifyConnection(getActivity())) {
+                if (NetworkUtil.verifyConnection(getActivity())) {
                     mUserService.getUsers();
                 }
             }
@@ -166,25 +168,55 @@ public class TestFragment extends Fragment implements RecyclerViewOnClickListene
 
     /**
      * Ação de click no item da lista a partir da interface
+     *
      * @param view
      * @param position
      */
     @Override
     public void onClickListener(View view, int position) {
         //Joga uma mensagem curta com a posição na tela.
-        Log.i("LOG","Clicou!");
-        Toast.makeText(getActivity(),"Clique curto! Posição: "+position, Toast.LENGTH_SHORT).show();
+        Log.i("LOG", "Clicou!");
+        Toast.makeText(getActivity(), "Clique curto! Posição: " + position, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Ação de click longo no item da lista a partir da interface
+     *
      * @param view
      * @param position
      */
     @Override
     public void onLongClickListener(View view, int position) {
-        Toast.makeText(getActivity(),"Position: "+position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_SHORT).show();
         mUserAdapter.removeListItem(position);
+    }
+
+    /*************************************************************************
+     * *                            SERVIÇO                                  **
+     *************************************************************************/
+
+    public void onBindUsers(List<User> users) {
+        boolean isNewer = mSwipeRefreshLayout.isRefreshing();
+        mPbLoad.setVisibility(View.GONE);
+
+        for(User u : users){
+            if (isNewer) {
+                mUserAdapter.addListItem(u, 0);
+            } else {
+                mUserAdapter.addListItem(u, mUserAdapter.getItemCount());
+            }
+        }
+        if (isNewer) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    public void startLoading(){
+        mPbLoad.setVisibility(View.VISIBLE);
+    }
+
+    public void nofityError(String error) {
+        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 
     /**

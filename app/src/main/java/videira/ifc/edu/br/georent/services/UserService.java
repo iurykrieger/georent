@@ -1,23 +1,19 @@
 package videira.ifc.edu.br.georent.services;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
-import videira.ifc.edu.br.georent.adapters.UserAdapter;
 import videira.ifc.edu.br.georent.fragments.TestFragment;
 import videira.ifc.edu.br.georent.models.NetworkObject;
 import videira.ifc.edu.br.georent.models.User;
@@ -29,37 +25,31 @@ import videira.ifc.edu.br.georent.utils.NetworkUtil;
 /**
  * Created by iuryk on 05/09/2016.
  */
-public class UserService implements Transaction{
+public class UserService implements Transaction {
+
+    private static final String URL = "http://a57.foxnews.com/global.fncstatic.com/static/managed/img/fb/Sbc/entrepreneurs/0/0/Facebook-CEO-Mark-Zuckerberg.jpg";
 
     /**
      * Atributos
      */
     private String service;
     private Context mContext;
-    private View mView;
-    private UserAdapter mUserAdapter;
+    private TestFragment mFragment;
     private int range;
     private HashMap<String, String> params;
     private Gson gson;
-    protected ProgressBar mPbLoad;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * Construtor
-     * @param mContext
-     * @param view
+     * @param mFragment
      */
-    public UserService(Context mContext, View view, UserAdapter adapter) {
-        this.mContext = mContext;
-        this.mView = view;
-        this.mUserAdapter = adapter;
+    public UserService(TestFragment mFragment) {
+        this.mFragment = mFragment;
+        this.mContext = mFragment.getActivity();
         this.range = 0;
         this.params = new HashMap<>();
-        this.service = NetworkUtil.getStringUrl(mContext, R.string.user_service);
+        this.service = NetworkUtil.getStringUrl(mFragment.getContext(), R.string.user_service);
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
-        mPbLoad = (ProgressBar) view.findViewById(R.id.pb_load_user);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.sr_users);
     }
 
     public void setParams(Object object){
@@ -79,7 +69,7 @@ public class UserService implements Transaction{
             User user = new User();
             NetworkObject no = new NetworkObject(user);
             setParams(no);
-            mPbLoad.setVisibility(View.VISIBLE);
+            mFragment.startLoading();
             return params;
         }
         return null;
@@ -92,27 +82,22 @@ public class UserService implements Transaction{
     @Override
     public void doAfter(JSONArray jsonArray) {
 
-        boolean isNewer = mSwipeRefreshLayout.isRefreshing();
-        mPbLoad.setVisibility(View.GONE);
+        List<User> users = new ArrayList();
         if(jsonArray != null) {
             try {
                 for(int i = 0; i < jsonArray.length(); i++){
                     User u = gson.fromJson(jsonArray.getJSONObject(i).toString(), User.class);
-                    if(isNewer){
-                        mUserAdapter.addListItem(u, 0);
-                    }else{
-                        mUserAdapter.addListItem(u, mUserAdapter.getItemCount());
-                    }
+                    u.setPhoto(URL);
+                    users.add(u);
                 }
                 this.range += jsonArray.length();
-                if(isNewer) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
+                mFragment.onBindUsers(users);
             } catch (JSONException e) {
                 e.printStackTrace();
+                mFragment.nofityError("Erro ao dar parse no JSON!");
             }
         }else{
-            Toast.makeText(mContext, "Deu pau piazão.", Toast.LENGTH_SHORT).show();
+            mFragment.nofityError("Deu Pau Jovem!");
         }
 
     }
@@ -124,7 +109,7 @@ public class UserService implements Transaction{
         service = String.format(NetworkUtil.getStringUrl(mContext, R.string.user_service)
                 + "?idUser_gte=" + String.valueOf(range) + "&idUser_lte=" + String.valueOf(range+10));
         Log.i("URL", service);
-        NetworkConnection.getConnection(mContext).execute(this, mContext.getClass().getName(), CustomRequest.Method.GET, service);
+        NetworkConnection.getConnection(mContext).executeJSONRequest(this, mContext.getClass().getName(), CustomRequest.Method.GET, service);
     }
 
     public void cancelRequests(){

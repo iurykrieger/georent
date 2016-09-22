@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.network.NetworkConnection;
 
 /**
  * Created by iuryk on 28/08/2016.
@@ -23,15 +27,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
      */
     private List<User> mUserList;
     private LayoutInflater mLayoutInflater;
+    private Context mContext;
 
     /**
      * Construtor
      * @param mUserList
-     * @param context
+     * @param mContext
      */
-    public UserAdapter(List<User> mUserList, Context context) {
+    public UserAdapter(List<User> mUserList, Context mContext) {
         this.mUserList = mUserList;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mContext = mContext;
+        mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     /**
@@ -60,7 +66,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         /**
          * Preenche os valores do objeto no holder baseado na posição da lista
          */
-        holder.ivUser.setImageResource(R.drawable.user);
+        holder.ivUser.setImageUrl(mUserList.get(position).getPhoto(), NetworkConnection.getConnection(mContext).getImageLoader());
         holder.tvName.setText(mUserList.get(position).getName());
         holder.tvEmail.setText(mUserList.get(position).getEmail());
     }
@@ -99,14 +105,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
      */
     public class UserViewHolder extends RecyclerView.ViewHolder{
 
-        public ImageView ivUser;
+        public NetworkImageView ivUser;
         public TextView tvName;
         public TextView tvEmail;
 
         public UserViewHolder(View itemView) {
             super(itemView);
 
-            ivUser = (ImageView) itemView.findViewById(R.id.iv_user_card);
+            ivUser = (NetworkImageView) itemView.findViewById(R.id.iv_user_card);
             tvName = (TextView) itemView.findViewById(R.id.tv_name_card);
             tvEmail = (TextView) itemView.findViewById(R.id.tv_email_card);
         }

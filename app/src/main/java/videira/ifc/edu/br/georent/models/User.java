@@ -33,6 +33,7 @@ public class User {
     private City idCity;
     private Date createdAt;
     private Date updatedAt;
+    private String photo;
 
     /**
      * Construtor
@@ -180,5 +181,13 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
