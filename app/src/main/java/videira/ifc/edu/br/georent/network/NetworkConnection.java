@@ -27,7 +27,7 @@ public class NetworkConnection {
     /**
      * Atributos
      */
-    private static NetworkConnection connection;
+    private static NetworkConnection instance;
     private Context mContext;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
@@ -62,11 +62,11 @@ public class NetworkConnection {
      * @param context
      * @return
      */
-    public static synchronized  NetworkConnection getConnection(Context context) {
-        if (connection == null) {
-            connection = new NetworkConnection(context.getApplicationContext());
+    public static synchronized NetworkConnection getInstance(Context context) {
+        if (instance == null) {
+            instance = new NetworkConnection(context.getApplicationContext());
         }
-        return connection;
+        return instance;
     }
 
     /**
@@ -97,9 +97,10 @@ public class NetworkConnection {
 
     /**
      * Pega o Carregador do Cache de Imagens
+     *
      * @return
      */
-    public ImageLoader getImageLoader(){
+    public ImageLoader getImageLoader() {
         return mImageLoader;
     }
 
@@ -110,7 +111,7 @@ public class NetworkConnection {
      * @param tag
      */
     public void executeJSONRequest(final Transaction transaction, String tag, int method, String url) {
-        HashMap<String,String> params = transaction.doBefore();
+        HashMap<String, String> params = transaction.doBefore();
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
         if (params == null) {
@@ -138,26 +139,4 @@ public class NetworkConnection {
 
         addRequest(request);
     }
-
-    /*public void executeImageRequest(final ImageTransaction transaction, String tag, int method) {
-
-        String url = transaction.doBefore();
-
-        ImageRequest request = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-                        transaction.doAfter(response);
-                    }
-                }, 0, 0, null, Bitmap.Config.RGB_565,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        transaction.doAfter(null);
-                    }
-                });
-        request.setTag(tag);
-
-        addRequest(request);
-    }*/
 }

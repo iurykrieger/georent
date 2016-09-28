@@ -26,6 +26,7 @@ public class Preference {
 
     /**
      * Construtor
+     *
      * @param idPreference
      * @param sponsor
      * @param room
@@ -60,7 +61,7 @@ public class Preference {
     /**
      * Construtor
      */
-    public Preference(){
+    public Preference() {
 
     }
 

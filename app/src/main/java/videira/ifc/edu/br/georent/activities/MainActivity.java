@@ -9,25 +9,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
-import videira.ifc.edu.br.georent.fragments.TestFragment;
-import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.fragments.ResidenceIndexFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int[] imageResId = {R.drawable.ic_home_black_24dp,
+            R.drawable.ic_chat_black_24dp,
+            R.drawable.ic_person_black_24dp};
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private final int[] imageResId = {R.drawable.ic_home_black_24dp,
-                                      R.drawable.ic_chat_black_24dp,
-                                      R.drawable.ic_person_black_24dp};
 
     /**
      * Cria a activity e seta as propriedades do layout
+     *
      * @param savedInstanceState
      */
     @Override
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
          * Adiciona icones e remove textos
          * Passar esse código para um componente separado para controlar só o tabLayout
          */
-        for (int i = 0; i < imageResId.length; i++){
+        for (int i = 0; i < imageResId.length; i++) {
             tabLayout.getTabAt(i).setIcon(imageResId[i]);
             tabLayout.getTabAt(i).getIcon().setTint(ContextCompat.getColor(this, R.color.secondary_text));
             tabLayout.getTabAt(i).setText(null);
@@ -85,18 +82,20 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Inicializa o viewPager a adiciona os fragments
+     *
      * @param viewPager
      */
-    public void setupViewPager(ViewPager viewPager){
+    public void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TestFragment(), "RENT");
-        adapter.addFragment(new TestFragment(), "CHAT");
-        adapter.addFragment(new TestFragment(), "PROFILE");
+        adapter.addFragment(new ResidenceIndexFragment(), "RENT");
+        adapter.addFragment(new ResidenceIndexFragment(), "CHAT");
+        adapter.addFragment(new ResidenceIndexFragment(), "PROFILE");
         viewPager.setAdapter(adapter);
     }
 
     /**
      * Cria o menu com base no layout do menu_main
+     *
      * @param menu
      * @return
      */

@@ -25,17 +25,16 @@ import java.io.File;
 
 import videira.ifc.edu.br.georent.R;
 
-public class UserRegisterActivity extends AppCompatActivity implements ViewSwitcher.ViewFactory{
+public class UserRegisterActivity extends AppCompatActivity implements ViewSwitcher.ViewFactory {
 
+    public static final int PICK_FROM_CAMERA = 1;
+    public static final int PICK_FROM_FILE = 2;
+    final int[] fotos = {R.drawable.photo, R.drawable.photo2};
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Toolbar mToolbar;
     private ImageView mImageView;
     private FloatingActionButton mFButton;
     private Uri imageCaptureUri;
-    public static final int PICK_FROM_CAMERA = 1;
-    public static final int PICK_FROM_FILE = 2;
-
-    final int[] fotos = {R.drawable.photo, R.drawable.photo2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,16 +85,17 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewSwitc
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK)
+        if (resultCode != RESULT_OK)
             return;
 
         Bitmap bitmap = null;
         String path = "";
 
-        if(requestCode == PICK_FROM_FILE) {
+        if (requestCode == PICK_FROM_FILE) {
             imageCaptureUri = data.getData();
             path = getRealPathFromURI(imageCaptureUri);
 
@@ -105,7 +105,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewSwitc
             if (path != null)
                 bitmap = BitmapFactory.decodeFile(path);
 
-        }else {
+        } else {
             path = imageCaptureUri.getPath();
             bitmap = BitmapFactory.decodeFile(path);
         }
@@ -113,11 +113,11 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewSwitc
         mImageView.setImageBitmap(bitmap);
     }
 
-    public String getRealPathFromURI(Uri contentURI){
+    public String getRealPathFromURI(Uri contentURI) {
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(contentURI, proj, null, null, null);
 
-        if(cursor == null)
+        if (cursor == null)
             return null;
 
         int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);

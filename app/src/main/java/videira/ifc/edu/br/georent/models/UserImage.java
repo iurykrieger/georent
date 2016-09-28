@@ -20,6 +20,7 @@ public class UserImage {
 
     /**
      * Construtor
+     *
      * @param idUserImage
      * @param idUser
      * @param path
@@ -41,7 +42,7 @@ public class UserImage {
     /**
      * Construtor
      */
-    public UserImage(){
+    public UserImage() {
 
     }
 

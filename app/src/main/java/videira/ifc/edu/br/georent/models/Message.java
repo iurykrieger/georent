@@ -22,6 +22,7 @@ public class Message {
 
     /**
      * Construtor
+     *
      * @param idMessage
      * @param from
      * @param to
@@ -47,7 +48,7 @@ public class Message {
     /**
      * Construtor
      */
-    public Message(){
+    public Message() {
 
     }
 

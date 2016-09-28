@@ -8,5 +8,6 @@ import android.view.View;
 public interface RecyclerViewOnClickListener {
 
     void onClickListener(View view, int position);
+
     void onLongClickListener(View view, int position);
 }

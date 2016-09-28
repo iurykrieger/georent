@@ -20,6 +20,7 @@ public class Residence {
 
     /**
      * Construtor
+     *
      * @param idResidence
      * @param idLocation
      * @param idUser
@@ -44,7 +45,7 @@ public class Residence {
     /**
      * Construtor
      */
-    public Residence(){
+    public Residence() {
 
     }
 

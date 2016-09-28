@@ -1,6 +1,5 @@
 package videira.ifc.edu.br.georent.models;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -8,14 +7,6 @@ import java.util.Date;
  */
 
 public class User {
-
-    /**
-     * Enumerador do tipo
-     */
-    public static enum Type{
-        LOCATOR,
-        OCCUPIER;
-    }
 
     /**
      * Atributos
@@ -34,9 +25,9 @@ public class User {
     private Date createdAt;
     private Date updatedAt;
     private String photo;
-
     /**
      * Construtor
+     *
      * @param idUser
      * @param name
      * @param birthDate
@@ -71,7 +62,7 @@ public class User {
     /**
      * Construtor
      */
-    public User(){
+    public User() {
 
     }
 
@@ -189,5 +180,13 @@ public class User {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    /**
+     * Enumerador do tipo
+     */
+    public static enum Type {
+        LOCATOR,
+        OCCUPIER;
     }
 }

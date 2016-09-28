@@ -20,6 +20,7 @@ public class ResidenceImage {
 
     /**
      * Construtor
+     *
      * @param idResidenceImage
      * @param idResidence
      * @param path
@@ -41,7 +42,7 @@ public class ResidenceImage {
     /**
      * Construtor
      */
-    public ResidenceImage(){
+    public ResidenceImage() {
 
     }
 

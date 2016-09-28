@@ -18,6 +18,7 @@ public class City {
 
     /**
      * Construtor
+     *
      * @param idCity
      * @param name
      * @param uf

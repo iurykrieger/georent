@@ -19,9 +19,9 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleMarginEnd="50dp"
             app:expandedTitleMarginStart="20dp"
-            app:expandedTitleMarginEnd="50dp">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/iv_user"
@@ -36,14 +36,13 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                android:minHeight="47dp" />
+                android:minHeight="47dp"
+                app:layout_collapseMode="pin" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -97,7 +96,6 @@
                     android:textColor="#727272" />
 
                 <ToggleButton
-                    android:id="@+id/chkState1"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
@@ -156,7 +154,6 @@
                     android:textColor="#727272" />
 
                 <ToggleButton
-                    android:id="@+id/chkState2"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
@@ -308,9 +305,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin_end"
         android:src="@drawable/ic_add_black_24dp"
+        android:tint="@android:color/white"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:rippleColor="@android:color/white"
-        android:tint="@android:color/white" />
+        app:rippleColor="@android:color/white" />
 
 </android.support.design.widget.CoordinatorLayout>

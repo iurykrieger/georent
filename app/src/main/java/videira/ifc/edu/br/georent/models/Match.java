@@ -20,6 +20,7 @@ public class Match {
 
     /**
      * Construtor
+     *
      * @param idMatch
      * @param idResidence
      * @param idUser
@@ -41,7 +42,7 @@ public class Match {
     /**
      * Construtor
      */
-    public Match(){
+    public Match() {
 
     }
 

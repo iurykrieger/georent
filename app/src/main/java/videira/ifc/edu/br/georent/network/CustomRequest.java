@@ -1,9 +1,5 @@
 package videira.ifc.edu.br.georent.network;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONArray;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -11,6 +7,12 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 /**
  * Created by iuryk on 30/08/2016.

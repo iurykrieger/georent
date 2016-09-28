@@ -2,8 +2,8 @@ package videira.ifc.edu.br.georent.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import videira.ifc.edu.br.georent.R;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity{
         final TextView tvLogo = (TextView) findViewById(R.id.tv_logo);
         final Button btRegister = (Button) findViewById(R.id.bt_register);
 
-        Typeface typeFace = Typeface.createFromAsset(getAssets(),"fonts/source-sans-pro.regular.ttf");
+        Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/source-sans-pro.regular.ttf");
         etEmail.setTypeface(typeFace);
         etPassword.setTypeface(typeFace);
         tvLogo.setTypeface(typeFace);
@@ -34,9 +34,9 @@ public class LoginActivity extends AppCompatActivity{
 
 
         assert btRegister != null;
-        btRegister.setOnClickListener(new View.OnClickListener(){
+        btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this, UserRegisterActivity.class);
                 startActivity(i);
             }

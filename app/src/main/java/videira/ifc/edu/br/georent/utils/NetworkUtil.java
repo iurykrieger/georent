@@ -13,26 +13,28 @@ public class NetworkUtil {
 
     /**
      * Método que verifica se existe alguma conexão com a Internet baseado no contexto
+     *
      * @param context
      * @return
      */
-    public static boolean verifyConnection(Context context){
+    public static boolean verifyConnection(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if(networkInfo != null && networkInfo.isConnected()){
+        if (networkInfo != null && networkInfo.isConnected()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     /**
      * Monta a url de conexão com base no nome do servico
+     *
      * @param idServicePath
      * @return
      */
-    public static String getStringUrl(Context context, int idServicePath){
+    public static String getStringUrl(Context context, int idServicePath) {
         String url = context.getResources().getString(R.string.ip) + ":" +
                 context.getResources().getString(R.string.port) + "/" +
                 context.getResources().getString(idServicePath);

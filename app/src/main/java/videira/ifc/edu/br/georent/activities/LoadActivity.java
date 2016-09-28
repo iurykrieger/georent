@@ -23,11 +23,11 @@ public class LoadActivity extends AppCompatActivity {
 
         /* Set progress bar color */
         ProgressBar pbLoad = (ProgressBar) findViewById(R.id.pbLoad);
-        pbLoad.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent),android.graphics.PorterDuff.Mode.SRC_IN);
+        pbLoad.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent), android.graphics.PorterDuff.Mode.SRC_IN);
 
         /* Set TextView logo font */
         TextView tvLogo = (TextView) findViewById(R.id.tvLogo);
-        Typeface typeFace = Typeface.createFromAsset(getAssets(),"fonts/source-sans-pro.regular.ttf");
+        Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/source-sans-pro.regular.ttf");
         tvLogo.setTypeface(typeFace);
 
         Intent i = new Intent(this, LoginActivity.class);

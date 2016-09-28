@@ -4,11 +4,7 @@
     <string name="hint_name">Nome Completo</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Senha</string>
-    <string name="btn_sign_up">Registrar</string>
     <string name="btn_login">Login</string>
-    <string name="err_msg_name">Digite seu nome completo</string>
-    <string name="err_msg_email">Digite um endereço de email válido</string>
-    <string name="err_msg_password">Digite sua senha</string>
     <string name="title_activity_main">MainActivity</string>
 
     <!-- CONSTANTES DE CONEXÃO -->
@@ -17,5 +13,5 @@
 
     <!-- SERVIÇOS DO SERVIDOR -->
     <string name="user_service">user</string>
-    <string name="city_service">city</string>
+    <string name="residence_service">residence</string>
 </resources>

@@ -19,6 +19,7 @@ public class Location {
 
     /**
      * Construtor
+     *
      * @param idLocation
      * @param latitude
      * @param longitude
@@ -38,7 +39,7 @@ public class Location {
     /**
      * Construtor
      */
-    public Location(){
+    public Location() {
 
     }
 
