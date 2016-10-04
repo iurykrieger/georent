@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
 import videira.ifc.edu.br.georent.models.Residence;
-import videira.ifc.edu.br.georent.services.ResidenceService;
+import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
 public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnClickListener, Bind<List<Residence>> {
@@ -37,11 +35,10 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     private int page;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FloatingActionButton mFloatingActionButton;
     private List<Residence> mResidenceList;
     private LinearLayoutManager mLinearLayoutManager;
     private ResidenceAdapter mResidenceAdapter;
-    private ResidenceService mResidenceService;
+    private ResidenceRepository mResidenceRepository;
 
     public static ResidenceIndexFragment newInstance(int page) {
         ResidenceIndexFragment fragment = new ResidenceIndexFragment();
@@ -73,7 +70,6 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
 
         mResidenceList = new ArrayList<>();
         mPbLoad = (ProgressBar) view.findViewById(R.id.pb_load_user);
-        mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fb_new_residence);
 
         /**
          * Seta as propriedades do LayoutManager para a lista
@@ -93,7 +89,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
          */
         mResidenceAdapter = new ResidenceAdapter(mResidenceList, getActivity());
         mRecyclerView.setAdapter(mResidenceAdapter);
-        mResidenceService = new ResidenceService(this);
+        mResidenceRepository = new ResidenceRepository(this.getActivity(), this);
         //Adiciona os eventos na lista
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
 
@@ -118,7 +114,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
                  * Carrega mais itens se o último já foi exibido
                  */
                 if (mResidenceList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
-                    mResidenceService.getResidences();
+                    mResidenceRepository.getResidences();
                 }
             }
         });
@@ -131,19 +127,8 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
             @Override
             public void onRefresh() {
                 if (NetworkUtil.verifyConnection(getActivity())) {
-                    mResidenceService.getResidences();
+                    mResidenceRepository.getResidences();
                 }
-            }
-        });
-
-        /**
-         * Seta o click do botão
-         */
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), ShowResidenceActivity.class);
-                startActivity(i);
             }
         });
 
@@ -158,7 +143,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Carrega os usuários
          */
-        mResidenceService.getResidences();
+        mResidenceRepository.getResidences();
         super.onResume();
     }
 
@@ -197,7 +182,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void onStop() {
         super.onStop();
-        mResidenceService.cancelRequests();
+        mResidenceRepository.cancelRequests();
     }
 
     @Override

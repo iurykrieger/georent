@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_home_frame">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sr_users"
@@ -11,7 +12,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_users"
             android:layout_width="wrap_content"
-            android:layout_height="565dp"
+            android:layout_height="491dp"
             android:scrollbars="vertical" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
@@ -22,14 +23,4 @@
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:visibility="gone" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fb_new_residence"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add_black_24dp"
-        app:layout_anchor="@id/sr_users"
-        app:layout_anchorGravity="bottom|right|end" />
 </FrameLayout>
