@@ -2,7 +2,6 @@ package videira.ifc.edu.br.georent.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -161,7 +160,9 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     public void onClickListener(View view, int position) {
         //Joga uma mensagem curta com a posição na tela.
         Log.i("LOG", "Clicou!");
-        Toast.makeText(getActivity(), "Clique curto! Posição: " + position, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this.getActivity(), ShowResidenceActivity.class);
+        i.putExtra("idResidence", mResidenceAdapter.getListItem(position).getIdResidence());
+        this.startActivity(i);
     }
 
     /**

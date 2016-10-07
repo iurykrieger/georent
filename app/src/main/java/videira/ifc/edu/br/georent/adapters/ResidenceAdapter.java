@@ -97,6 +97,15 @@ public class ResidenceAdapter extends RecyclerView.Adapter<ResidenceAdapter.Resi
     }
 
     /**
+     * Pega item na posição desejada
+     * @param position
+     * @return
+     */
+    public Residence getListItem(int position){
+        return mResidenceList.get(position);
+    }
+
+    /**
      * Remove um item da lista
      *
      * @param position

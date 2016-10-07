@@ -46,7 +46,7 @@ public class ResidenceRepository<T> implements Transaction {
         this.mContext = mContext;
         this.range = 0;
         this.params = new HashMap<>();
-        this.service = NetworkUtil.getStringUrl(mContext, R.string.user_service);
+        this.service = NetworkUtil.getStringUrl(mContext, R.string.residence_service);
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     }
 
@@ -111,6 +111,12 @@ public class ResidenceRepository<T> implements Transaction {
     public void getResidences() {
         service = String.format(NetworkUtil.getStringUrl(mContext, R.string.residence_service)
                 + "?id_gte=" + String.valueOf(range) + "&id_lte=" + String.valueOf(range + 10));
+        Log.i("URL", service);
+        NetworkConnection.getInstance(mContext).executeJSONRequest(this, mContext.getClass().getName(), CustomRequest.Method.GET, service);
+    }
+
+    public void getResidenceById(Integer idResidence){
+        service = String.format(service + "/" + idResidence);
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONRequest(this, mContext.getClass().getName(), CustomRequest.Method.GET, service);
     }

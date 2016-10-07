@@ -56,8 +56,8 @@ public class Residence {
         return idResidence;
     }
 
-    public void setIdResidence(Integer idResidence) {
-        this.idResidence = idResidence;
+    public void setIdResidence(Integer id) {
+        this.idResidence = id;
     }
 
     public Location getIdLocation() {

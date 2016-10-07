@@ -295,6 +295,13 @@
 
             </RelativeLayout>
 
+            <ProgressBar
+                android:id="@+id/pb_load_residence"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
