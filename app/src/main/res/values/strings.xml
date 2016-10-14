@@ -8,10 +8,11 @@
     <string name="title_activity_main">MainActivity</string>
 
     <!-- CONSTANTES DE CONEXÃO -->
-    <string name="port">3000</string>
-    <string name="ip">http://192.168.1.104</string>
+    <string name="port">8000</string>
+    <string name="ip">http://172.31.4.222</string>
 
     <!-- SERVIÇOS DO SERVIDOR -->
     <string name="user_service">user</string>
     <string name="residence_service">residence</string>
+    <string name="residence_image_service">residenceImage</string>
 </resources>

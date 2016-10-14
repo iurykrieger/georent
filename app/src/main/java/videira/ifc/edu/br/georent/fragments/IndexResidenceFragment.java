@@ -23,10 +23,11 @@ import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
 import videira.ifc.edu.br.georent.models.Residence;
+import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnClickListener, Bind<List<Residence>> {
+public class IndexResidenceFragment extends Fragment implements RecyclerViewOnClickListener, Bind<Residence> {
     //Parâmetros constantes do fragment
     private static final String ARG_PAGE = "HOME";
     protected ProgressBar mPbLoad;
@@ -38,9 +39,10 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     private LinearLayoutManager mLinearLayoutManager;
     private ResidenceAdapter mResidenceAdapter;
     private ResidenceRepository mResidenceRepository;
+    private ResidenceRepository mResidenceImageRepository;
 
-    public static ResidenceIndexFragment newInstance(int page) {
-        ResidenceIndexFragment fragment = new ResidenceIndexFragment();
+    public static IndexResidenceFragment newInstance(int page) {
+        IndexResidenceFragment fragment = new IndexResidenceFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
@@ -192,7 +194,12 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     }
 
     @Override
-    public void doBind(List<Residence> result) {
+    public void doSingleBind(Residence result) {
+
+    }
+
+    @Override
+    public void doMultipleBind(List<Residence> result) {
         boolean isNewer = mSwipeRefreshLayout.isRefreshing();
         mPbLoad.setVisibility(View.GONE);
 

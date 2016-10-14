@@ -19,7 +19,7 @@ import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 
-public class ShowResidenceActivity extends AppCompatActivity implements Bind<List<Residence>>{
+public class ShowResidenceActivity extends AppCompatActivity implements Bind<Residence>{
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Toolbar mToolbar;
@@ -70,11 +70,16 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Lis
     }
 
     @Override
-    public void doBind(List<Residence> result) {
-        mResidence = result.get(0);
+    public void doSingleBind(Residence result) {
+        mResidence = result;
         Log.i("Residence", mResidence.getTitle());
         mToolbar.setTitle(mResidence.getTitle());
         mPbResidence.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void doMultipleBind(List<Residence> results) {
+
     }
 
     @Override
