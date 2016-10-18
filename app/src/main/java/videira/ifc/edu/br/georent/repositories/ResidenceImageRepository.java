@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.NetworkObject;
-import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.network.JSONArrayRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
@@ -36,18 +34,17 @@ public class ResidenceImageRepository implements Transaction {
     private String service;
     private Context mContext;
     private Gson gson;
-    private Residence residence;
     private Bind bind;
+    private int range;
 
     /**
      * Construtor
      *
-     * @param residence
      */
-    public ResidenceImageRepository(Context mContext, Bind bind, Residence residence) {
+    public ResidenceImageRepository(Context mContext, Bind bind) {
         this.mContext = mContext;
-        this.residence = residence;
         this.bind = bind;
+        this.range = 0;
         this.service = NetworkUtil.getStringUrl(mContext, R.string.residence_image_service);
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     }
@@ -59,6 +56,15 @@ public class ResidenceImageRepository implements Transaction {
      */
     @Override
     public HashMap<String, String> doBefore() {
+        //Verifica conexão com a internet
+        if (NetworkUtil.verifyConnection(mContext)) {
+            ResidenceImage residenceImage = new ResidenceImage();
+            NetworkObject no = new NetworkObject(residenceImage);
+            HashMap<String, String> params = new HashMap<>();
+            params.put("jsonObject", gson.toJson(no));
+            bind.doStartLoad();
+            return params;
+        }
         return null;
     }
 
@@ -75,20 +81,21 @@ public class ResidenceImageRepository implements Transaction {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ResidenceImage r = gson.fromJson(jsonArray.getJSONObject(i).toString(), ResidenceImage.class);
                     residenceImages.add(r);
+                    Log.i("LOG",r.getResidence().getTitle());
                 }
-                residence.setResidenceImages(residenceImages);
+                this.range += jsonArray.length();
+                bind.doMultipleBind(residenceImages);
             } catch (Exception e) {
                 e.printStackTrace();
                 bind.doError(e.getMessage());
             }
         } else {
-            bind.doError("Deu Pau Jovem!");
+            bind.doError("Erro ao carregar residencias");
         }
     }
 
     @Override
     public void doAfterObject(JSONObject jsonObject) {
-        Residence residence;
         if (jsonObject != null) {
             try {
                 ResidenceImage residenceImage = gson.fromJson(jsonObject.toString(), ResidenceImage.class);
@@ -98,18 +105,19 @@ public class ResidenceImageRepository implements Transaction {
                 bind.doError(e.getMessage());
             }
         } else {
-            bind.doError("Deu Pau Jovem!");
+            bind.doError("Erro ao carregar residencias");
         }
     }
 
     /****************************************************************************************
-     * *                             MÉTODOS PERSONALIZADOS                                 **
+     **                             MÉTODOS PERSONALIZADOS                                 **
      ****************************************************************************************/
-    public void getImagesByResidence() {
-        /*service = String.format(NetworkUtil.getStringUrl(mContext, R.string.residence_service)
-                + "/limit/" + String.valueOf(range) + "/" + String.valueOf(range + 10));*/
+    public void getImages() {
+        service = String.format(NetworkUtil.getStringUrl(mContext, R.string.residence_image_service)
+                + "/top/limit/" + String.valueOf(range) + "/" + String.valueOf(range + 10));
         Log.i("URL", service);
-        NetworkConnection.getInstance(mContext).executeJSONArrayRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
+        NetworkConnection.getInstance(mContext).executeJSONArrayRequest(this, mContext.getClass().getName(),
+                JSONArrayRequest.Method.GET, service);
     }
 
     public void cancelRequests() {

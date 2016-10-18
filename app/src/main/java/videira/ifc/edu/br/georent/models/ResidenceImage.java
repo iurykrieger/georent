@@ -11,7 +11,7 @@ public class ResidenceImage {
      * Atributos
      */
     private Integer idResidenceImage;
-    private Residence idResidence;
+    private Residence residence;
     private String path;
     private Integer resource;
     private Integer order;
@@ -31,7 +31,7 @@ public class ResidenceImage {
      */
     public ResidenceImage(Integer idResidenceImage, Residence idResidence, String path, Integer resource, Integer order, Date createdAt, Date updatedAt) {
         this.idResidenceImage = idResidenceImage;
-        this.idResidence = idResidence;
+        this.residence = idResidence;
         this.path = path;
         this.resource = resource;
         this.order = order;
@@ -58,12 +58,12 @@ public class ResidenceImage {
         this.idResidenceImage = idResidenceImage;
     }
 
-    public Residence getIdResidence() {
-        return idResidence;
+    public Residence getResidence() {
+        return residence;
     }
 
-    public void setIdResidence(Residence idResidence) {
-        this.idResidence = idResidence;
+    public void setResidence(Residence residence) {
+        this.residence = residence;
     }
 
     public String getPath() {

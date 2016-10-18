@@ -18,16 +18,15 @@ import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.activities.ShowResidenceActivity;
-import videira.ifc.edu.br.georent.adapters.ResidenceAdapter;
+import videira.ifc.edu.br.georent.adapters.ResidenceImageAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
-import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
-import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
+import videira.ifc.edu.br.georent.repositories.ResidenceImageRepository;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class IndexResidenceFragment extends Fragment implements RecyclerViewOnClickListener, Bind<Residence> {
+public class IndexResidenceFragment extends Fragment implements RecyclerViewOnClickListener, Bind<ResidenceImage> {
     //Parâmetros constantes do fragment
     private static final String ARG_PAGE = "HOME";
     protected ProgressBar mPbLoad;
@@ -35,11 +34,10 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     private int page;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private List<Residence> mResidenceList;
+    private List<ResidenceImage> mResidenceImageList;
     private LinearLayoutManager mLinearLayoutManager;
-    private ResidenceAdapter mResidenceAdapter;
-    private ResidenceRepository mResidenceRepository;
-    private ResidenceRepository mResidenceImageRepository;
+    private ResidenceImageAdapter mResidenceImageAdapter;
+    private ResidenceImageRepository mResidenceImageRepository;
 
     public static IndexResidenceFragment newInstance(int page) {
         IndexResidenceFragment fragment = new IndexResidenceFragment();
@@ -69,7 +67,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
          */
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mResidenceList = new ArrayList<>();
+        mResidenceImageList = new ArrayList<>();
         mPbLoad = (ProgressBar) view.findViewById(R.id.pb_load_user);
 
         /**
@@ -88,9 +86,9 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Cria o adapter para amarrar a view aos objetos e seta ele na view
          */
-        mResidenceAdapter = new ResidenceAdapter(mResidenceList, getActivity());
-        mRecyclerView.setAdapter(mResidenceAdapter);
-        mResidenceRepository = new ResidenceRepository(this.getActivity(), this);
+        mResidenceImageAdapter = new ResidenceImageAdapter(mResidenceImageList, getActivity());
+        mRecyclerView.setAdapter(mResidenceImageAdapter);
+        mResidenceImageRepository = new ResidenceImageRepository(this.getActivity(), this);
         //Adiciona os eventos na lista
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
 
@@ -114,8 +112,8 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
                 /**
                  * Carrega mais itens se o último já foi exibido
                  */
-                if (mResidenceList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
-                    mResidenceRepository.getResidences();
+                if (mResidenceImageList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
+                    mResidenceImageRepository.getImages();
                 }
             }
         });
@@ -128,7 +126,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
             @Override
             public void onRefresh() {
                 if (NetworkUtil.verifyConnection(getActivity())) {
-                    mResidenceRepository.getResidences();
+                    mResidenceImageRepository.getImages();
                 }
             }
         });
@@ -144,7 +142,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Carrega os usuários
          */
-        mResidenceRepository.getResidences();
+        mResidenceImageRepository.getImages();
         super.onResume();
     }
 
@@ -163,7 +161,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         //Joga uma mensagem curta com a posição na tela.
         Log.i("LOG", "Clicou!");
         Intent i = new Intent(this.getActivity(), ShowResidenceActivity.class);
-        i.putExtra("idResidence", mResidenceAdapter.getListItem(position).getIdResidence());
+        i.putExtra("idResidence", mResidenceImageAdapter.getListItem(position).getResidence().getIdResidence());
         this.startActivity(i);
     }
 
@@ -176,7 +174,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void onLongClickListener(View view, int position) {
         Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_SHORT).show();
-        mResidenceAdapter.removeListItem(position);
+        mResidenceImageAdapter.removeListItem(position);
     }
 
     /*************************************************************************
@@ -185,7 +183,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void onStop() {
         super.onStop();
-        mResidenceRepository.cancelRequests();
+        mResidenceImageRepository.cancelRequests();
     }
 
     @Override
@@ -194,20 +192,20 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     }
 
     @Override
-    public void doSingleBind(Residence result) {
+    public void doSingleBind(ResidenceImage result) {
 
     }
 
     @Override
-    public void doMultipleBind(List<Residence> result) {
+    public void doMultipleBind(List<ResidenceImage> result) {
         boolean isNewer = mSwipeRefreshLayout.isRefreshing();
         mPbLoad.setVisibility(View.GONE);
 
-        for (Residence residence : result) {
+        for (ResidenceImage residenceImage : result) {
             if (isNewer) {
-                mResidenceAdapter.addListItem(residence, 0);
+                mResidenceImageAdapter.addListItem(residenceImage, 0);
             } else {
-                mResidenceAdapter.addListItem(residence, mResidenceAdapter.getItemCount());
+                mResidenceImageAdapter.addListItem(residenceImage, mResidenceImageAdapter.getItemCount());
             }
         }
         if (isNewer) {
