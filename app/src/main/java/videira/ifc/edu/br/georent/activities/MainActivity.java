@@ -14,7 +14,7 @@ import android.view.View;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
-import videira.ifc.edu.br.georent.fragments.ResidenceIndexFragment;
+import videira.ifc.edu.br.georent.fragments.IndexResidenceFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ResidenceIndexFragment(), "RENT");
-        adapter.addFragment(new ResidenceIndexFragment(), "CHAT");
-        adapter.addFragment(new ResidenceIndexFragment(), "PROFILE");
+        adapter.addFragment(new IndexResidenceFragment(), "RENT");
+        adapter.addFragment(new IndexResidenceFragment(), "CHAT");
+        adapter.addFragment(new IndexResidenceFragment(), "PROFILE");
         viewPager.setAdapter(adapter);
     }
 

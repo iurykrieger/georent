@@ -12,7 +12,9 @@ public interface Bind<T> {
 
     void doStartLoad();
 
-    void doBind(T result);
+    void doSingleBind(T result);
+
+    void doMultipleBind(List<T> results);
 
     void doError(String error);
 }

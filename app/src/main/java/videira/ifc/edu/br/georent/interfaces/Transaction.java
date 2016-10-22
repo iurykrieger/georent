@@ -1,6 +1,7 @@
-package videira.ifc.edu.br.georent.network;
+package videira.ifc.edu.br.georent.interfaces;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -11,5 +12,7 @@ public interface Transaction {
 
     HashMap<String, String> doBefore();
 
-    void doAfter(JSONArray jsonArray);
+    void doAfterArray(JSONArray jsonArray);
+
+    void doAfterObject(JSONObject jsonObject);
 }

@@ -1,5 +1,7 @@
 package videira.ifc.edu.br.georent.models;
 
+import java.util.List;
+
 /**
  * Created by iuryk on 19/09/2016.
  */
@@ -17,6 +19,9 @@ public class Residence {
     private String address;
     private String observation;
     private Float rent;
+
+    /* Lazy */
+    private List<ResidenceImage> residenceImages;
 
     /**
      * Construtor
@@ -122,5 +127,13 @@ public class Residence {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<ResidenceImage> getResidenceImages() {
+        return residenceImages;
+    }
+
+    public void setResidenceImages(List<ResidenceImage> residenceImages) {
+        this.residenceImages = residenceImages;
     }
 }

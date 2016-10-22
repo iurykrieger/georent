@@ -16,8 +16,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import videira.ifc.edu.br.georent.interfaces.Transaction;
 
 /**
  * Created by iuryk on 30/08/2016.
@@ -110,7 +113,7 @@ public class NetworkConnection {
      * @param transaction
      * @param tag
      */
-    public void executeJSONRequest(final Transaction transaction, String tag, int method, String url) {
+    public void executeJSONArrayRequest(final Transaction transaction, String tag, int method, String url) {
         HashMap<String, String> params = transaction.doBefore();
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
@@ -118,21 +121,57 @@ public class NetworkConnection {
             return;
         }
 
-        CustomRequest request = new CustomRequest(method,
+        JSONArrayRequest request = new JSONArrayRequest(method,
                 url,
                 params,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.i("JSON", response.toString());
-                        transaction.doAfter(response);
+                        transaction.doAfterArray(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i("JSON", error.toString());
-                        transaction.doAfter(null);
+                        transaction.doAfterArray(null);
+                    }
+                });
+        request.setTag(tag);
+
+        addRequest(request);
+    }
+
+    /**
+     * Executa a transação da tag
+     *
+     * @param transaction
+     * @param tag
+     */
+    public void executeJSONObjectRequest(final Transaction transaction, String tag, int method, String url) {
+        HashMap<String, String> params = transaction.doBefore();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+        if (params == null) {
+            return;
+        }
+
+        JSONObjectRequest request = new JSONObjectRequest(method,
+                url,
+                params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("JSON", response.toString());
+                        transaction.doAfterObject(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("JSON", error.toString());
+                        transaction.doAfterObject(null);
                     }
                 });
         request.setTag(tag);
