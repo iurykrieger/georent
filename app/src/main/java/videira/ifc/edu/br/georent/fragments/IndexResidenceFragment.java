@@ -2,7 +2,11 @@ package videira.ifc.edu.br.georent.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +28,7 @@ import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.repositories.ResidenceImageRepository;
+import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
 public class IndexResidenceFragment extends Fragment implements RecyclerViewOnClickListener, Bind<ResidenceImage> {
@@ -65,10 +70,11 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Infla o layout do fragment e pega a view
          */
-        final View view = inflater.inflate(R.layout.fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_index_residence, container, false);
 
+        mResidenceImageRepository = new ResidenceImageRepository(this.getActivity(), this);
         mResidenceImageList = new ArrayList<>();
-        mPbLoad = (ProgressBar) view.findViewById(R.id.pb_load_user);
+        mPbLoad = (ProgressBar) view.findViewById(R.id.pb_residence_index);
 
         /**
          * Seta as propriedades do LayoutManager para a lista
@@ -88,7 +94,6 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
          */
         mResidenceImageAdapter = new ResidenceImageAdapter(mResidenceImageList, getActivity());
         mRecyclerView.setAdapter(mResidenceImageAdapter);
-        mResidenceImageRepository = new ResidenceImageRepository(this.getActivity(), this);
         //Adiciona os eventos na lista
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
 
@@ -113,7 +118,8 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
                  * Carrega mais itens se o último já foi exibido
                  */
                 if (mResidenceImageList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
-                    mResidenceImageRepository.getImages();
+                    mPbLoad.setVisibility(View.VISIBLE);
+                    startLoad();
                 }
             }
         });
@@ -125,11 +131,13 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetworkUtil.verifyConnection(getActivity())) {
-                    mResidenceImageRepository.getImages();
-                }
+                startLoad();
             }
         });
+
+        if (mResidenceImageList.isEmpty()) {
+            startLoad();
+        }
 
         /**
          * Retorna a view para preencher a tela
@@ -137,13 +145,29 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         return view;
     }
 
-    @Override
-    public void onResume() {
-        /**
-         * Carrega os usuários
-         */
-        mResidenceImageRepository.getImages();
-        super.onResume();
+    void stopLoad() {
+        mPbLoad.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    void startLoad() {
+        if (NetworkUtil.verifyConnection(getActivity())) {
+            //mResidenceImageRepository.getImages();
+            doMultipleBind(FakeGenerator.getInstance().getResidenceImages(10));
+        } else {
+            Snackbar snackbar = Snackbar
+                    .make(getView(), R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Conectar", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent it = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                            startActivity(it);
+                        }
+                    })
+                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+            snackbar.show();
+            stopLoad();
+        }
     }
 
     /*************************************************************************
@@ -159,10 +183,11 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void onClickListener(View view, int position) {
         //Joga uma mensagem curta com a posição na tela.
+        int index = mResidenceImageAdapter.getListItem(position).getResidence().getIdResidence();
+        Intent i = new Intent(getActivity(), ShowResidenceActivity.class);
+        i.putExtra("idResidence", index);
+        startActivity(i);
         Log.i("LOG", "Clicou!");
-        Intent i = new Intent(this.getActivity(), ShowResidenceActivity.class);
-        i.putExtra("idResidence", mResidenceImageAdapter.getListItem(position).getResidence().getIdResidence());
-        this.startActivity(i);
     }
 
     /**
@@ -174,7 +199,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void onLongClickListener(View view, int position) {
         Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_SHORT).show();
-        mResidenceImageAdapter.removeListItem(position);
+        //mResidenceImageAdapter.removeListItem(position);
     }
 
     /*************************************************************************
@@ -182,13 +207,9 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
      *************************************************************************/
     @Override
     public void onStop() {
-        super.onStop();
         mResidenceImageRepository.cancelRequests();
-    }
-
-    @Override
-    public void doStartLoad() {
-        mPbLoad.setVisibility(View.VISIBLE);
+        stopLoad();
+        super.onStop();
     }
 
     @Override
@@ -199,7 +220,8 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void doMultipleBind(List<ResidenceImage> result) {
         boolean isNewer = mSwipeRefreshLayout.isRefreshing();
-        mPbLoad.setVisibility(View.GONE);
+
+        stopLoad();
 
         for (ResidenceImage residenceImage : result) {
             if (isNewer) {
@@ -208,13 +230,14 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
                 mResidenceImageAdapter.addListItem(residenceImage, mResidenceImageAdapter.getItemCount());
             }
         }
-        if (isNewer) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
     }
 
     @Override
     public void doError(String error) {
-        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+        stopLoad();
+        Snackbar snackbar = Snackbar
+                .make(getView(), error, Snackbar.LENGTH_SHORT)
+                .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+        snackbar.show();
     }
 }

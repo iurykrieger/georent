@@ -75,7 +75,6 @@ public class ResidenceRepository implements Transaction {
             Residence residence = new Residence();
             NetworkObject no = new NetworkObject(residence);
             setParams(no);
-            bind.doStartLoad();
             return params;
         }
         return null;

@@ -62,7 +62,6 @@ public class ResidenceImageRepository implements Transaction {
             NetworkObject no = new NetworkObject(residenceImage);
             HashMap<String, String> params = new HashMap<>();
             params.put("jsonObject", gson.toJson(no));
-            bind.doStartLoad();
             return params;
         }
         return null;

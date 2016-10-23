@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface Bind<T> {
 
-    void doStartLoad();
-
     void doSingleBind(T result);
 
     void doMultipleBind(List<T> results);

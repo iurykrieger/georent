@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_home_frame">
+    android:id="@+id/fragment_index_residence">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sr_users"
@@ -18,7 +18,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@+id/pb_load_user"
+        android:id="@+id/pb_residence_index"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
