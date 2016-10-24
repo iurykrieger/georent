@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +34,7 @@ import videira.ifc.edu.br.georent.utils.NetworkUtil;
 public class IndexResidenceFragment extends Fragment implements RecyclerViewOnClickListener, Bind<ResidenceImage> {
     //Parâmetros constantes do fragment
     private static final String ARG_PAGE = "HOME";
-    protected ProgressBar mPbLoad;
+
     //Parâmetros variáveis do fragment
     private int page;
     private RecyclerView mRecyclerView;
@@ -43,6 +43,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     private LinearLayoutManager mLinearLayoutManager;
     private ResidenceImageAdapter mResidenceImageAdapter;
     private ResidenceImageRepository mResidenceImageRepository;
+    protected ProgressBar mProgressBar;
 
     public static IndexResidenceFragment newInstance(int page) {
         IndexResidenceFragment fragment = new IndexResidenceFragment();
@@ -74,7 +75,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
 
         mResidenceImageRepository = new ResidenceImageRepository(this.getActivity(), this);
         mResidenceImageList = new ArrayList<>();
-        mPbLoad = (ProgressBar) view.findViewById(R.id.pb_residence_index);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.pb_residence_index);
 
         /**
          * Seta as propriedades do LayoutManager para a lista
@@ -118,8 +119,8 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
                  * Carrega mais itens se o último já foi exibido
                  */
                 if (mResidenceImageList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
-                    mPbLoad.setVisibility(View.VISIBLE);
-                    startLoad();
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    doLoad();
                 }
             }
         });
@@ -131,12 +132,13 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                startLoad();
+                doLoad();
             }
         });
 
         if (mResidenceImageList.isEmpty()) {
-            startLoad();
+            mProgressBar.setVisibility(View.VISIBLE);
+            doLoad();
         }
 
         /**
@@ -145,29 +147,12 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         return view;
     }
 
-    void stopLoad() {
-        mPbLoad.setVisibility(View.GONE);
+    @Override
+    public void onStop() {
+        mResidenceImageRepository.cancelRequests();
+        mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    void startLoad() {
-        if (NetworkUtil.verifyConnection(getActivity())) {
-            //mResidenceImageRepository.getImages();
-            doMultipleBind(FakeGenerator.getInstance().getResidenceImages(10));
-        } else {
-            Snackbar snackbar = Snackbar
-                    .make(getView(), R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Conectar", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent it = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                            startActivity(it);
-                        }
-                    })
-                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
-            snackbar.show();
-            stopLoad();
-        }
+        super.onStop();
     }
 
     /*************************************************************************
@@ -205,11 +190,15 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     /*************************************************************************
      * *                            SERVIÇO                                  **
      *************************************************************************/
+
     @Override
-    public void onStop() {
-        mResidenceImageRepository.cancelRequests();
-        stopLoad();
-        super.onStop();
+    public void doLoad() {
+        if (NetworkUtil.verifyConnection(getActivity())) {
+            //mResidenceImageRepository.getImages(); //Bind Correto
+            doMultipleBind(FakeGenerator.getInstance().getResidenceImages(10));
+        } else {
+            doError(new UnknownHostException());
+        }
     }
 
     @Override
@@ -221,7 +210,8 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     public void doMultipleBind(List<ResidenceImage> result) {
         boolean isNewer = mSwipeRefreshLayout.isRefreshing();
 
-        stopLoad();
+        mProgressBar.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
 
         for (ResidenceImage residenceImage : result) {
             if (isNewer) {
@@ -233,11 +223,28 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     }
 
     @Override
-    public void doError(String error) {
-        stopLoad();
-        Snackbar snackbar = Snackbar
-                .make(getView(), error, Snackbar.LENGTH_SHORT)
-                .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+    public void doError(Exception ex) {
+        mProgressBar.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
+        Snackbar snackbar = null;
+
+        if (ex instanceof UnknownHostException) {
+            snackbar = Snackbar
+                    .make(getView(), R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Conectar", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent it = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                            startActivity(it);
+                        }
+                    })
+                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+        } else {
+            snackbar = Snackbar
+                    .make(getView(), R.string.unknown_error, Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+        }
+
         snackbar.show();
     }
 }

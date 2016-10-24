@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,10 +87,10 @@ public class ResidenceImageRepository implements Transaction {
                 bind.doMultipleBind(residenceImages);
             } catch (Exception e) {
                 e.printStackTrace();
-                bind.doError(e.getMessage());
+                bind.doError(e);
             }
         } else {
-            bind.doError("Erro ao carregar residencias");
+            bind.doError(new ConnectException());
         }
     }
 
@@ -101,10 +102,10 @@ public class ResidenceImageRepository implements Transaction {
                 bind.doSingleBind(residenceImage);
             } catch (Exception e) {
                 e.printStackTrace();
-                bind.doError(e.getMessage());
+                bind.doError(e);
             }
         } else {
-            bind.doError("Erro ao carregar residencias");
+            bind.doError(new ConnectException());
         }
     }
 

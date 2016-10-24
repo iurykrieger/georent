@@ -1,18 +1,21 @@
 <resources>
     <string name="app_name">GeoRENT</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configurações</string>
     <string name="hint_name">Nome Completo</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Senha</string>
     <string name="btn_login">Login</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="no_internet">Sem conexão com a Internet. Por favor, verifique sua conexão</string>
     <string name="info">Informações</string>
     <string name="description">Descrição</string>
     <string name="address">Endereço</string>
     <string name="observation">Observação</string>
     <string name="preferences">Preferências</string>
     <string name="city">Cidade</string>
+
+    <!-- ERROS -->
+    <string name="no_internet">Sem conexão com a Internet. Por favor, verifique sua conexão</string>
+    <string name="unknown_error">Erro desconhecido</string>
 
     <!-- CONSTANTES DE CONEXÃO -->
     <string name="port">8000</string>

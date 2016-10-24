@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:id="@+id/cl_residence_show"
     tools:context="videira.ifc.edu.br.georent.activities.ShowResidenceActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -20,10 +21,10 @@
             android:layout_height="300dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMargin="18dp"
             app:expandedTitleMarginEnd="5dp"
             app:expandedTitleMarginStart="10dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:expandedTitleMargin="18dp">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/niv_residence"
@@ -72,46 +73,46 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/info"
                         android:textColor="@color/primary_text"
-                        android:textSize="17sp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/tv_address_residence"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/address"
                         android:textColor="@color/secondary_text"
-                        android:textSize="15sp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tv_city_residence"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/city"
                         android:textColor="@color/secondary_text"
-                        android:textSize="15sp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tv_description_residence"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/description"
                         android:textColor="@color/secondary_text"
-                        android:textSize="15sp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tv_observation_residence"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/observation"
                         android:textColor="@color/secondary_text"
-                        android:textSize="15sp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -131,10 +132,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/preferences"
                         android:textColor="@color/primary_text"
-                        android:textSize="17sp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textSize="17sp" />
 
                 </LinearLayout>
 
@@ -143,5 +144,13 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/pb_residence_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginTop="300dp" />
 
 </android.support.design.widget.CoordinatorLayout>

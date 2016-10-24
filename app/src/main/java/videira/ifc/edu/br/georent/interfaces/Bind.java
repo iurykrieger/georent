@@ -10,9 +10,11 @@ import java.util.List;
 
 public interface Bind<T> {
 
+    void doLoad();
+
     void doSingleBind(T result);
 
     void doMultipleBind(List<T> results);
 
-    void doError(String error);
+    void doError(Exception ex);
 }
