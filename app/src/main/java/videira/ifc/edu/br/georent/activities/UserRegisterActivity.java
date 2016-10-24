@@ -19,7 +19,11 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 
@@ -35,6 +39,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewSwitc
     private ImageView mImageView;
     private FloatingActionButton mFButton;
     private Uri imageCaptureUri;
+    private SeekBar mSeekBar;
+    private TextView mTvDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +90,35 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewSwitc
                 dialog.show();
             }
         });
+
+
+        final SeekBar skDistance = (SeekBar) findViewById(R.id.sb_distance);
+        final TextView tvDistance = (TextView) findViewById(R.id.tv_distance);
+
+        skDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    if (progress >= 0 && progress <= skDistance.getMax()) {
+
+                        String progressString = String.valueOf(progress + 1);
+                        tvDistance.setText(progressString + "Km"); // the TextView Reference
+                        seekBar.setSecondaryProgress(progress);
+                    }
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     @Override

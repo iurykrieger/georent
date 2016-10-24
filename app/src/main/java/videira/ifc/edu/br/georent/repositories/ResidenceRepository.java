@@ -101,7 +101,7 @@ public class ResidenceRepository implements Transaction {
                 bind.doError(e.getMessage());
             }
         } else {
-            bind.doError("Deu Pau Jovem!");
+            //bind.doError("Deu Pau Jovem!");
         }
     }
 

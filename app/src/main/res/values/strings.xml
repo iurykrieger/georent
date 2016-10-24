@@ -3,6 +3,8 @@
     <string name="action_settings">Configurações</string>
     <string name="hint_name">Nome Completo</string>
     <string name="hint_email">Email</string>
+    <string name="hint_birthDate">Data Nascimento</string>
+    <string name="hint_phone">Telefone</string>
     <string name="hint_password">Senha</string>
     <string name="btn_login">Login</string>
     <string name="title_activity_main">MainActivity</string>
