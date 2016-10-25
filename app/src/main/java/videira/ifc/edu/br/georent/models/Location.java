@@ -1,5 +1,7 @@
 package videira.ifc.edu.br.georent.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -11,10 +13,16 @@ public class Location {
      * Atributos
      */
     private Integer idLocation;
+
     private Double latitude;
+
     private Double longitude;
+
+    @SerializedName("city")
     private City idCity;
+
     private Date createdAt;
+
     private Date updatedAt;
 
     /**

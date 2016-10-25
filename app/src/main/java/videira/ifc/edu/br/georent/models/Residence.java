@@ -1,5 +1,8 @@
 package videira.ifc.edu.br.georent.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,16 +14,36 @@ public class Residence {
      * Atributos
      */
     private Integer idResidence;
+
+    @SerializedName("location")
     private Location idLocation;
+
+    @SerializedName("user")
     private User idUser;
+
+    @SerializedName("preference")
     private Preference idPreference;
+
     private String title;
+
     private String description;
+
     private String address;
+
     private String observation;
+
     private Float rent;
 
+    private Date createdAt;
+
+    private Date updatedAt;
+
     /* Lazy */
+
+    @SerializedName("matches")
+    private List<Match> matches;
+
+    @SerializedName("residence_images")
     private List<ResidenceImage> residenceImages;
 
     /**
@@ -135,5 +158,13 @@ public class Residence {
 
     public void setResidenceImages(List<ResidenceImage> residenceImages) {
         this.residenceImages = residenceImages;
+    }
+
+    public List<Match> getMatches() {
+        return matches;
+    }
+
+    public void setMatches(List<Match> matches) {
+        this.matches = matches;
     }
 }

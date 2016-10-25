@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:fitsSystemWindows="true"
+        app:expandedTitleTextAppearance="@android:color/transparent"
         app:theme="@style/ToolBarStyle">
 
         <net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout

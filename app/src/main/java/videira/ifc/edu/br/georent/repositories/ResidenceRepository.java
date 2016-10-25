@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,10 +99,10 @@ public class ResidenceRepository implements Transaction {
                 bind.doMultipleBind(residences);
             } catch (JSONException e) {
                 e.printStackTrace();
-                bind.doError(e.getMessage());
+                bind.doError(e);
             }
         } else {
-            //bind.doError("Deu Pau Jovem!");
+            bind.doError(new ConnectException());
         }
     }
 
@@ -114,10 +115,11 @@ public class ResidenceRepository implements Transaction {
                 bind.doSingleBind(residence);
             }catch (Exception e){
                 e.printStackTrace();
-                bind.doError(e.getMessage());
+                bind.doError(e);
             }
         } else {
-            bind.doError("Deu Pau Jovem!");
+            //TODO Implementar serviço de exceções!
+            bind.doError(new ConnectException());
         }
     }
 
@@ -133,6 +135,12 @@ public class ResidenceRepository implements Transaction {
 
     public void getResidenceById(Integer idResidence) {
         service = String.format(service + "/" + idResidence);
+        Log.i("URL", service);
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
+    }
+
+    public void getEagerResidenceById(Integer idResidence){
+        service = String.format(service + "/" + idResidence + "/eager");
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
     }

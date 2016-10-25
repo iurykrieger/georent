@@ -1,5 +1,7 @@
 package videira.ifc.edu.br.georent.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -10,14 +12,25 @@ public class Message {
     /**
      * Atributos
      */
+
     private Integer idMessage;
+
+    @SerializedName("from")
     private User from;
+
+    @SerializedName("to")
     private User to;
+
     private String message;
+
     private Date dateTime;
+
     private Integer resource;
+
     private String path;
+
     private Date createdAt;
+
     private Date updatedAt;
 
     /**

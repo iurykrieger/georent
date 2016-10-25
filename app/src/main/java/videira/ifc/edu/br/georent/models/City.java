@@ -11,9 +11,13 @@ public class City {
      * Atributos
      */
     private Integer idCity;
+
     private String name;
+
     private String uf;
+
     private Date createdAt;
+
     private Date updatedAt;
 
     /**

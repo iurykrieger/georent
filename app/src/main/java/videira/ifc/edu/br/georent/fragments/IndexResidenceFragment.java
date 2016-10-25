@@ -194,8 +194,8 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void doLoad() {
         if (NetworkUtil.verifyConnection(getActivity())) {
-            //mResidenceImageRepository.getImages(); //Bind Correto
-            doMultipleBind(FakeGenerator.getInstance().getResidenceImages(10));
+            mResidenceImageRepository.getTopImages(); //Bind Correto
+            //doMultipleBind(FakeGenerator.getInstance().getResidenceImages(10));
         } else {
             doError(new UnknownHostException());
         }

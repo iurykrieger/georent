@@ -112,7 +112,7 @@ public class ResidenceImageRepository implements Transaction {
     /****************************************************************************************
      **                             MÉTODOS PERSONALIZADOS                                 **
      ****************************************************************************************/
-    public void getImages() {
+    public void getTopImages() {
         service = String.format(NetworkUtil.getStringUrl(mContext, R.string.residence_image_service)
                 + "/top/limit/" + String.valueOf(range) + "/" + String.valueOf(range + 10));
         Log.i("URL", service);

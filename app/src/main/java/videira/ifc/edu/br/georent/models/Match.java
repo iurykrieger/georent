@@ -1,5 +1,8 @@
 package videira.ifc.edu.br.georent.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -11,11 +14,19 @@ public class Match {
      * Atributos
      */
     private Integer idMatch;
+
+    @SerializedName("residence")
     private Residence idResidence;
+
+    @SerializedName("user")
     private User idUser;
-    private Boolean like;
+
+    private Integer like;
+
     private Date dateTime;
+
     private Date createdAt;
+
     private Date updatedAt;
 
     /**
@@ -29,7 +40,7 @@ public class Match {
      * @param createdAt
      * @param updatedAt
      */
-    public Match(Integer idMatch, Residence idResidence, User idUser, Boolean like, Date dateTime, Date createdAt, Date updatedAt) {
+    public Match(Integer idMatch, Residence idResidence, User idUser, Integer like, Date dateTime, Date createdAt, Date updatedAt) {
         this.idMatch = idMatch;
         this.idResidence = idResidence;
         this.idUser = idUser;
@@ -73,11 +84,11 @@ public class Match {
         this.idUser = idUser;
     }
 
-    public Boolean getLike() {
+    public Integer getLike() {
         return like;
     }
 
-    public void setLike(Boolean like) {
+    public void setLike(Integer like) {
         this.like = like;
     }
 

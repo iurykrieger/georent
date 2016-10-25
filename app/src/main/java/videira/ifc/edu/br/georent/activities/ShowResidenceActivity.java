@@ -1,6 +1,7 @@
 package videira.ifc.edu.br.georent.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
@@ -76,9 +77,9 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     public void doLoad() {
         if (NetworkUtil.verifyConnection(this)) {
             mProgressBar.setVisibility(View.VISIBLE);
-            //mResidenceImageRepository.getImages(); //Bind Correto
-            doSingleBind(FakeGenerator.getInstance().getResidence(
-                    mIntent.getIntExtra("idResidence", 0))); //Geração Fake!
+            mResidenceRepository.getEagerResidenceById(mIntent.getIntExtra("idResidence", 0)); //Bind Correto
+            //doSingleBind(FakeGenerator.getInstance().getResidence(
+            //        mIntent.getIntExtra("idResidence", 0))); //Geração Fake!
         } else {
             doError(new UnknownHostException());
         }
@@ -104,6 +105,8 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         tvObservation.setText(mResidence.getObservation());
 
         mCollapsingToolbarLayout.setTitle(mResidence.getTitle());
+        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.icons));
     }
 
     @Override
