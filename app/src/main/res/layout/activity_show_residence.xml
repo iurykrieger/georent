@@ -2,10 +2,10 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_residence_show"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:id="@+id/cl_residence_show"
     tools:context="videira.ifc.edu.br.georent.activities.ShowResidenceActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -13,10 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:fitsSystemWindows="true"
-        app:expandedTitleTextAppearance="@android:color/transparent"
         app:theme="@style/ToolBarStyle">
 
-        <net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
+        <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/ct_residence"
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -25,6 +24,7 @@
             app:expandedTitleMargin="18dp"
             app:expandedTitleMarginEnd="5dp"
             app:expandedTitleMarginStart="10dp"
+            app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.android.volley.toolbox.NetworkImageView
@@ -42,7 +42,7 @@
                 app:layout_collapseMode="pin"
                 app:theme="@style/ToolBarStyle" />
 
-        </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -58,6 +58,7 @@
             android:orientation="vertical"
             android:paddingTop="5dp">
 
+            <!-- CardView Título -->
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,12 +73,14 @@
                     android:padding="10dp">
 
                     <TextView
+                        android:id="@+id/tv_title_residence"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="@string/info"
+                        android:text="@string/title"
                         android:textColor="@color/primary_text"
-                        android:textSize="17sp" />
+                        android:textSize="24sp"
+                        android:textStyle="normal|bold"/>
 
                     <TextView
                         android:id="@+id/tv_address_residence"
@@ -86,7 +89,37 @@
                         android:layout_marginBottom="10dp"
                         android:text="@string/address"
                         android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!-- CardView Informações -->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="345dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/info"
+                        android:textColor="@color/primary_text"
+                        android:textSize="17sp"
+                        android:drawableLeft="@drawable/ic_info_black_24dp"
+                        android:drawablePadding="5dp"
+                        android:drawableTint="@color/primary"
+                        android:textStyle="normal|bold" />
 
                     <TextView
                         android:id="@+id/tv_city_residence"
@@ -119,6 +152,37 @@
 
             </android.support.v7.widget.CardView>
 
+            <!-- CardView Preferências -->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/preferences"
+                        android:textColor="@color/primary_text"
+                        android:textSize="17sp"
+                        android:drawableLeft="@drawable/ic_home_black_24dp"
+                        android:drawablePadding="5dp"
+                        android:drawableTint="@color/primary"
+                        android:textStyle="normal|bold" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!-- CardView Localização -->
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,9 +198,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="@string/preferences"
+                        android:text="@string/location"
                         android:textColor="@color/primary_text"
-                        android:textSize="17sp" />
+                        android:textSize="17sp"
+                        android:drawableLeft="@drawable/ic_place_black_24dp"
+                        android:drawablePadding="5dp"
+                        android:drawableTint="@color/primary"
+                        android:textStyle="normal|bold" />
 
                 </LinearLayout>
 
@@ -150,8 +218,8 @@
         android:id="@+id/pb_residence_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center"
-        android:layout_marginTop="300dp" />
+        android:layout_marginTop="300dp"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

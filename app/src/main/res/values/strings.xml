@@ -8,12 +8,17 @@
     <string name="hint_password">Senha</string>
     <string name="btn_login">Login</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="loading">Carregando...</string>
+
+    <!-- RESIDÊNCIA -->
+    <string name="title">Título</string>
     <string name="info">Informações</string>
     <string name="description">Descrição</string>
     <string name="address">Endereço</string>
     <string name="observation">Observação</string>
     <string name="preferences">Preferências</string>
     <string name="city">Cidade</string>
+    <string name="location">Localização</string>
 
     <!-- ERROS -->
     <string name="no_internet">Sem conexão com a Internet. Por favor, verifique sua conexão</string>
@@ -27,7 +32,4 @@
     <string name="user_service">user</string>
     <string name="residence_service">residence</string>
     <string name="residence_image_service">residenceImage</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

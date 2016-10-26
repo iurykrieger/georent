@@ -1,9 +1,9 @@
 package videira.ifc.edu.br.georent.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
+import org.w3c.dom.Text;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -50,10 +50,16 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         mProgressBar = (ProgressBar) findViewById(R.id.pb_residence_show);
         mResidenceRepository = new ResidenceRepository(this, this);
 
+        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this,android.R.color.transparent));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-        //mResidenceRepository.getResidenceById(mIntent.getIntExtra("idResidence",0));
         doLoad();
     }
 
@@ -76,10 +82,14 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     @Override
     public void doLoad() {
         if (NetworkUtil.verifyConnection(this)) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mResidenceRepository.getEagerResidenceById(mIntent.getIntExtra("idResidence", 0)); //Bind Correto
-            //doSingleBind(FakeGenerator.getInstance().getResidence(
-            //        mIntent.getIntExtra("idResidence", 0))); //Geração Fake!
+            if(mProgressBar.getVisibility() == View.GONE){
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+            mCollapsingToolbarLayout.setTitle(getString(R.string.loading));
+
+            //mResidenceRepository.getEagerResidenceById(mIntent.getIntExtra("idResidence", 0)); //Bind Correto
+            doSingleBind(FakeGenerator.getInstance().getResidence(
+                    mIntent.getIntExtra("idResidence", 0))); //Geração Fake!
         } else {
             doError(new UnknownHostException());
         }
@@ -89,8 +99,13 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     public void doSingleBind(Residence result) {
         mResidence = result;
         Log.i("Residence", mResidence.getTitle());
+        if(mProgressBar.getVisibility() == View.VISIBLE){
+            mProgressBar.setVisibility(View.GONE);
+        }
+        mCollapsingToolbarLayout.setTitle(mResidence.getTitle());
 
         final NetworkImageView nivResidence = (NetworkImageView) findViewById(R.id.niv_residence);
+        final TextView tvTitle = (TextView) findViewById(R.id.tv_title_residence);
         final TextView tvAddress = (TextView) findViewById(R.id.tv_address_residence);
         final TextView tvCity = (TextView) findViewById(R.id.tv_city_residence);
         final TextView tvDescription = (TextView) findViewById(R.id.tv_description_residence);
@@ -98,15 +113,12 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
 
         nivResidence.setImageUrl(mResidence.getResidenceImages().get(0).getPath(),
                 NetworkConnection.getInstance(this).getImageLoader());
+        tvTitle.setText(mResidence.getTitle());
         tvAddress.setText(mResidence.getAddress());
         tvCity.setText(mResidence.getIdLocation().getIdCity().getName() + " - " +
                 mResidence.getIdLocation().getIdCity().getUf());
         tvDescription.setText(mResidence.getDescription());
         tvObservation.setText(mResidence.getObservation());
-
-        mCollapsingToolbarLayout.setTitle(mResidence.getTitle());
-        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
-        mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.icons));
     }
 
     @Override
