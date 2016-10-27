@@ -2,11 +2,10 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_residence_show"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="videira.ifc.edu.br.georent.activities.ShowResidenceActivity">
+    tools:context="videira.ifc.edu.br.georent.activities.ShowResidenceActivity"
+    android:id="@+id/cl_residence_show">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -50,12 +49,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill_vertical"
+        android:clipToPadding="false"
+        android:paddingTop="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:fillViewport="true"
             android:paddingTop="5dp">
 
             <!-- CardView Título -->
@@ -80,7 +82,7 @@
                         android:text="@string/title"
                         android:textColor="@color/primary_text"
                         android:textSize="24sp"
-                        android:textStyle="normal|bold"/>
+                        android:textStyle="normal|bold" />
 
                     <TextView
                         android:id="@+id/tv_address_residence"
@@ -96,119 +98,13 @@
             </android.support.v7.widget.CardView>
 
             <!-- CardView Informações -->
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="345dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/info"
-                        android:textColor="@color/primary_text"
-                        android:textSize="17sp"
-                        android:drawableLeft="@drawable/ic_info_black_24dp"
-                        android:drawablePadding="5dp"
-                        android:drawableTint="@color/primary"
-                        android:textStyle="normal|bold" />
-
-                    <TextView
-                        android:id="@+id/tv_city_residence"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/city"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tv_description_residence"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/description"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tv_observation_residence"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/observation"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+            <include layout="@layout/residence_info" />
 
             <!-- CardView Preferências -->
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/preferences"
-                        android:textColor="@color/primary_text"
-                        android:textSize="17sp"
-                        android:drawableLeft="@drawable/ic_home_black_24dp"
-                        android:drawablePadding="5dp"
-                        android:drawableTint="@color/primary"
-                        android:textStyle="normal|bold" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+            <include layout="@layout/residence_preferences" />
 
             <!-- CardView Localização -->
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/location"
-                        android:textColor="@color/primary_text"
-                        android:textSize="17sp"
-                        android:drawableLeft="@drawable/ic_place_black_24dp"
-                        android:drawablePadding="5dp"
-                        android:drawableTint="@color/primary"
-                        android:textStyle="normal|bold" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+            <include layout="@layout/residence_location" />
 
         </LinearLayout>
 

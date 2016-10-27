@@ -9,6 +9,10 @@
     <string name="btn_login">Login</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="loading">Carregando...</string>
+    <string name="show_more">Mostrar Mais</string>
+    <string name="show_less">Mostrar Menos</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 
     <!-- RESIDÊNCIA -->
     <string name="title">Título</string>
@@ -19,6 +23,19 @@
     <string name="preferences">Preferências</string>
     <string name="city">Cidade</string>
     <string name="location">Localização</string>
+
+    <!-- PREFERÊNCIAS -->
+    <string name="sponsor">Fiador</string>
+    <string name="room">Quartos</string>
+    <string name="bathroom">Banheiros</string>
+    <string name="vacancy">Garagem</string>
+    <string name="laundry">Lavanderia</string>
+    <string name="income">Renda mínima</string>
+    <string name="condominium">Condomínio</string>
+    <string name="child">Crianças</string>
+    <string name="stay">Tempo mínimo de locação</string>
+    <string name="pet">Animais de estimação</string>
+    <string name="months">Meses</string>
 
     <!-- ERROS -->
     <string name="no_internet">Sem conexão com a Internet. Por favor, verifique sua conexão</string>

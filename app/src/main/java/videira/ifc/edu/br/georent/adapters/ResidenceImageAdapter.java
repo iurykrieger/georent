@@ -51,7 +51,7 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
         /**
          * Infla o layout do item e preenche o layout com o holder
          */
-        View view = mLayoutInflater.inflate(R.layout.item_residence_card, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_card_residence, parent, false);
         ResidenceViewHolder rvh = new ResidenceViewHolder(view);
         return rvh;
     }
