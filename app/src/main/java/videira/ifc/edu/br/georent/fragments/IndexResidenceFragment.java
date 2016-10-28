@@ -43,6 +43,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     private LinearLayoutManager mLinearLayoutManager;
     private ResidenceImageAdapter mResidenceImageAdapter;
     private ResidenceImageRepository mResidenceImageRepository;
+    private View mView;
     protected ProgressBar mProgressBar;
 
     public static IndexResidenceFragment newInstance(int page) {
@@ -144,6 +145,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Retorna a view para preencher a tela
          */
+        mView = view;
         return view;
     }
 
@@ -230,7 +232,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
 
         if (ex instanceof UnknownHostException) {
             snackbar = Snackbar
-                    .make(getView(), R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
+                    .make(mView, R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
                     .setAction("Conectar", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -241,7 +243,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
                     .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
         } else {
             snackbar = Snackbar
-                    .make(getView(), R.string.unknown_error, Snackbar.LENGTH_SHORT)
+                    .make(mView, R.string.unknown_error, Snackbar.LENGTH_SHORT)
                     .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
         }
 

@@ -6,6 +6,7 @@ import android.provider.Settings;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,6 +26,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.adapters.ImageAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
@@ -78,7 +80,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     }
 
     /*************************************************************************
-     * *                            SERVIÇO                                  **
+     **                            SERVIÇO                                  **
      *************************************************************************/
 
     @Override

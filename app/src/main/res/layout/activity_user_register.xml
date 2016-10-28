@@ -24,7 +24,7 @@
                 app:expandedTitleMarginStart="20dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <ImageSwitcher
+                <!--<ImageSwitcher
                     android:id="@+id/is_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -37,7 +37,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:spacing="10dp"/>
+                    android:spacing="10dp"/>-->
+                
+                <android.support.v4.view.ViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:id="@+id/vp_user_register">
+                </android.support.v4.view.ViewPager>
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
