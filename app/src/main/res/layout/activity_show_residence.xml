@@ -10,14 +10,14 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:theme="@style/ToolBarStyle">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/ct_residence"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="280dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMargin="18dp"
@@ -26,13 +26,14 @@
             app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/niv_residence"
+            <ViewFlipper
+                android:id="@+id/vf_residence"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+            </ViewFlipper>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

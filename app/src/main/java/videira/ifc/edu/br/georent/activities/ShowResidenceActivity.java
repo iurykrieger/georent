@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -28,13 +30,16 @@ import java.util.List;
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ImageAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
+import videira.ifc.edu.br.georent.interfaces.ViewFlipperOnSwipeListener;
+import videira.ifc.edu.br.georent.listeners.ViewFlipperTouchListener;
 import videira.ifc.edu.br.georent.models.Residence;
+import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class ShowResidenceActivity extends AppCompatActivity implements Bind<Residence> {
+public class ShowResidenceActivity extends AppCompatActivity implements Bind<Residence>, ViewFlipperOnSwipeListener{
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Toolbar mToolbar;
@@ -42,6 +47,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     private ResidenceRepository mResidenceRepository;
     private Intent mIntent;
     private Residence mResidence;
+    private ViewFlipper mViewFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,11 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_residence_show);
         mResidenceRepository = new ResidenceRepository(this, this);
-
+        mViewFlipper = (ViewFlipper) findViewById(R.id.vf_residence);
+        mViewFlipper.setOnTouchListener(new ViewFlipperTouchListener(this, mViewFlipper, this));
+        mViewFlipper.setInAnimation(this, android.R.anim.fade_in);
+        mViewFlipper.setOutAnimation(this, android.R.anim.fade_out);
+        mViewFlipper.setLongClickable(true);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,7 +119,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         mCollapsingToolbarLayout.setTitle(mResidence.getTitle());
 
         /* Cabeçalho */
-        final NetworkImageView nivResidence = (NetworkImageView) findViewById(R.id.niv_residence);
+        //final NetworkImageView nivResidence = (NetworkImageView) findViewById(R.id.niv_residence);
         final TextView tvTitle = (TextView) findViewById(R.id.tv_title_residence);
         final TextView tvAddress = (TextView) findViewById(R.id.tv_address_residence);
 
@@ -130,8 +140,12 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         final TextView tvPet = (TextView) findViewById(R.id.tv_pet_residence);
         final TextView tvChild = (TextView) findViewById(R.id.tv_child_residence);
 
-        nivResidence.setImageUrl(mResidence.getResidenceImages().get(0).getPath(),
-                NetworkConnection.getInstance(this).getImageLoader());
+        for (ResidenceImage ri : mResidence.getResidenceImages()) {
+            NetworkImageView networkImageView = new NetworkImageView(this);
+            networkImageView.setImageUrl(ri.getPath(), NetworkConnection.getInstance(this).getImageLoader());
+            networkImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            mViewFlipper.addView(networkImageView);
+        }
         tvTitle.setText(mResidence.getTitle());
         tvAddress.setText(mResidence.getAddress());
         tvCity.setText(mResidence.getIdLocation().getIdCity().getName() + " - " +
@@ -215,5 +229,19 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         }
 
         snackbar.show();
+    }
+
+    /*************************************************************************
+     **                            SWIPE                                    **
+     *************************************************************************/
+
+    @Override
+    public void onSwipeLeft() {
+        mViewFlipper.showPrevious();
+    }
+
+    @Override
+    public void onSwipeRight() {
+        mViewFlipper.showNext();
     }
 }

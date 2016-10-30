@@ -1,6 +1,7 @@
 package videira.ifc.edu.br.georent.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -75,18 +76,26 @@ public class FakeGenerator {
             r.setIdLocation(l);
             r.setIdPreference(p);
 
-            ResidenceImage ri = new ResidenceImage();
-            ri.setIdResidenceImage(new Random().nextInt());
-            ri.setCreatedAt(new Date());
-            ri.setOrder(i);
-            ri.setUpdatedAt(new Date());
-            ri.setResidence(r);
-            ri.setPath(RES[i % 4]);
+            List<String> tmp = new ArrayList<>();
+            for (int j = 0; j < RES.length; j++) {
+                tmp.add(RES[j]);
+            }
 
-            residenceImages.add(ri);
-
+            Collections.shuffle(tmp);
             List<ResidenceImage> ris = new ArrayList<>();
-            ris.add(ri);
+
+            for (String s : tmp) {
+                ResidenceImage ri = new ResidenceImage();
+                ri.setIdResidenceImage(new Random().nextInt());
+                ri.setCreatedAt(new Date());
+                ri.setOrder(i);
+                ri.setUpdatedAt(new Date());
+                ri.setResidence(r);
+                ri.setPath(s);
+                ris.add(ri);
+            }
+
+            residenceImages.add(ris.get(0));
             r.setResidenceImages(ris);
 
             residences.add(r);
