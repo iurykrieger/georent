@@ -17,29 +17,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
-
-import com.android.volley.toolbox.NetworkImageView;
-
-import org.w3c.dom.Text;
 
 import java.net.UnknownHostException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
-import videira.ifc.edu.br.georent.adapters.ImageAdapter;
+import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
-import videira.ifc.edu.br.georent.interfaces.ViewFlipperOnSwipeListener;
-import videira.ifc.edu.br.georent.listeners.ViewFlipperTouchListener;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
-import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
+import videira.ifc.edu.br.georent.utils.LayoutUtils;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class ShowResidenceActivity extends AppCompatActivity implements Bind<Residence>, ViewFlipperOnSwipeListener{
+public class ShowResidenceActivity extends AppCompatActivity implements Bind<Residence>, ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Toolbar mToolbar;
@@ -47,7 +41,15 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     private ResidenceRepository mResidenceRepository;
     private Intent mIntent;
     private Residence mResidence;
-    private ViewFlipper mViewFlipper;
+
+    /**
+     * ViewPager
+     */
+    private ViewPagerAdapter mViewPagerAdapter;
+    private ViewPager mViewPager;
+    private LinearLayout mPagerIndicator;
+    private ImageView[] dots;
+    private int dotsCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +60,10 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.ct_residence);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_residence_show);
+        mViewPager = (ViewPager) findViewById(R.id.vp_residence);
+        mPagerIndicator = (LinearLayout) findViewById(R.id.vp_count_dots);
         mResidenceRepository = new ResidenceRepository(this, this);
-        mViewFlipper = (ViewFlipper) findViewById(R.id.vf_residence);
-        mViewFlipper.setOnTouchListener(new ViewFlipperTouchListener(this, mViewFlipper, this));
-        mViewFlipper.setInAnimation(this, android.R.anim.fade_in);
-        mViewFlipper.setOutAnimation(this, android.R.anim.fade_out);
-        mViewFlipper.setLongClickable(true);
+
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,7 +90,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     }
 
     /*************************************************************************
-     **                            SERVIÇO                                  **
+     * *                            SERVIÇO                                  **
      *************************************************************************/
 
     @Override
@@ -140,52 +140,33 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         final TextView tvPet = (TextView) findViewById(R.id.tv_pet_residence);
         final TextView tvChild = (TextView) findViewById(R.id.tv_child_residence);
 
+        List<String> resources = new ArrayList<>();
         for (ResidenceImage ri : mResidence.getResidenceImages()) {
-            NetworkImageView networkImageView = new NetworkImageView(this);
-            networkImageView.setImageUrl(ri.getPath(), NetworkConnection.getInstance(this).getImageLoader());
-            networkImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            mViewFlipper.addView(networkImageView);
+            resources.add(ri.getPath());
         }
+        mViewPagerAdapter = new ViewPagerAdapter(this, resources);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setCurrentItem(0);
+        mViewPager.addOnPageChangeListener(this);
+        mViewPager.setOffscreenPageLimit(3);
+        setUiPageViewController();
+
         tvTitle.setText(mResidence.getTitle());
         tvAddress.setText(mResidence.getAddress());
         tvCity.setText(mResidence.getIdLocation().getIdCity().getName() + " - " +
                 mResidence.getIdLocation().getIdCity().getUf());
         tvDescription.setText(mResidence.getDescription());
         tvObservation.setText(mResidence.getObservation());
-
-        if (mResidence.getIdPreference().getSponsor()) {
-            tvSponsor.setText(getString(R.string.yes));
-            tvSponsor.setTextColor(ContextCompat.getColor(this, R.color.accent));
-        } else {
-            tvSponsor.setText(getString(R.string.no));
-            tvSponsor.setTextColor(ContextCompat.getColor(this, R.color.primary));
-        }
         tvRoom.setText(mResidence.getIdPreference().getRoom().toString());
         tvIncome.setText("$ " + new DecimalFormat("0.00").format(mResidence.getIdPreference().getIncome()));
         tvIncome.setTextColor(ContextCompat.getColor(this, R.color.accent));
         tvStay.setText(mResidence.getIdPreference().getStay().toString() + " " + getString(R.string.months));
         tvVacancy.setText(mResidence.getIdPreference().getVacancy().toString());
-        if (mResidence.getIdPreference().getCondominium()) {
-            tvCondominium.setText(getString(R.string.yes));
-            tvCondominium.setTextColor(ContextCompat.getColor(this, R.color.accent));
-        } else {
-            tvCondominium.setText(getString(R.string.no));
-            tvCondominium.setTextColor(ContextCompat.getColor(this, R.color.primary));
-        }
-        if (mResidence.getIdPreference().getPet()) {
-            tvPet.setText(getString(R.string.yes));
-            tvPet.setTextColor(ContextCompat.getColor(this, R.color.accent));
-        } else {
-            tvPet.setText(getString(R.string.no));
-            tvPet.setTextColor(ContextCompat.getColor(this, R.color.primary));
-        }
-        if (mResidence.getIdPreference().getChild()) {
-            tvChild.setText(getString(R.string.yes));
-            tvChild.setTextColor(ContextCompat.getColor(this, R.color.accent));
-        } else {
-            tvChild.setText(getString(R.string.no));
-            tvChild.setTextColor(ContextCompat.getColor(this, R.color.primary));
-        }
+
+        LayoutUtils.setTextViewColorByBoolean(this, tvSponsor, mResidence.getIdPreference().getSponsor());
+        LayoutUtils.setTextViewColorByBoolean(this, tvCondominium, mResidence.getIdPreference().getCondominium());
+        LayoutUtils.setTextViewColorByBoolean(this, tvPet, mResidence.getIdPreference().getPet());
+        LayoutUtils.setTextViewColorByBoolean(this, tvChild, mResidence.getIdPreference().getChild());
 
         tvLoadPreferences.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,16 +213,49 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     }
 
     /*************************************************************************
-     **                            SWIPE                                    **
+     * *                            VIEW PAGER                               **
      *************************************************************************/
 
-    @Override
-    public void onSwipeLeft() {
-        mViewFlipper.showPrevious();
+    private void setUiPageViewController() {
+        dotsCount = mViewPagerAdapter.getCount();
+        dots = new ImageView[dotsCount];
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new ImageView(this);
+            dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_nonselected));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            params.setMargins(4, 0, 4, 0);
+
+            mPagerIndicator.addView(dots[i], params);
+        }
+
+        dots[0].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_selected));
     }
 
     @Override
-    public void onSwipeRight() {
-        mViewFlipper.showNext();
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_nonselected));
+        }
+        dots[position].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_selected));
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

@@ -21,7 +21,8 @@ public class FakeGenerator {
     public static String[] RES = {"http://orig01.deviantart.net/c8ff/f/2010/111/4/d/bintaro_residence_by_ivanth.jpg",
             "https://www.residence.ualberta.ca/sites/default/files/graduate-residence-side.jpg",
             "https://www.residence.ualberta.ca/sites/default/files/graduate-residence-angle.jpg",
-            "http://o.homedsgn.com/wp-content/uploads/2012/06/Lima-Residence-02.jpg"};
+            "http://o.homedsgn.com/wp-content/uploads/2012/06/Lima-Residence-02.jpg",
+            "http://www.planwallpaper.com/static/images/1080p-Wallpapers.jpg"};
 
     private static FakeGenerator instance;
     private static List<ResidenceImage> residenceImages;

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -51,7 +52,7 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
         /**
          * Infla o layout do item e preenche o layout com o holder
          */
-        View view = mLayoutInflater.inflate(R.layout.item_card_residence, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_residence_card, parent, false);
         ResidenceViewHolder rvh = new ResidenceViewHolder(view);
         return rvh;
     }
@@ -63,12 +64,20 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
      * @param position
      */
     @Override
-    public void onBindViewHolder(ResidenceViewHolder holder, int position) {
+    public void onBindViewHolder(final ResidenceViewHolder holder, int position) {
         /**
          * Preenche os valores do objeto no holder baseado na posição da lista
          */
         holder.nivResidence.setImageUrl(mResidenceImageList.get(position).getPath(),
                 NetworkConnection.getInstance(mContext).getImageLoader());
+        holder.nivResidence.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if(holder.nivResidence.getDrawable() != null){
+                    holder.pbResidenceImage.setVisibility(View.GONE);
+                }
+            }
+        });
         holder.tvTitle.setText(mResidenceImageList.get(position).getResidence().getTitle());
         holder.tvAddress.setText(mResidenceImageList.get(position).getResidence().getAddress());
     }
@@ -122,6 +131,7 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
         public NetworkImageView nivResidence;
         public TextView tvTitle;
         public TextView tvAddress;
+        public ProgressBar pbResidenceImage;
 
         public ResidenceViewHolder(View itemView) {
             super(itemView);
@@ -129,6 +139,7 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
             nivResidence = (NetworkImageView) itemView.findViewById(R.id.niv_residence_card);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title_card);
             tvAddress = (TextView) itemView.findViewById(R.id.tv_address_card);
+            pbResidenceImage = (ProgressBar) itemView.findViewById(R.id.pb_residence_card);
         }
     }
 }
