@@ -3,6 +3,7 @@ package videira.ifc.edu.br.georent.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by iuryk on 28/08/2016.
@@ -44,6 +45,8 @@ public class User {
 
     private Date updatedAt;
 
+    @SerializedName("user_images")
+    private List<UserImage> userImages;
     /**
      * Construtor
      *
@@ -199,6 +202,14 @@ public class User {
 
     public void setProfileImage(UserImage profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public List<UserImage> getUserImages() {
+        return userImages;
+    }
+
+    public void setUserImages(List<UserImage> userImages) {
+        this.userImages = userImages;
     }
 
     /**
