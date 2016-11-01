@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
-import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
+import videira.ifc.edu.br.georent.adapters.NetworkViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
@@ -45,7 +45,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     /**
      * ViewPager
      */
-    private ViewPagerAdapter mViewPagerAdapter;
+    private NetworkViewPagerAdapter mViewPagerAdapter;
     private ViewPager mViewPager;
     private LinearLayout mPagerIndicator;
     private ImageView[] dots;
@@ -144,7 +144,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         for (ResidenceImage ri : mResidence.getResidenceImages()) {
             resources.add(ri.getPath());
         }
-        mViewPagerAdapter = new ViewPagerAdapter(this, resources);
+        mViewPagerAdapter = new NetworkViewPagerAdapter(this, resources);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setCurrentItem(0);
         mViewPager.addOnPageChangeListener(this);
