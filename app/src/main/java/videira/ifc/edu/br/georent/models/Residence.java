@@ -24,6 +24,9 @@ public class Residence {
     @SerializedName("preference")
     private Preference idPreference;
 
+    @SerializedName("profileImage")
+    private ResidenceImage profileImage;
+
     private String title;
 
     private String description;
@@ -58,11 +61,13 @@ public class Residence {
      * @param observation
      * @param rent
      */
-    public Residence(Integer idResidence, Location idLocation, User idUser, Preference idPreference, String title, String description, String address, String observation, Float rent) {
+    public Residence(Integer idResidence, Location idLocation, User idUser, Preference idPreference,
+                     ResidenceImage profileImage, String title, String description, String address, String observation, Float rent) {
         this.idResidence = idResidence;
         this.idLocation = idLocation;
         this.idUser = idUser;
         this.idPreference = idPreference;
+        this.profileImage = profileImage;
         this.title = title;
         this.description = description;
         this.address = address;
@@ -150,6 +155,30 @@ public class Residence {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public ResidenceImage getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(ResidenceImage profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<ResidenceImage> getResidenceImages() {

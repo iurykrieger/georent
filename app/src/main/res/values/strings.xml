@@ -23,6 +23,11 @@
     <string name="preferences">Preferências</string>
     <string name="city">Cidade</string>
     <string name="location">Localização</string>
+    <string name="likes">Curtidas</string>
+
+    <!-- USUÁRIO -->
+    <string name="name">Nome</string>
+    <string name="date">Data</string>
 
     <!-- PREFERÊNCIAS -->
     <string name="sponsor">Fiador</string>

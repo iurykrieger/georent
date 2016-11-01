@@ -1,5 +1,7 @@
 package videira.ifc.edu.br.georent.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -12,19 +14,36 @@ public class User {
      * Atributos
      */
     private Integer idUser;
+
     private String name;
+
     private Date birthDate;
+
     private String email;
+
     private String phone;
+
     private String password;
+
     private Float credits;
+
     private Type type;
+
     private Integer distance;
+
+    @SerializedName("preference")
     private Preference idPreference;
+
+    @SerializedName("city")
     private City idCity;
+
+    @SerializedName("profileImage")
+    private UserImage profileImage;
+
     private Date createdAt;
+
     private Date updatedAt;
-    private String photo;
+
     /**
      * Construtor
      *
@@ -174,12 +193,12 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public String getPhoto() {
-        return photo;
+    public UserImage getProfileImage() {
+        return profileImage;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setProfileImage(UserImage profileImage) {
+        this.profileImage = profileImage;
     }
 
     /**

@@ -127,6 +127,9 @@
                 <!-- CardView Preferências -->
                 <include layout="@layout/residence_preferences" />
 
+                <!-- CardView Likes -->
+                <include layout="@layout/residence_likes" />
+
                 <!-- CardView Localização -->
                 <include layout="@layout/residence_location" />
 

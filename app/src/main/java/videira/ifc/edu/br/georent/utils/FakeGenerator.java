@@ -1,5 +1,6 @@
 package videira.ifc.edu.br.georent.utils;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -8,9 +9,12 @@ import java.util.Random;
 
 import videira.ifc.edu.br.georent.models.City;
 import videira.ifc.edu.br.georent.models.Location;
+import videira.ifc.edu.br.georent.models.Match;
 import videira.ifc.edu.br.georent.models.Preference;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
+import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.models.UserImage;
 
 /**
  * Created by iuryk on 23/10/2016.
@@ -84,6 +88,7 @@ public class FakeGenerator {
 
             Collections.shuffle(tmp);
             List<ResidenceImage> ris = new ArrayList<>();
+            List<Match> ms = new ArrayList<>();
 
             for (String s : tmp) {
                 ResidenceImage ri = new ResidenceImage();
@@ -94,10 +99,38 @@ public class FakeGenerator {
                 ri.setResidence(r);
                 ri.setPath(s);
                 ris.add(ri);
+
+                User u = new User();
+                u.setBirthDate(new Date());
+                u.setCredits(new Random().nextFloat());
+                u.setDistance(new Random().nextInt());
+                u.setEmail("fulano" + tmp.indexOf(s) + "@gmail.com");
+                u.setIdCity(c);
+                u.setName("Fulano Número " + tmp.indexOf(s));
+                u.setIdPreference(p);
+                u.setPassword("aosdihaosidh120398");
+                u.setPhone("(49) 8909-9777");
+
+                UserImage ui = new UserImage();
+                ui.setIdUserImage(new Random().nextInt());
+                ui.setOrder(i);
+                ui.setIdUser(u);
+                ui.setPath(s);
+
+                u.setProfileImage(ui);
+
+                Match m = new Match();
+                m.setIdMatch(new Random().nextInt());
+                m.setDateTime(new Date());
+                m.setIdResidence(r);
+                m.setIdUser(u);
+                m.setLike(new Random().nextInt(1));
+                ms.add(m);
             }
 
             residenceImages.add(ris.get(0));
             r.setResidenceImages(ris);
+            r.setMatches(ms);
 
             residences.add(r);
         }
