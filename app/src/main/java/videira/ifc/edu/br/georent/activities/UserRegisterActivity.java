@@ -15,6 +15,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,12 +42,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private ViewPagerAdapter mImageAdapter;
     private ViewPager mViewPager;
     private LinearLayout mPagerIndicator;
-    private ImageView[] dots;
-    private int dotsCount;
     private User mUser;
-
-
-    private List<Integer> mImageResources ;
+    private List<Integer> mImageResources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,15 +84,11 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
 
         /**     ViewPager    **/
-        List<Integer> resources = new ArrayList<>();
-        resources.add(R.drawable.new_image);
-        mImageAdapter = new ViewPagerAdapter(this, resources);
+        mImageAdapter = new ViewPagerAdapter(this, mPagerIndicator);
         mViewPager.setAdapter(mImageAdapter);
-        mViewPager.setCurrentItem(0);
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setOffscreenPageLimit(3);
-        setUiPageViewController();
-
+        mViewPager.setCurrentItem(0);
 
         /**    PICKUP IMAGE   **/
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -108,27 +101,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         });
     }
 
-
-    private void setUiPageViewController() {
-        dotsCount = mImageAdapter.getCount();
-        dots = new ImageView[dotsCount];
-
-        for (int i = 0; i < dotsCount; i++) {
-            dots[i] = new ImageView(this);
-            dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_nonselected));
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            params.setMargins(4, 0, 4, 0);
-
-            mPagerIndicator.addView(dots[i], params);
-        }
-
-        dots[0].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_selected));
-    }
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -136,7 +108,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     @Override
     public void onPageSelected(int position) {
-
+        mImageAdapter.setIndex(position);
     }
 
     @Override
@@ -166,7 +138,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                     }
                     yourSelectedImage = BitmapFactory.decodeStream(imageStream);
                     final Drawable imageDrawable = new BitmapDrawable(getResources(), yourSelectedImage);
-
                 }
                 break;
             case REQUEST_CAMERA_IMAGE: {
@@ -176,7 +147,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                         final Drawable imageDrawable = new BitmapDrawable(getResources(), selectedImage);
-
+                        mImageAdapter.addListItem(imageUri);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }

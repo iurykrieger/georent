@@ -14,14 +14,12 @@ import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.models.Match;
-import videira.ifc.edu.br.georent.models.ResidenceImage;
-import videira.ifc.edu.br.georent.network.NetworkConnection;
 
 /**
  * Created by Aluno on 01/11/2016.
  */
 
-public class MatchAdapter extends RecyclerView.Adapter<ResidenceImageAdapter.ResidenceViewHolder> {
+public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHolder> {
 
     /**
      * Atributos
@@ -50,13 +48,13 @@ public class MatchAdapter extends RecyclerView.Adapter<ResidenceImageAdapter.Res
      * @return
      */
     @Override
-    public ResidenceImageAdapter.ResidenceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MatchAdapter.MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         /**
          * Infla o layout do item e preenche o layout com o holder
          */
         View view = mLayoutInflater.inflate(R.layout.item_user_card, parent, false);
-        ResidenceImageAdapter.ResidenceViewHolder rvh = new ResidenceImageAdapter.ResidenceViewHolder(view);
-        return rvh;
+        MatchAdapter.MatchViewHolder mvh = new MatchAdapter.MatchViewHolder(view);
+        return mvh;
     }
 
     /**
@@ -66,11 +64,11 @@ public class MatchAdapter extends RecyclerView.Adapter<ResidenceImageAdapter.Res
      * @param position
      */
     @Override
-    public void onBindViewHolder(final ResidenceImageAdapter.ResidenceViewHolder holder, int position) {
+    public void onBindViewHolder(final MatchAdapter.MatchViewHolder holder, int position) {
         /**
          * Preenche os valores do objeto no holder baseado na posição da lista
          */
-        holder.nivResidence.setImageUrl(mMatchList.get(position).getPath(),
+        /*holder.nivResidence.setImageUrl(mMatchList.get(position).getPath(),
                 NetworkConnection.getInstance(mContext).getImageLoader());
         holder.nivResidence.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -81,7 +79,7 @@ public class MatchAdapter extends RecyclerView.Adapter<ResidenceImageAdapter.Res
             }
         });
         holder.tvTitle.setText(mMatchList.get(position).getResidence().getTitle());
-        holder.tvAddress.setText(mMatchList.get(position).getResidence().getAddress());
+        holder.tvAddress.setText(mMatchList.get(position).getResidence().getAddress());*/
     }
 
     /**
@@ -97,11 +95,11 @@ public class MatchAdapter extends RecyclerView.Adapter<ResidenceImageAdapter.Res
     /**
      * Adiciona um novo item na lista
      *
-     * @param residenceImage
+     * @param match
      * @param position
      */
-    public void addListItem(ResidenceImage residenceImage, int position) {
-        mMatchList.add(residenceImage);
+    public void addListItem(Match match, int position) {
+        mMatchList.add(match);
         notifyItemInserted(position);
     }
 
@@ -110,7 +108,7 @@ public class MatchAdapter extends RecyclerView.Adapter<ResidenceImageAdapter.Res
      * @param position
      * @return
      */
-    public ResidenceImage getListItem(int position){
+    public Match getListItem(int position){
         return mMatchList.get(position);
     }
 
