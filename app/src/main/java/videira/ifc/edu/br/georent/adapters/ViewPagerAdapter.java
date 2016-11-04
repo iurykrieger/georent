@@ -6,6 +6,9 @@ package videira.ifc.edu.br.georent.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import videira.ifc.edu.br.georent.R;
 
@@ -52,15 +56,13 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         final View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_pager, container, false);
-
         final ImageView mImageView = (ImageView) itemView.findViewById(R.id.niv_item_image);
 
         try {
-            Bitmap bmp = MediaStore.Images.Media.getBitmap(
-                    mContext.getContentResolver(),
-                    mResources.get(position));
+            Bitmap bmp = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(),mResources.get(position));
             bmp.compress(Bitmap.CompressFormat.JPEG, 50, new ByteArrayOutputStream());
-            mImageView.setImageBitmap(bmp);
+            Bitmap resized = scaleDown(bmp, 500, true);
+            mImageView.setImageBitmap(resized);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,6 +70,15 @@ public class ViewPagerAdapter extends PagerAdapter {
         container.addView(itemView);
         addIndex();
         return itemView;
+    }
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,boolean filter) {
+        float ratio = Math.min((float) maxImageSize / realImage.getWidth(), (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width, height, filter);
+        return newBitmap;
     }
 
     @Override
@@ -97,10 +108,6 @@ public class ViewPagerAdapter extends PagerAdapter {
         params.setMargins(4, 0, 4, 0);
 
         mPagerIndicator.addView(iv, params);
-    }
-
-    private void removeIndex(int position) {
-
     }
 
     public void setIndex(int position) {

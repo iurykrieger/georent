@@ -14,6 +14,9 @@
     <string name="yes">Sim</string>
     <string name="no">Não</string>
 
+    <!-- CADASTRO USUARIO -->
+    <string name="range">Área De Busca</string>
+
     <!-- RESIDÊNCIA -->
     <string name="title">Título</string>
     <string name="info">Informações</string>

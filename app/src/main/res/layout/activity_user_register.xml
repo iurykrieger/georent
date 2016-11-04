@@ -82,167 +82,177 @@
         android:paddingTop="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            <LinearLayout
+            <!-- CardView Usuario -->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp">
 
-                <TextView
-                    android:layout_width="345dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/info"
-                    android:textColor="@color/primary_text"
-                    android:textSize="17sp"
-                    android:drawableLeft="@drawable/ic_info_black_24dp"
-                    android:drawablePadding="5dp"
-                    android:drawableTint="@color/primary"
-                    android:textStyle="normal|bold" />
-
-                //Nome
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/hint_name"
-                        android:inputType="textPersonName" />
-                </android.support.design.widget.TextInputLayout>
-
-                //Email
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/hint_email"
-                        android:inputType="textEmailAddress" />
-                </android.support.design.widget.TextInputLayout>
-
-                //DtNasc
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="date"
-                        android:hint="@string/hint_birthDate"
-                        android:ems="10"
-                        android:id="@+id/textBirthDate" />
-                </android.support.design.widget.TextInputLayout>
-
-                //Tel
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:hint="@string/hint_phone"
-                        android:ems="10"
-                        android:id="@+id/textPhone" />
-                </android.support.design.widget.TextInputLayout>
-
-                //Senha
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:ems="10"
-                        android:hint="@string/hint_password"
-                        android:id="@+id/editText5" />
-                </android.support.design.widget.TextInputLayout>
-
-                //Distancia
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/tv_range"
-                        android:layout_width="0dp"
+                        android:layout_width="345dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="Área de Busca"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textAlignment="textStart"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
+                        android:text="@string/info"
+                        android:textColor="@color/primary_text"
+                        android:textSize="17sp"
+                        android:drawableLeft="@drawable/ic_person_black_24dp"
+                        android:drawablePadding="5dp"
+                        android:drawableTint="@color/primary"
+                        android:textStyle="normal|bold" />
 
-                    <TextView
-                        android:id="@+id/tv_range_number"
-                        android:layout_width="0dp"
+                    //Nome
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="0 km"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/hint_name"
+                            android:inputType="textPersonName" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    //Email
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_email"
+                            android:inputType="textEmailAddress" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    //DtNasc
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"
+                            android:hint="@string/hint_birthDate"
+                            android:ems="10"
+                            android:id="@+id/textBirthDate" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    //Tel
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:hint="@string/hint_phone"
+                            android:ems="10"
+                            android:id="@+id/textPhone" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    //Senha
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:ems="10"
+                            android:hint="@string/hint_password"
+                            android:id="@+id/editText5" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    //Distancia
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/tv_range"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="@string/range"
+                            android:layout_weight="1"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="15sp"
+                            android:textAlignment="viewStart"/>
+
+                        <TextView
+                            android:id="@+id/tv_range_number"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="0 km"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+                    <SeekBar
+                        android:id="@+id/sb_distance"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:progressTint="@color/accent"
+                        android:thumbTint="@color/accent"
+                        android:max="99"/>
+
                 </LinearLayout>
-                <SeekBar
-                    android:id="@+id/sb_distance"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:progressTint="@color/accent"
-                    android:thumbTint="@color/accent"
-                    android:max="99"/>
-
-                <Button
-                    android:id="@+id/bt_register"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@android:color/transparent"
-                    android:nestedScrollingEnabled="false"
-                    android:text="Cadastrar"
-                    android:textColor="@color/accent"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
         </android.support.v7.widget.CardView>
 
+            <include layout="@layout/new_residence_preference" />
+
+            <!--
+            <Button
+                android:id="@+id/bt_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:nestedScrollingEnabled="false"
+                android:text="Cadastrar"
+                android:textColor="@color/accent"
+                android:textStyle="bold" />
+            -->
+
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
