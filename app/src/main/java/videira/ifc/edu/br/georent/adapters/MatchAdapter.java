@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.models.Match;
+import videira.ifc.edu.br.georent.network.NetworkConnection;
 
 /**
  * Created by Aluno on 01/11/2016.
@@ -52,7 +54,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
         /**
          * Infla o layout do item e preenche o layout com o holder
          */
-        View view = mLayoutInflater.inflate(R.layout.item_user_card, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_match, parent, false);
         MatchAdapter.MatchViewHolder mvh = new MatchAdapter.MatchViewHolder(view);
         return mvh;
     }
@@ -68,18 +70,18 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
         /**
          * Preenche os valores do objeto no holder baseado na posição da lista
          */
-        /*holder.nivResidence.setImageUrl(mMatchList.get(position).getPath(),
+        holder.nivMatch.setImageUrl(mMatchList.get(position).getIdUser().getProfileImage().getPath(),
                 NetworkConnection.getInstance(mContext).getImageLoader());
-        holder.nivResidence.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        holder.nivMatch.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if(holder.nivResidence.getDrawable() != null){
+                /*if(holder.nivResidence.getDrawable() != null){
                     holder.pbResidenceImage.setVisibility(View.GONE);
-                }
+                }*/
             }
         });
-        holder.tvTitle.setText(mMatchList.get(position).getResidence().getTitle());
-        holder.tvAddress.setText(mMatchList.get(position).getResidence().getAddress());*/
+        holder.tvName.setText(mMatchList.get(position).getIdUser().getName());
+        holder.tvDate.setText(mMatchList.get(position).getDateTime().toString());
     }
 
     /**
@@ -128,18 +130,18 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
      */
     public class MatchViewHolder extends RecyclerView.ViewHolder {
 
-        public NetworkImageView nivResidence;
-        public TextView tvTitle;
-        public TextView tvAddress;
-        public ProgressBar pbResidenceImage;
+        public NetworkImageView nivMatch;
+        public TextView tvName;
+        public TextView tvDate;
+        public ImageView ivChat;
 
         public MatchViewHolder(View itemView) {
             super(itemView);
 
-            nivResidence = (NetworkImageView) itemView.findViewById(R.id.niv_residence_card);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title_card);
-            tvAddress = (TextView) itemView.findViewById(R.id.tv_address_card);
-            pbResidenceImage = (ProgressBar) itemView.findViewById(R.id.pb_residence_card);
+            nivMatch = (NetworkImageView) itemView.findViewById(R.id.niv_item_match);
+            tvName = (TextView) itemView.findViewById(R.id.tv_name_item_match);
+            tvDate = (TextView) itemView.findViewById(R.id.tv_date_item_match);
+            ivChat = (ImageView) itemView.findViewById(R.id.iv_chat_item_match);
         }
     }
 }

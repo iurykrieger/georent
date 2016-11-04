@@ -144,12 +144,11 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         for (ResidenceImage ri : mResidence.getResidenceImages()) {
             resources.add(ri.getPath());
         }
-        mViewPagerAdapter = new NetworkViewPagerAdapter(this, resources);
+        mViewPagerAdapter = new NetworkViewPagerAdapter(this, resources, mPagerIndicator);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setCurrentItem(0);
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setOffscreenPageLimit(3);
-        setUiPageViewController();
 
         tvTitle.setText(mResidence.getTitle());
         tvAddress.setText(mResidence.getAddress());
@@ -216,26 +215,6 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
      * *                            VIEW PAGER                               **
      *************************************************************************/
 
-    private void setUiPageViewController() {
-        dotsCount = mViewPagerAdapter.getCount();
-        dots = new ImageView[dotsCount];
-
-        for (int i = 0; i < dotsCount; i++) {
-            dots[i] = new ImageView(this);
-            dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_nonselected));
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            params.setMargins(4, 0, 4, 0);
-
-            mPagerIndicator.addView(dots[i], params);
-        }
-
-        dots[0].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_selected));
-    }
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -243,10 +222,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
 
     @Override
     public void onPageSelected(int position) {
-        for (int i = 0; i < dotsCount; i++) {
-            dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_nonselected));
-        }
-        dots[position].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.item_selected));
+        mViewPagerAdapter.setIndex(position);
     }
 
     @Override

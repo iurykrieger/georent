@@ -12,8 +12,8 @@
     android:paddingRight="?listPreferredItemPaddingRight"
     android:paddingStart="?listPreferredItemPaddingLeft">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/primary_action"
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/niv_item_match"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
@@ -33,23 +33,23 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_toEndOf="@+id/primary_action"
-        android:layout_toLeftOf="@+id/secondary_action"
-        android:layout_toRightOf="@+id/primary_action"
-        android:layout_toStartOf="@+id/secondary_action"
+        android:layout_toEndOf="@+id/niv_item_match"
+        android:layout_toLeftOf="@+id/iv_chat_item_match"
+        android:layout_toRightOf="@+id/niv_item_match"
+        android:layout_toStartOf="@+id/iv_chat_item_match"
         android:orientation="vertical"
         android:paddingBottom="16dp"
         android:paddingTop="16dp">
 
         <TextView
-            android:id="@+id/first_text_view"
+            android:id="@+id/tv_name_item_match"
             style="@style/TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/name"/>
 
         <TextView
-            android:id="@+id/second_text_view"
+            android:id="@+id/tv_date_item_match"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
 
     <!-- Can be replaced by a widget -->
     <ImageView
-        android:id="@+id/secondary_action"
+        android:id="@+id/iv_chat_item_match"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
