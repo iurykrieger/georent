@@ -22,209 +22,199 @@ android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout
             android:textSize="17sp"
             android:textStyle="normal|bold" />
 
-        // Fiador
-        <LinearLayout
+    // Fiador
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sponsor"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switchSponsor"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:weightSum="1">
+            android:layout_height="20dp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sponsor"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp" />
+    //Condominio
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1">
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchSponsor"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:textAlignment="textEnd" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/condominium"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
 
-        </LinearLayout>
-
-        //Garagem
-        <LinearLayout
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switchCondominium"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:weightSum="1">
+            android:layout_height="20dp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/vacancy"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="15sp" />
+    //Animais
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1">
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchVacancy"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:textAlignment="textEnd" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pet"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
 
-        </LinearLayout>
-
-        //Condominio
-        <LinearLayout
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switchPet"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:weightSum="1">
+            android:layout_height="20dp"
+            android:textAlignment="textEnd" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/condominium"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp" />
+    </LinearLayout>
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchCondominium"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:textAlignment="textEnd" />
+    //Criancas
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1">
 
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/child"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
 
-        //Animais
-        <LinearLayout
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switchChild"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:weightSum="1">
+            android:layout_height="20dp"
+            android:textAlignment="textEnd" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/pet"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp" />
+    </LinearLayout>
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchPet"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:textAlignment="textEnd" />
+    //Lavanderia
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1">
 
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/laundry"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
 
-        //Criancas
-        <LinearLayout
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/laundry"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:weightSum="1">
+            android:layout_height="20dp"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/child"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp" />
+    //Garagem
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1">
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchChild"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:textAlignment="textEnd" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vacancy"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
 
-        </LinearLayout>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/et_vacancy"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-        // Quartos
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp">
+    // Quartos
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1"
+        android:textAlignment="textEnd">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/room"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/tv_room_residence"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:digits="2"
-                android:gravity="right"
-                android:text="@string/room"
-                android:textColor="@color/primary_text"
-                android:textSize="16sp" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/et_rooms"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-        </LinearLayout>
+    //Banheiro
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="1">
 
-        //Renda
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bathroom"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/income"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/tv_income_residence"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:digits="2"
-                android:gravity="right"
-                android:text="@string/income"
-                android:textColor="@color/primary_text"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-        //TempoMin
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/stay"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/tv_stay_residence"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:digits="2"
-                android:gravity="right"
-                android:text="@string/stay"
-                android:textColor="@color/primary_text"
-                android:textSize="16sp" />
-
-        </LinearLayout>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/et_bathroom"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"/>
+    </LinearLayout>
 
 </LinearLayout>
 

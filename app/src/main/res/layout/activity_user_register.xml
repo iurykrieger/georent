@@ -159,6 +159,12 @@
                             android:hint="@string/hint_birthDate"
                             android:ems="10"
                             android:id="@+id/textBirthDate" />
+
+                        <DatePicker
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/datePicker"
+                            android:headerBackground="@color/primary_dark"/>
                     </android.support.design.widget.TextInputLayout>
 
                     //Tel
