@@ -14,13 +14,54 @@ android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:drawableLeft="@drawable/ic_home_black_24dp"
+            android:drawableLeft="@drawable/ic_person_black_24dp"
             android:drawablePadding="5dp"
             android:drawableTint="@color/primary"
             android:text="@string/preferences"
             android:textColor="@color/primary_text"
             android:textSize="17sp"
             android:textStyle="normal|bold" />
+
+    //Distancia
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_range"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/range"
+            android:layout_weight="1"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp"
+            android:textAlignment="viewStart"/>
+
+        <TextView
+            android:id="@+id/tv_range_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="0 km"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+    <SeekBar
+        android:id="@+id/sb_distance"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:progressTint="@color/accent"
+        android:thumbTint="@color/accent"
+        android:max="99"/>
+
 
     // Fiador
     <LinearLayout
@@ -153,15 +194,17 @@ android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout
             android:layout_height="wrap_content"
             android:text="@string/vacancy"
             android:textColor="@color/secondary_text"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_weight="0.96" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
             android:id="@+id/et_vacancy"
-            android:layout_weight="1" />
+            android:textAlignment="center" />
+
     </LinearLayout>
 
     // Quartos
@@ -171,26 +214,29 @@ android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout
         android:orientation="horizontal"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:weightSum="1"
-        android:textAlignment="textEnd">
+        android:textAlignment="textEnd"
+        android:weightSum="1">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/room"
             android:textColor="@color/secondary_text"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_weight="0.96" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
             android:id="@+id/et_rooms"
-            android:layout_weight="1" />
+            android:textAlignment="center" />
+
     </LinearLayout>
 
     //Banheiro
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -204,16 +250,16 @@ android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout
             android:layout_height="wrap_content"
             android:text="@string/bathroom"
             android:textColor="@color/secondary_text"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_weight="0.96" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/et_bathroom"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"/>
+            android:id="@+id/et_bathrooms"
+            android:textAlignment="center" />
     </LinearLayout>
 
 </LinearLayout>
