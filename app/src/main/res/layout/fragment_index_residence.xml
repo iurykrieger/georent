@@ -4,23 +4,30 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_index_residence">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/sr_users"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_users"
-            android:layout_width="wrap_content"
-            android:layout_height="491dp"
-            android:scrollbars="vertical" />
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/sr_users"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_users"
+                android:layout_width="wrap_content"
+                android:layout_height="491dp"
+                android:scrollbars="vertical" />
 
-    <ProgressBar
-        android:id="@+id/pb_residence_index"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_residence_index"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </LinearLayout>
 </FrameLayout>

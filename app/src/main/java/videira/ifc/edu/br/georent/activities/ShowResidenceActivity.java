@@ -8,6 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.adapters.MatchAdapter;
 import videira.ifc.edu.br.georent.adapters.NetworkViewPagerAdapter;
+import videira.ifc.edu.br.georent.adapters.ResidenceImageAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
@@ -48,8 +52,6 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     private NetworkViewPagerAdapter mViewPagerAdapter;
     private ViewPager mViewPager;
     private LinearLayout mPagerIndicator;
-    private ImageView[] dots;
-    private int dotsCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +142,11 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
         final TextView tvPet = (TextView) findViewById(R.id.tv_pet_residence);
         final TextView tvChild = (TextView) findViewById(R.id.tv_child_residence);
 
+        /* Matches */
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        final RecyclerView rvMatch = (RecyclerView) findViewById(R.id.rv_match_residence);
+        final MatchAdapter matchAdapter = new MatchAdapter(mResidence.getMatches().subList(0,4), this);
+
         List<String> resources = new ArrayList<>();
         for (ResidenceImage ri : mResidence.getResidenceImages()) {
             resources.add(ri.getPath());
@@ -179,6 +186,11 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
                 }
             }
         });
+
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvMatch.setHasFixedSize(true);
+        rvMatch.setLayoutManager(linearLayoutManager);
+        rvMatch.setAdapter(matchAdapter);
     }
 
     @Override

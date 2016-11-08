@@ -125,10 +125,10 @@
                 <include layout="@layout/residence_info" />
 
                 <!-- CardView Preferências -->
-                <include layout="@layout/residence_preferences" />
+                <include layout="@layout/residence_preference" />
 
                 <!-- CardView Likes -->
-                <include layout="@layout/residence_likes" />
+                <include layout="@layout/residence_match" />
 
                 <!-- CardView Localização -->
                 <include layout="@layout/residence_location" />

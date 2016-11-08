@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
@@ -81,7 +82,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
             }
         });
         holder.tvName.setText(mMatchList.get(position).getIdUser().getName());
-        holder.tvDate.setText(mMatchList.get(position).getDateTime().toString());
+        holder.tvDate.setText(new SimpleDateFormat("mm/dd/yyyy hh:mm").format(mMatchList.get(position).getDateTime()));
     }
 
     /**
