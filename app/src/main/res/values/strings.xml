@@ -66,4 +66,7 @@
     <string name="user_service">user</string>
     <string name="residence_service">residence</string>
     <string name="residence_image_service">residenceImage</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -31,9 +31,9 @@ import videira.ifc.edu.br.georent.repositories.ResidenceImageRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class IndexResidenceFragment extends Fragment implements RecyclerViewOnClickListener, Bind<ResidenceImage> {
+public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnClickListener, Bind<ResidenceImage> {
     //Parâmetros constantes do fragment
-    private static final String ARG_PAGE = "HOME";
+    public static final String ARG_PAGE_RESIDENCE = "HOME";
 
     //Parâmetros variáveis do fragment
     private int page;
@@ -46,10 +46,10 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     private View mView;
     protected ProgressBar mProgressBar;
 
-    public static IndexResidenceFragment newInstance(int page) {
-        IndexResidenceFragment fragment = new IndexResidenceFragment();
+    public static ResidenceIndexFragment newInstance(int page) {
+        ResidenceIndexFragment fragment = new ResidenceIndexFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
+        args.putInt(ARG_PAGE_RESIDENCE, page);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +62,7 @@ public class IndexResidenceFragment extends Fragment implements RecyclerViewOnCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.page = getArguments().getInt(ARG_PAGE);
+            this.page = getArguments().getInt(ARG_PAGE_RESIDENCE);
         }
     }
 
