@@ -15,7 +15,16 @@
     <string name="no">Não</string>
 
     <!-- CADASTRO USUARIO -->
+    <string name="new_user">Novo Usuário</string>
     <string name="range">Área De Busca</string>
+    <string-array name="numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
 
     <!-- RESIDÊNCIA -->
     <string name="title">Título</string>

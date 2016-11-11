@@ -8,23 +8,22 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
@@ -38,12 +37,18 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
 
-    /** ViewPager **/
+    /**
+     * ViewPager
+     **/
     private ViewPagerAdapter mImageAdapter;
     private ViewPager mViewPager;
     private LinearLayout mPagerIndicator;
     private User mUser;
     private List<Integer> mImageResources;
+    private EditText mEtBirthDate;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+
+    String[] numbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +59,18 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.vp_user);
         mPagerIndicator = (LinearLayout) findViewById(R.id.vp_user_count_dots);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
+        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
         /*     CHANGE DISTANCE    */
         final SeekBar skDistance = (SeekBar) findViewById(R.id.sb_distance);
@@ -82,7 +97,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             }
         });
 
-
         /**     ViewPager    **/
         mImageAdapter = new ViewPagerAdapter(this, mPagerIndicator);
         mViewPager.setAdapter(mImageAdapter);
@@ -99,11 +113,27 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 startActivityForResult(photoPickerIntent, REQUEST_CAMERA_IMAGE);
             }
         });
+
+        /** SPINNERS   **/
+        numbers = getResources().getStringArray(R.array.numbers);
+
+       /* Spinner mSpinnerRoom = (Spinner) findViewById(R.id.spinner_rooms);
+        Spinner mSpinnerBathRoom = (Spinner) findViewById(R.id.spinner_bathroom);
+        Spinner mSpinnerVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
+
+        ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.activity_user_register, numbers);
+
+        mSpinnerRoom.setAdapter(adapter);
+        mSpinnerBathRoom.setAdapter(adapter);
+        mSpinnerVacancy.setAdapter(adapter);
+*/
+        /**     DATE PICKER    **/
+        mEtBirthDate = (EditText) findViewById(R.id.et_birth_date);
+
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override
@@ -113,12 +143,10 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
 
     @Override
     public void onClick(View v) {
-
     }
 
     @Override

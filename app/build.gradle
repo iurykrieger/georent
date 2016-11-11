@@ -41,4 +41,7 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.13.0'
     compile 'com.mikhaellopez:circularimageview:3.0.2'
 
+    //DatePicker
+    compile 'com.wdullaer:materialdatetimepicker:2.5.0'
+
 }
