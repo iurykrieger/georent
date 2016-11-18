@@ -31,6 +31,7 @@ public class FakeGenerator {
     private static FakeGenerator instance;
     private static List<ResidenceImage> residenceImages;
     private static List<Residence> residences;
+    private static List<User> users;
 
     public static FakeGenerator getInstance() {
         if (instance == null) {
@@ -147,5 +148,13 @@ public class FakeGenerator {
 
     public static List<ResidenceImage> getResidenceImages(int end) {
         return residenceImages.subList(0, end);
+    }
+
+    public static List<Residence> getResidences() {
+        return residences;
+    }
+
+    public static List<ResidenceImage> getResidenceImages() {
+        return residenceImages;
     }
 }

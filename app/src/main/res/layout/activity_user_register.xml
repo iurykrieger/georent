@@ -130,6 +130,7 @@
                             android:orientation="vertical">
 
                             <EditText
+                                android:id="@+id/et_name_user"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/hint_name"
@@ -145,6 +146,7 @@
                             android:orientation="vertical">
 
                             <EditText
+                                android:id="@+id/et_email_user"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/hint_email"
@@ -160,7 +162,7 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:id="@+id/et_birth_date"
+                                android:id="@+id/et_birth_date_user"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:ems="10"
@@ -176,7 +178,7 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:id="@+id/textPhone"
+                                android:id="@+id/et_tel_user"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:ems="10"
@@ -193,7 +195,7 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:id="@+id/editText5"
+                                android:id="@+id/et_password_user"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:ems="10"
@@ -209,7 +211,7 @@
                             android:padding="10dp">
 
                             <TextView
-                                android:id="@+id/tv_range"
+                                android:id="@+id/tv_range_user"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="10dp"
@@ -220,7 +222,7 @@
                                 android:textSize="15sp" />
 
                             <TextView
-                                android:id="@+id/tv_range_number"
+                                android:id="@+id/tv_range_number_user"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="10dp"
@@ -235,7 +237,7 @@
                         </LinearLayout>
 
                         <SeekBar
-                            android:id="@+id/sb_distance"
+                            android:id="@+id/sb_distance_user"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:max="99"
@@ -248,7 +250,7 @@
                 <include layout="@layout/new_residence_preference" />
 
                 <Button
-                    android:id="@+id/bt_register"
+                    android:id="@+id/bt_register_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

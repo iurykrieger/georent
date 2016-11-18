@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -24,13 +25,21 @@ import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
+import videira.ifc.edu.br.georent.interfaces.Bind;
+import videira.ifc.edu.br.georent.models.City;
 import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.repositories.UserRepository;
+import videira.ifc.edu.br.georent.utils.FakeGenerator;
+import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind {
 
     private Integer[] imgs = {R.drawable.new_image, R.drawable.photo2, R.drawable.user};
     private Toolbar mToolbar;
@@ -48,13 +57,35 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private EditText mEtBirthDate;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
+    private UserRepository mUserRepository;
+
+    private EditText etName;
+    private EditText etEmail;
+    private EditText etBirthDate;
+    private EditText etTel;
+    private EditText etPassword;
+    private SeekBar skDistance;
+    private TextView tvDistance;
+    private Button btRegister;
+
+
     String[] numbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
+
+        etName = (EditText) findViewById(R.id.et_name_user);
+        etEmail = (EditText) findViewById(R.id.et_email_user);
+        etBirthDate = (EditText) findViewById(R.id.et_birth_date_user);
+        etTel = (EditText) findViewById(R.id.et_tel_user);
+        etPassword = (EditText) findViewById(R.id.et_password_user);
+        skDistance = (SeekBar) findViewById(R.id.sb_distance_user);
+        tvDistance = (TextView) findViewById(R.id.tv_range_number_user);
+        btRegister = (Button) findViewById(R.id.bt_register_user);
+
+        mUserRepository = new UserRepository(this,this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.vp_user);
@@ -73,8 +104,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
 
         /*     CHANGE DISTANCE    */
-        final SeekBar skDistance = (SeekBar) findViewById(R.id.sb_distance);
-        final TextView tvDistance = (TextView) findViewById(R.id.tv_range_number);
+
         skDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -117,18 +147,12 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         /** SPINNERS   **/
         numbers = getResources().getStringArray(R.array.numbers);
 
-       /* Spinner mSpinnerRoom = (Spinner) findViewById(R.id.spinner_rooms);
-        Spinner mSpinnerBathRoom = (Spinner) findViewById(R.id.spinner_bathroom);
-        Spinner mSpinnerVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
-
-        ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.activity_user_register, numbers);
-
-        mSpinnerRoom.setAdapter(adapter);
-        mSpinnerBathRoom.setAdapter(adapter);
-        mSpinnerVacancy.setAdapter(adapter);
-*/
-        /**     DATE PICKER    **/
-        mEtBirthDate = (EditText) findViewById(R.id.et_birth_date);
+       btRegister.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               doLoad();
+           }
+       });
 
     }
 
@@ -183,5 +207,44 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 }
             }
         }
+    }
+
+    /*************************************************************************
+     * *                            REPOSITORIO                             **
+     *************************************************************************/
+    @Override
+    public void doLoad() {
+        if (NetworkUtil.verifyConnection(this)) {
+            mUser = new User();
+            mUser.setName(etName.getText().toString());
+            mUser.setEmail(etEmail.getText().toString());
+            mUser.setBirthDate(new Date());
+            mUser.setPhone(etTel.getText().toString());
+            mUser.setPassword(etPassword.getText().toString());
+            mUser.setIdPreference(FakeGenerator.getInstance().getResidences().get(0).getIdPreference());
+            City c = FakeGenerator.getResidences().get(0).getIdLocation().getIdCity();
+            c.setIdCity(1);
+            mUser.setIdCity(c);
+
+            mUserRepository.createUser(mUser);
+        } else {
+            doError(new UnknownHostException());
+        }
+    }
+
+    @Override
+    public void doSingleBind(Object result) {
+
+    }
+
+    @Override
+    public void doMultipleBind(List results) {
+
+
+    }
+
+    @Override
+    public void doError(Exception ex) {
+
     }
 }
