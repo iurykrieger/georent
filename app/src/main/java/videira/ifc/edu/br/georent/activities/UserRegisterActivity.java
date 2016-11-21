@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,7 @@ import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.City;
+import videira.ifc.edu.br.georent.models.Preference;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
@@ -53,6 +55,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private ViewPager mViewPager;
     private LinearLayout mPagerIndicator;
     private User mUser;
+    private Preference mPreference;
     private List<Integer> mImageResources;
     private EditText mEtBirthDate;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -66,8 +69,15 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private EditText etPassword;
     private SeekBar skDistance;
     private TextView tvDistance;
+    private SwitchCompat scSponsor;
+    private SwitchCompat scCondominium;
+    private SwitchCompat scPet;
+    private SwitchCompat scChild;
+    private SwitchCompat scLaundry;
+    private Spinner sVacancy;
+    private Spinner sRoom;
+    private Spinner sBathroom;
     private Button btRegister;
-
 
     String[] numbers;
 
@@ -83,7 +93,20 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         etPassword = (EditText) findViewById(R.id.et_password_user);
         skDistance = (SeekBar) findViewById(R.id.sb_distance_user);
         tvDistance = (TextView) findViewById(R.id.tv_range_number_user);
+
+        scSponsor = (SwitchCompat) findViewById(R.id.sc_sponsor);
+        scCondominium  = (SwitchCompat) findViewById(R.id.sc_condominium);
+        scPet = (SwitchCompat) findViewById(R.id.sc_pet);
+        scChild = (SwitchCompat) findViewById(R.id.sc_child);
+        scLaundry = (SwitchCompat) findViewById(R.id.sc_laundry);
+
+        sVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
+        sRoom = (Spinner) findViewById(R.id.spinner_rooms);
+        sBathroom = (Spinner) findViewById(R.id.spinner_bathroom);
+
         btRegister = (Button) findViewById(R.id.bt_register_user);
+
+
 
         mUserRepository = new UserRepository(this,this);
 
@@ -92,6 +115,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         mPagerIndicator = (LinearLayout) findViewById(R.id.vp_user_count_dots);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,9 +126,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             }
         });
 
-
         /*     CHANGE DISTANCE    */
-
         skDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -221,6 +243,39 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             mUser.setBirthDate(new Date());
             mUser.setPhone(etTel.getText().toString());
             mUser.setPassword(etPassword.getText().toString());
+
+            /*
+            if(scSponsor.isChecked())
+                mPreference.setSponsor(true);
+            else
+                mPreference.setSponsor(false);
+
+            if(scCondominium.isChecked())
+                mPreference.setCondominium(true);
+            else
+                mPreference.setCondominium(false);
+
+            if(scPet.isChecked())
+                mPreference.setPet(true);
+            else
+                mPreference.setPet(false);
+
+            if(scChild.isChecked())
+                mPreference.setChild(true);
+            else
+                mPreference.setChild(false);
+
+            if(scLaundry.isChecked())
+                mPreference.setLaundry(true);
+            else
+                mPreference.setLaundry(false);
+
+
+             mPreference.setVacancy((Integer) sVacancy.getSelectedItem());
+             mPreference.setRoom((Integer) sRoom.getSelectedItem());
+             mPreference.setBathroom((Integer) sBathroom.getSelectedItem());
+             */
+
             mUser.setIdPreference(FakeGenerator.getInstance().getResidences().get(0).getIdPreference());
             City c = FakeGenerator.getResidences().get(0).getIdLocation().getIdCity();
             c.setIdCity(1);

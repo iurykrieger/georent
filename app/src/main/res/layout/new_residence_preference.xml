@@ -39,7 +39,7 @@ android:layout_margin="10dp">
             android:textSize="15sp" />
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/switchSponsor"
+            android:id="@+id/sc_sponsor"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:textAlignment="textEnd" />
@@ -62,7 +62,7 @@ android:layout_margin="10dp">
             android:textSize="15sp" />
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/switchCondominium"
+            android:id="@+id/sc_condominium"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:textAlignment="textEnd" />
@@ -85,7 +85,7 @@ android:layout_margin="10dp">
             android:textSize="15sp" />
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/switchPet"
+            android:id="@+id/sc_pet"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:textAlignment="textEnd" />
@@ -109,7 +109,7 @@ android:layout_margin="10dp">
             android:textSize="15sp" />
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/switchChild"
+            android:id="@+id/sc_child"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:textAlignment="textEnd" />
@@ -133,7 +133,7 @@ android:layout_margin="10dp">
             android:textSize="15sp" />
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/laundry"
+            android:id="@+id/sc_laundry"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:textAlignment="textEnd" />

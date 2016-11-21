@@ -4,6 +4,8 @@
     <string name="hint_name">Nome Completo</string>
     <string name="hint_email">Email</string>
     <string name="hint_birthDate">Data Nascimento</string>
+    <string name="hint_city">Cidade</string>
+    <string name="hint_state">Estado</string>
     <string name="hint_phone">Telefone</string>
     <string name="hint_password">Senha</string>
     <string name="btn_login">Login</string>

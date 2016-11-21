@@ -165,9 +165,43 @@
                                 android:id="@+id/et_birth_date_user"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:inputType="date"
                                 android:ems="10"
                                 android:hint="@string/hint_birthDate" />
                         </android.support.design.widget.TextInputLayout>
+
+                        //Cidade
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/et_city"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/hint_city" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        //Estado
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/et_state"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/hint_state" />
+                        </android.support.design.widget.TextInputLayout>
+
 
                         //Tel
                         <android.support.design.widget.TextInputLayout
