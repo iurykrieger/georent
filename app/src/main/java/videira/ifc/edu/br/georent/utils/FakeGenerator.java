@@ -1,6 +1,5 @@
 package videira.ifc.edu.br.georent.utils;
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -43,6 +42,7 @@ public class FakeGenerator {
     public FakeGenerator() {
         residences = new ArrayList<>();
         residenceImages = new ArrayList<>();
+        users = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
             City c = new City();
@@ -119,6 +119,7 @@ public class FakeGenerator {
                 ui.setPath(s);
 
                 u.setProfileImage(ui);
+                users.add(u);
 
                 Match m = new Match();
                 m.setIdMatch(new Random().nextInt());
@@ -156,5 +157,18 @@ public class FakeGenerator {
 
     public static List<ResidenceImage> getResidenceImages() {
         return residenceImages;
+    }
+
+    public static User getUser(int idUser) {
+        for (User u : users) {
+            if (u.getIdUser() == idUser) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public static List<User> getUsers() {
+        return users;
     }
 }

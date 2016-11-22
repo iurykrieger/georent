@@ -263,7 +263,7 @@
             android:background="@color/secondary_background"
             android:gravity="center"
             android:padding="3dp"
-            android:text="@string/show_more"
+            android:text="@string/show_less"
             android:textColor="@color/primary_text"
             android:textStyle="bold" />
 

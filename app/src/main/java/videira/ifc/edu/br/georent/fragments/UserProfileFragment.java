@@ -6,7 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.toolbox.NetworkImageView;
+
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.network.NetworkConnection;
+import videira.ifc.edu.br.georent.utils.CircularNetworkImageView;
+import videira.ifc.edu.br.georent.utils.FakeGenerator;
 
 public class UserProfileFragment extends Fragment {
 
@@ -36,6 +41,11 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        final CircularNetworkImageView cnivUser = (CircularNetworkImageView) view.findViewById(R.id.cniv_user_profile);
+        cnivUser.setImageUrl(FakeGenerator.getInstance().getUsers().get(0).getProfileImage().getPath(), NetworkConnection.getInstance(getActivity()).getImageLoader());
+
+        return view;
     }
 }
