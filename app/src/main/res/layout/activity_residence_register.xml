@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="videira.ifc.edu.br.georent.activities.ResidenceRegisterActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/abl_residence_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/ctl_residence_register"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#55000000"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="50dp"
+            app:expandedTitleMarginStart="20dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="@string/new_residence">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                tools:listitem="@layout/item_pager_network" />
+
+            <RelativeLayout
+                android:id="@+id/vp_indicator_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="5dp">
+
+                <LinearLayout
+                    android:id="@+id/vp_dots_residence_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_photo_residence_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginEnd="@dimen/fab_margin_end"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:clickable="true"
+        android:src="@drawable/ic_add_a_photo_black_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/accent"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_anchor="@id/abl_residence_register"
+        app:layout_anchorGravity="bottom|right|end" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical"
+            android:clipToPadding="false"
+            android:paddingTop="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="25dp">
+
+                <!-- CardView Info -->
+                <include layout="@layout/residence_register_info" />
+
+                <!-- CardView Preference -->
+                <include layout="@layout/user_register_preference" />
+
+                <Button
+                    android:id="@+id/bt_residence_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="10dp"
+                    android:background="@color/accent"
+                    android:nestedScrollingEnabled="false"
+                    android:text="Cadastrar"
+                    android:textColor="@color/icons"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="videira.ifc.edu.br.georent.activities.ShowResidenceActivity">
+    tools:context="videira.ifc.edu.br.georent.activities.ResidenceShowActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -122,16 +122,16 @@
                 </android.support.v7.widget.CardView>
 
                 <!-- CardView Informações -->
-                <include layout="@layout/residence_info" />
+                <include layout="@layout/residence_show_info" />
 
                 <!-- CardView Preferências -->
-                <include layout="@layout/residence_preference" />
+                <include layout="@layout/residence_show_preference" />
 
                 <!-- CardView Likes -->
-                <include layout="@layout/residence_match" />
+                <include layout="@layout/residence_show_match" />
 
                 <!-- CardView Localização -->
-                <include layout="@layout/residence_location" />
+                <include layout="@layout/residence_show_location" />
 
             </LinearLayout>
 

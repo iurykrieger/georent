@@ -24,10 +24,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -41,13 +42,13 @@ import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind {
+public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User> {
 
-    private Integer[] imgs = {R.drawable.new_image, R.drawable.photo2, R.drawable.user};
-    private Toolbar mToolbar;
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
-
+    String[] numbers;
+    private Integer[] imgs = {R.drawable.new_image, R.drawable.photo2, R.drawable.user};
+    private Toolbar mToolbar;
     /**
      * ViewPager
      **/
@@ -59,9 +60,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private List<Integer> mImageResources;
     private EditText mEtBirthDate;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
-
     private UserRepository mUserRepository;
-
     private EditText etName;
     private EditText etEmail;
     private EditText etBirthDate;
@@ -77,9 +76,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private Spinner sVacancy;
     private Spinner sRoom;
     private Spinner sBathroom;
+    private MaterialBetterSpinner spnState;
     private Button btRegister;
-
-    String[] numbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +93,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         tvDistance = (TextView) findViewById(R.id.tv_range_number_user);
 
         scSponsor = (SwitchCompat) findViewById(R.id.sc_sponsor);
-        scCondominium  = (SwitchCompat) findViewById(R.id.sc_condominium);
+        scCondominium = (SwitchCompat) findViewById(R.id.sc_condominium);
         scPet = (SwitchCompat) findViewById(R.id.sc_pet);
         scChild = (SwitchCompat) findViewById(R.id.sc_child);
         scLaundry = (SwitchCompat) findViewById(R.id.sc_laundry);
@@ -103,12 +101,12 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         sVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
         sRoom = (Spinner) findViewById(R.id.spinner_rooms);
         sBathroom = (Spinner) findViewById(R.id.spinner_bathroom);
+        spnState = (MaterialBetterSpinner) findViewById(R.id.spn_state_user_register);
 
         btRegister = (Button) findViewById(R.id.bt_register_user);
 
 
-
-        mUserRepository = new UserRepository(this,this);
+        mUserRepository = new UserRepository(this, this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.vp_user);
@@ -168,13 +166,16 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
         /** SPINNERS   **/
         numbers = getResources().getStringArray(R.array.numbers);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.states));
+        spnState.setAdapter(arrayAdapter);
 
-       btRegister.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               doLoad();
-           }
-       });
+        btRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doLoad();
+            }
+        });
 
     }
 
@@ -238,45 +239,23 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     public void doLoad() {
         if (NetworkUtil.verifyConnection(this)) {
             mUser = new User();
+            mPreference = new Preference();
             mUser.setName(etName.getText().toString());
             mUser.setEmail(etEmail.getText().toString());
             mUser.setBirthDate(new Date());
             mUser.setPhone(etTel.getText().toString());
             mUser.setPassword(etPassword.getText().toString());
 
-            /*
-            if(scSponsor.isChecked())
-                mPreference.setSponsor(true);
-            else
-                mPreference.setSponsor(false);
+            mPreference.setSponsor(scSponsor.isChecked());
+            mPreference.setCondominium(scCondominium.isChecked());
+            mPreference.setPet(scPet.isChecked());
+            mPreference.setChild(scChild.isChecked());
+            mPreference.setLaundry(scLaundry.isChecked());
+            mPreference.setVacancy((Integer) sVacancy.getSelectedItem());
+            mPreference.setRoom((Integer) sRoom.getSelectedItem());
+            mPreference.setBathroom((Integer) sBathroom.getSelectedItem());
 
-            if(scCondominium.isChecked())
-                mPreference.setCondominium(true);
-            else
-                mPreference.setCondominium(false);
-
-            if(scPet.isChecked())
-                mPreference.setPet(true);
-            else
-                mPreference.setPet(false);
-
-            if(scChild.isChecked())
-                mPreference.setChild(true);
-            else
-                mPreference.setChild(false);
-
-            if(scLaundry.isChecked())
-                mPreference.setLaundry(true);
-            else
-                mPreference.setLaundry(false);
-
-
-             mPreference.setVacancy((Integer) sVacancy.getSelectedItem());
-             mPreference.setRoom((Integer) sRoom.getSelectedItem());
-             mPreference.setBathroom((Integer) sBathroom.getSelectedItem());
-             */
-
-            mUser.setIdPreference(FakeGenerator.getInstance().getResidences().get(0).getIdPreference());
+            mUser.setIdPreference(mPreference);
             City c = FakeGenerator.getResidences().get(0).getIdLocation().getIdCity();
             c.setIdCity(1);
             mUser.setIdCity(c);
@@ -288,12 +267,12 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     }
 
     @Override
-    public void doSingleBind(Object result) {
+    public void doSingleBind(User result) {
 
     }
 
     @Override
-    public void doMultipleBind(List results) {
+    public void doMultipleBind(List<User> results) {
 
 
     }

@@ -19,12 +19,42 @@
     <!-- CADASTRO USUARIO -->
     <string name="new_user">Novo Usuário</string>
     <string name="range">Área De Busca</string>
+    <string name="state">Estado</string>
     <string-array name="numbers">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
+    </string-array>
+    <string-array name="states">
+        <item>AC</item>
+        <item>AL</item>
+        <item>AP</item>
+        <item>AM</item>
+        <item>BA</item>
+        <item>CE</item>
+        <item>DF</item>
+        <item>ES</item>
+        <item>GO</item>
+        <item>MA</item>
+        <item>MT</item>
+        <item>MS</item>
+        <item>MG</item>
+        <item>PA</item>
+        <item>PB</item>
+        <item>PR</item>
+        <item>PE</item>
+        <item>PI</item>
+        <item>RJ</item>
+        <item>RN</item>
+        <item>RS</item>
+        <item>RO</item>
+        <item>RR</item>
+        <item>SC</item>
+        <item>SP</item>
+        <item>SE</item>
+        <item>TO</item>
     </string-array>
 
 
@@ -38,6 +68,7 @@
     <string name="city">Cidade</string>
     <string name="location">Localização</string>
     <string name="likes">Curtidas</string>
+    <string name="new_residence">Nova Residência</string>
 
     <!-- USUÁRIO -->
     <string name="name">Nome</string>
@@ -71,4 +102,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_residence_register">ResidenceRegisterActivity</string>
 </resources>

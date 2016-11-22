@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="345dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:drawableLeft="@drawable/ic_info_black_24dp"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/primary"
+            android:text="@string/info"
+            android:textColor="@color/primary_text"
+            android:textSize="17sp"
+            android:textStyle="normal|bold" />
+
+        <!-- Title -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_title_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/title"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Address -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_address_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- City -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_city_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/hint_city" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- State -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_state_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/hint_state" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Description -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_description_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:ems="10"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
+                android:gravity="top"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Observation -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_observation_residence_register"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:ems="10"
+                android:hint="@string/observation"
+                android:inputType="textMultiLine"
+                android:gravity="top"/>
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

@@ -73,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) viewPager.getAdapter();
+                if (!adapter.getPageTitle(viewPager.getCurrentItem()).equals(ResidenceIndexFragment.ARG_PAGE_RESIDENCE)) {
+                    mFloatingActionButton.setVisibility(View.GONE);
+                } else {
+                    mFloatingActionButton.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -92,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, ShowResidenceActivity.class);
+                Intent i = new Intent(MainActivity.this, ResidenceRegisterActivity.class);
                 startActivity(i);
             }
         });

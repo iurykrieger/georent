@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
-import videira.ifc.edu.br.georent.activities.ShowResidenceActivity;
+import videira.ifc.edu.br.georent.activities.ResidenceShowActivity;
 import videira.ifc.edu.br.georent.adapters.ResidenceImageAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
@@ -72,11 +72,11 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Infla o layout do fragment e pega a view
          */
-        final View view = inflater.inflate(R.layout.fragment_index_residence, container, false);
+        mView = inflater.inflate(R.layout.fragment_index_residence, container, false);
 
         mResidenceImageRepository = new ResidenceImageRepository(this.getActivity(), this);
         mResidenceImageList = new ArrayList<>();
-        mProgressBar = (ProgressBar) view.findViewById(R.id.pb_residence_index);
+        mProgressBar = (ProgressBar) mView.findViewById(R.id.pb_residence_index);
 
         /**
          * Seta as propriedades do LayoutManager para a lista
@@ -87,7 +87,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Seta as propriedades do recyclerView (componente gráfico da lista)
          */
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_users);
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.rv_users);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
@@ -129,7 +129,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Seta o refresh do layout
          */
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.sr_users);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.sr_users);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -137,16 +137,12 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
             }
         });
 
-        if (mResidenceImageList.isEmpty()) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            doLoad();
-        }
 
         /**
          * Retorna a view para preencher a tela
          */
-        mView = view;
-        return view;
+        Log.i("LOG","onCreateView()");
+        return mView;
     }
 
     @Override
@@ -155,6 +151,15 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        if (mResidenceImageList.isEmpty()) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            doLoad();
+        }
+        super.onStart();
     }
 
     /*************************************************************************
@@ -171,7 +176,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     public void onClickListener(View view, int position) {
         //Joga uma mensagem curta com a posição na tela.
         int index = mResidenceImageAdapter.getListItem(position).getResidence().getIdResidence();
-        Intent i = new Intent(getActivity(), ShowResidenceActivity.class);
+        Intent i = new Intent(getActivity(), ResidenceShowActivity.class);
         i.putExtra("idResidence", index);
         startActivity(i);
         Log.i("LOG", "Clicou!");
@@ -230,9 +235,10 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
         mSwipeRefreshLayout.setRefreshing(false);
         Snackbar snackbar = null;
 
+        Log.i("LOG","doError()");
         if (ex instanceof UnknownHostException) {
             snackbar = Snackbar
-                    .make(mView, R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
+                    .make(mView.getRootView(), R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
                     .setAction("Conectar", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -240,11 +246,11 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
                             startActivity(it);
                         }
                     })
-                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+                    .setActionTextColor(ContextCompat.getColor(getContext(), R.color.accent));
         } else {
             snackbar = Snackbar
-                    .make(mView, R.string.unknown_error, Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+                    .make(mView.getRootView(), R.string.unknown_error, Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(ContextCompat.getColor(getContext(), R.color.accent));
         }
 
         snackbar.show();

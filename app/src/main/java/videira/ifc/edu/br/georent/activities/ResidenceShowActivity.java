@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ import java.util.List;
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.MatchAdapter;
 import videira.ifc.edu.br.georent.adapters.NetworkViewPagerAdapter;
-import videira.ifc.edu.br.georent.adapters.ResidenceImageAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
@@ -37,7 +35,7 @@ import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.LayoutUtils;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class ShowResidenceActivity extends AppCompatActivity implements Bind<Residence>, ViewPager.OnPageChangeListener, View.OnClickListener {
+public class ResidenceShowActivity extends AppCompatActivity implements Bind<Residence>, ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Toolbar mToolbar;
@@ -56,7 +54,7 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_residence);
+        setContentView(R.layout.activity_residence_show);
 
         mIntent = getIntent();
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.ct_residence);
@@ -75,8 +73,12 @@ public class ShowResidenceActivity extends AppCompatActivity implements Bind<Res
                 onBackPressed();
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
         doLoad();
+        super.onStart();
     }
 
     @Override
