@@ -9,9 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import videira.ifc.edu.br.georent.R;
+import java.util.List;
 
-public class LoginActivity extends AppCompatActivity {
+import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.interfaces.Bind;
+import videira.ifc.edu.br.georent.models.User;
+
+public class LoginActivity extends AppCompatActivity implements Bind<User> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
 
-
         assert btRegister != null;
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,5 +44,29 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    /*************************************************************************
+     **                            SERVIÇO                                  **
+     *************************************************************************/
+
+    @Override
+    public void doLoad() {
+
+    }
+
+    @Override
+    public void doSingleBind(User result) {
+
+    }
+
+    @Override
+    public void doMultipleBind(List<User> results) {
+
+    }
+
+    @Override
+    public void doError(Exception ex) {
+
     }
 }

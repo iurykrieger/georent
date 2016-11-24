@@ -60,7 +60,7 @@ public class UserRepository implements Transaction {
         if (NetworkUtil.verifyConnection(mContext)) {
             //NetworkObject no = new NetworkObject(mUser);
             params.put("jsonObject", gson.toJson(mUser));
-            Log.i("LOG",params.toString());
+            Log.i("LOG", params.toString());
             return params;
         }
         return null;
@@ -90,5 +90,14 @@ public class UserRepository implements Transaction {
         mUser = u;
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
+    }
+
+    public void login(User user) {
+        mUser = user;
+        String url = NetworkUtil.getStringUrl(mContext, R.string.auth_service);
+        url = String.format(url + "/login");
+        Log.i("URL", url);
+        NetworkConnection.getInstance(mContext)
+                .executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, url);
     }
 }

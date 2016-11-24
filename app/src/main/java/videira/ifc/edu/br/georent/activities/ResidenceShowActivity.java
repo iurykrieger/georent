@@ -94,7 +94,7 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
     }
 
     /*************************************************************************
-     * *                            SERVIÇO                                  **
+     **                            SERVIÇO                                  **
      *************************************************************************/
 
     @Override
