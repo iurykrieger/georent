@@ -12,9 +12,15 @@ import java.util.List;
 public class User {
 
     /**
+     * Constantes
+     */
+    public static Integer LOCATOR = 1;
+    public static Integer OCCUPIER = 0;
+
+    /**
      * Atributos
      */
-    private Integer idUser;
+    private java.lang.Integer idUser;
 
     private String name;
 
@@ -28,8 +34,9 @@ public class User {
 
     private Float credits;
 
-    private Type type;
+    private Integer type;
 
+    @SerializedName("distance")
     private Integer distance;
 
     @SerializedName("preference")
@@ -64,8 +71,8 @@ public class User {
      * @param createdAt
      * @param updatedAt
      */
-    public User(Integer idUser, String name, Date birthDate, String email, String phone, String password,
-                Float credits, Type type, Integer distance, Preference idPreference, City idCity, Date createdAt, Date updatedAt) {
+    public User(java.lang.Integer idUser, String name, Date birthDate, String email, String phone, String password,
+                Float credits, Integer type, java.lang.Integer distance, Preference idPreference, City idCity, Date createdAt, Date updatedAt) {
         this.idUser = idUser;
         this.name = name;
         this.birthDate = birthDate;
@@ -92,11 +99,11 @@ public class User {
      * Getters e Setters
      */
 
-    public Integer getIdUser() {
+    public java.lang.Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(java.lang.Integer idUser) {
         this.idUser = idUser;
     }
 
@@ -148,15 +155,15 @@ public class User {
         this.credits = credits;
     }
 
-    public Type getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public Integer getDistance() {
+    public java.lang.Integer getDistance() {
         return distance;
     }
 
@@ -210,13 +217,5 @@ public class User {
 
     public void setUserImages(List<UserImage> userImages) {
         this.userImages = userImages;
-    }
-
-    /**
-     * Enumerador do tipo
-     */
-    public static enum Type {
-        LOCATOR,
-        OCCUPIER;
     }
 }

@@ -245,15 +245,17 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             mUser.setBirthDate(new Date());
             mUser.setPhone(etTel.getText().toString());
             mUser.setPassword(etPassword.getText().toString());
+            mUser.setDistance(skDistance.getProgress());
+            mUser.setType(User.OCCUPIER);
 
             mPreference.setSponsor(scSponsor.isChecked());
             mPreference.setCondominium(scCondominium.isChecked());
             mPreference.setPet(scPet.isChecked());
             mPreference.setChild(scChild.isChecked());
             mPreference.setLaundry(scLaundry.isChecked());
-            mPreference.setVacancy((Integer) sVacancy.getSelectedItem());
-            mPreference.setRoom((Integer) sRoom.getSelectedItem());
-            mPreference.setBathroom((Integer) sBathroom.getSelectedItem());
+            mPreference.setVacancy(java.lang.Integer.getInteger(sVacancy.getSelectedItem().toString()));
+            mPreference.setRoom(java.lang.Integer.getInteger(sRoom.getSelectedItem().toString()));
+            mPreference.setBathroom(java.lang.Integer.getInteger(sBathroom.getSelectedItem().toString()));
 
             mUser.setIdPreference(mPreference);
             City c = FakeGenerator.getResidences().get(0).getIdLocation().getIdCity();
