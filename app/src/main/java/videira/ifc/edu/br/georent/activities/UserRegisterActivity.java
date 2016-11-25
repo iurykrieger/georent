@@ -1,6 +1,8 @@
 package videira.ifc.edu.br.georent.activities;
 
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -79,6 +82,9 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private MaterialBetterSpinner spnState;
     private Button btRegister;
 
+    int year,month,day;
+    static final int DIALOG_ID = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +130,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             }
         });
 
+
+
         /*     CHANGE DISTANCE    */
         skDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -145,6 +153,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
+
         });
 
         /**     ViewPager    **/
@@ -177,7 +186,36 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             }
         });
 
+        showDialog(0);
+
     }
+
+    public void ShowDialog(){
+        mEtBirthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(DIALOG_ID);
+            }
+        });
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id){
+        if(id == DIALOG_ID)
+            return new DatePickerDialog(this, dpickerListner , year,month,day);
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener dpickerListner = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+            year = i;
+            month = i1;
+            day =  i2;
+
+            mEtBirthDate.setText(day+"/"+month+"/"+year);
+        }
+    };
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -270,7 +308,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     @Override
     public void doSingleBind(User result) {
-
     }
 
     @Override
