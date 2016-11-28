@@ -17,7 +17,7 @@ import videira.ifc.edu.br.georent.adapters.FragmentPagerAdapter;
 import videira.ifc.edu.br.georent.fragments.ResidenceIndexFragment;
 import videira.ifc.edu.br.georent.fragments.UserProfileFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final int[] imageResId = {R.drawable.ic_home_black_24dp,
             R.drawable.ic_chat_black_24dp,
@@ -41,18 +41,17 @@ public class MainActivity extends AppCompatActivity {
          * Inicializa o tabLayout
          */
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fb_action);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.primary));
-
-        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fb_action);
 
         /**
          * Adiciona icones e remove textos
@@ -69,15 +68,31 @@ public class MainActivity extends AppCompatActivity {
          * Troca a cor do icone ao selecionar a aba
          */
         tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
                 FragmentPagerAdapter adapter = (FragmentPagerAdapter) viewPager.getAdapter();
-                if (!adapter.getPageTitle(viewPager.getCurrentItem()).equals(ResidenceIndexFragment.ARG_PAGE_RESIDENCE)) {
+                String pageTitle = adapter.getPageTitle(viewPager.getCurrentItem()).toString();
+
+                if (pageTitle.equals("CHAT")) {
                     mFloatingActionButton.setVisibility(View.GONE);
                 } else {
                     mFloatingActionButton.setVisibility(View.VISIBLE);
+                    switch (pageTitle) {
+                        case ResidenceIndexFragment.ARG_PAGE_RESIDENCE: {
+                            mFloatingActionButton.setImageResource(R.drawable.ic_add_black_24dp);
+                        }
+                        break;
+                        case UserProfileFragment.ARG_PAGE_PROFILE: {
+                            mFloatingActionButton.setImageResource(R.drawable.ic_mode_edit_black_24dp);
+                        }
+                        break;
+                        default: {
+                            mFloatingActionButton.setVisibility(View.GONE);
+                        }
+                        break;
+                    }
                 }
             }
 
@@ -95,13 +110,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Seta o click do botão
          */
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, ResidenceRegisterActivity.class);
-                startActivity(i);
-            }
-        });
+        mFloatingActionButton.setOnClickListener(this);
     }
 
     /**
@@ -130,4 +139,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fb_action: {
+                String pageTitle = viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()).toString();
+                Intent intent = null;
+                switch (pageTitle){
+                    case ResidenceIndexFragment.ARG_PAGE_RESIDENCE: {
+                        intent = new Intent(MainActivity.this, ResidenceRegisterActivity.class);
+                    }break;
+                    case UserProfileFragment.ARG_PAGE_PROFILE:{
+                        intent = new Intent(MainActivity.this, UserRegisterActivity.class);
+                    }break;
+                }
+                if (intent != null){
+                    startActivity(intent);
+                }
+            }
+            break;
+        }
+    }
 }

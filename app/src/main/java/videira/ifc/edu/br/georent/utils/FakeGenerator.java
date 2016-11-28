@@ -32,7 +32,7 @@ public class FakeGenerator {
     private static List<Residence> residences;
     private static List<User> users;
 
-    public static FakeGenerator getInstance() {
+    public synchronized static FakeGenerator getInstance() {
         if (instance == null) {
             instance = new FakeGenerator();
         }
@@ -102,6 +102,7 @@ public class FakeGenerator {
                 ris.add(ri);
 
                 User u = new User();
+                u.setIdUser(new Random().nextInt());
                 u.setBirthDate(new Date());
                 u.setCredits(new Random().nextFloat());
                 u.setDistance(new Random().nextInt());
