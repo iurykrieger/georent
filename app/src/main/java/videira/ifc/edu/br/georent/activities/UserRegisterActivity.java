@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -32,10 +34,12 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.adapters.FragmentPagerAdapter;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.City;
@@ -45,7 +49,7 @@ import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User> {
+public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User>{
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
@@ -82,8 +86,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private MaterialBetterSpinner spnState;
     private Button btRegister;
 
-    int year,month,day;
     static final int DIALOG_ID = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +133,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 onBackPressed();
             }
         });
-
 
 
         /*     CHANGE DISTANCE    */
@@ -185,37 +188,23 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 doLoad();
             }
         });
-
-        showDialog(0);
-
     }
 
-    public void ShowDialog(){
-        mEtBirthDate.setOnClickListener(new View.OnClickListener() {
+    /** DATE PICKER **/
+    public void onStart(){
+        super.onStart();
+        EditText mEtBirthDate = (EditText) findViewById(R.id.et_birth_date_user);
+        mEtBirthDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
-                showDialog(DIALOG_ID);
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    DateDialog dialog = new DateDialog(v);
+                    android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft,"DatePicker");
+                }
             }
         });
     }
-
-    @Override
-    protected Dialog onCreateDialog(int id){
-        if(id == DIALOG_ID)
-            return new DatePickerDialog(this, dpickerListner , year,month,day);
-        return null;
-    }
-
-    private DatePickerDialog.OnDateSetListener dpickerListner = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            year = i;
-            month = i1;
-            day =  i2;
-
-            mEtBirthDate.setText(day+"/"+month+"/"+year);
-        }
-    };
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -313,11 +302,12 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     @Override
     public void doMultipleBind(List<User> results) {
 
-
     }
 
     @Override
     public void doError(Exception ex) {
 
     }
+
+
 }
