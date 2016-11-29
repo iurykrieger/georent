@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GeoRENT</string>
-    <string name="action_settings">Configurações</string>
+    <string name="settings">Configurações</string>
     <string name="hint_name">Nome Completo</string>
     <string name="hint_email">Email</string>
     <string name="hint_birthDate">Data Nascimento</string>
@@ -15,6 +15,7 @@
     <string name="show_less">Mostrar Menos</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="edit">Editar</string>
 
     <!-- CADASTRO USUARIO -->
     <string name="new_user">Novo Usuário</string>

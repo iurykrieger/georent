@@ -55,7 +55,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     }
 
     /*************************************************************************
-     * *                             VIEW                                    **
+     **                             VIEW                                    **
      *************************************************************************/
 
     @Override

@@ -14,18 +14,21 @@ import android.view.View;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.FragmentPagerAdapter;
+import videira.ifc.edu.br.georent.fragments.ChatIndexFragment;
 import videira.ifc.edu.br.georent.fragments.ResidenceIndexFragment;
 import videira.ifc.edu.br.georent.fragments.UserProfileFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
-    private final int[] imageResId = {R.drawable.ic_home_black_24dp,
+    private final int[] imageResId = {
+            R.drawable.ic_home_black_24dp,
             R.drawable.ic_chat_black_24dp,
             R.drawable.ic_person_black_24dp};
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private Toolbar mToolbar;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
     private FloatingActionButton mFloatingActionButton;
+    private Menu mMenu;
 
     /**
      * Cria a activity e seta as propriedades do layout
@@ -38,74 +41,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         /**
-         * Inicializa o tabLayout
+         * Inicializa o mTabLayout
          */
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fb_action);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        toolbar.setTitle(R.string.app_name);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setTitle(R.string.app_name);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.primary));
+        setupViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.primary));
+        mTabLayout.setSelectedTabIndicatorHeight(getResources().getInteger(R.integer.selected_tab_indicator_height));
 
         /**
          * Adiciona icones e remove textos
-         * Passar esse código para um componente separado para controlar só o tabLayout
+         * Passar esse código para um componente separado para controlar só o mTabLayout
          */
         for (int i = 0; i < imageResId.length; i++) {
-            tabLayout.getTabAt(i).setIcon(imageResId[i]);
-            tabLayout.getTabAt(i).getIcon().setTint(ContextCompat.getColor(this, R.color.secondary_text));
-            tabLayout.getTabAt(i).setText(null);
-            tabLayout.setSelectedTabIndicatorHeight(getResources().getInteger(R.integer.selected_tab_indicator_height));
+            mTabLayout.getTabAt(i).setIcon(imageResId[i]);
+            mTabLayout.getTabAt(i).setText(null);
+            mTabLayout.getTabAt(i).getIcon().setTint(ContextCompat.getColor(this, R.color.secondary_text));
         }
 
         /**
          * Troca a cor do icone ao selecionar a aba
          */
-        tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) viewPager.getAdapter();
-                String pageTitle = adapter.getPageTitle(viewPager.getCurrentItem()).toString();
-
-                if (pageTitle.equals("CHAT")) {
-                    mFloatingActionButton.setVisibility(View.GONE);
-                } else {
-                    mFloatingActionButton.setVisibility(View.VISIBLE);
-                    switch (pageTitle) {
-                        case ResidenceIndexFragment.ARG_PAGE_RESIDENCE: {
-                            mFloatingActionButton.setImageResource(R.drawable.ic_add_black_24dp);
-                        }
-                        break;
-                        case UserProfileFragment.ARG_PAGE_PROFILE: {
-                            mFloatingActionButton.setImageResource(R.drawable.ic_mode_edit_black_24dp);
-                        }
-                        break;
-                        default: {
-                            mFloatingActionButton.setVisibility(View.GONE);
-                        }
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.secondary_text));
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        mTabLayout.addOnTabSelectedListener(this);
 
         /**
          * Seta o click do botão
@@ -114,14 +79,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Inicializa o viewPager a adiciona os fragments
+     * Inicializa o mViewPager a adiciona os fragments
      *
      * @param viewPager
      */
     public void setupViewPager(ViewPager viewPager) {
         FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ResidenceIndexFragment(), ResidenceIndexFragment.ARG_PAGE_RESIDENCE);
-        adapter.addFragment(new ResidenceIndexFragment(), "CHAT");
+        adapter.addFragment(new ChatIndexFragment(), ChatIndexFragment.ARG_PAGE_CHAT);
         adapter.addFragment(new UserProfileFragment(), UserProfileFragment.ARG_PAGE_PROFILE);
         viewPager.setAdapter(adapter);
     }
@@ -134,30 +99,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        String pageTitle = mViewPager.getAdapter().getPageTitle(mViewPager.getCurrentItem()).toString();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_search, menu);
+        mMenu = menu;
         return true;
     }
+
+    /*************************************************************************
+     * *                             VIEW                                  * *
+     *************************************************************************/
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fb_action: {
-                String pageTitle = viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()).toString();
+                String pageTitle = mViewPager.getAdapter().getPageTitle(mViewPager.getCurrentItem()).toString();
                 Intent intent = null;
-                switch (pageTitle){
+                switch (pageTitle) {
                     case ResidenceIndexFragment.ARG_PAGE_RESIDENCE: {
                         intent = new Intent(MainActivity.this, ResidenceRegisterActivity.class);
-                    }break;
-                    case UserProfileFragment.ARG_PAGE_PROFILE:{
+                    }
+                    break;
+                    case UserProfileFragment.ARG_PAGE_PROFILE: {
                         intent = new Intent(MainActivity.this, UserRegisterActivity.class);
-                    }break;
+                    }
+                    break;
                 }
-                if (intent != null){
+                if (intent != null) {
                     startActivity(intent);
                 }
             }
             break;
         }
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+            mTabLayout.getTabAt(i).getIcon().setTint(ContextCompat.getColor(this, R.color.secondary_text));
+        }
+        tab.getIcon().setTint(ContextCompat.getColor(MainActivity.this, R.color.primary));
+        FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+        String pageTitle = adapter.getPageTitle(mViewPager.getCurrentItem()).toString();
+
+
+        switch (pageTitle) {
+            case ResidenceIndexFragment.ARG_PAGE_RESIDENCE: {
+                mFloatingActionButton.setImageResource(R.drawable.ic_add_black_24dp);
+                mFloatingActionButton.setVisibility(View.VISIBLE);
+                mMenu.findItem(R.id.action_search).setVisible(true);
+            }
+            break;
+            case UserProfileFragment.ARG_PAGE_PROFILE: {
+                mFloatingActionButton.setImageResource(R.drawable.ic_mode_edit_black_24dp);
+                mFloatingActionButton.setVisibility(View.VISIBLE);
+                mMenu.findItem(R.id.action_search).setVisible(false);
+            }
+            break;
+            default: {
+                mMenu.findItem(R.id.action_search).setVisible(false);
+                mFloatingActionButton.setVisibility(View.GONE);
+            }
+            break;
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }

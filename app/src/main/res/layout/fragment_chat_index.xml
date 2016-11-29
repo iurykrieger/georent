@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="videira.ifc.edu.br.georent.fragments.ChatIndexFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/ic_chat_black_24dp"
+        android:id="@+id/imageView"
+        android:tint="@color/secondary_text"
+        android:layout_gravity="center_vertical|center_horizontal" />
+</FrameLayout>

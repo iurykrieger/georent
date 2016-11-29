@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -84,7 +85,7 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_edit, menu);
         return true;
     }
 
@@ -93,8 +94,21 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
         super.onStop();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit: {
+
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
+    }
+
     /*************************************************************************
-     **                            SERVIÇO                                  **
+     * *                            SERVIÇO                                  **
      *************************************************************************/
 
     @Override
@@ -147,7 +161,7 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
         /* Matches */
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         final RecyclerView rvMatch = (RecyclerView) findViewById(R.id.rv_match_residence);
-        final MatchAdapter matchAdapter = new MatchAdapter(mResidence.getMatches().subList(0,4), this);
+        final MatchAdapter matchAdapter = new MatchAdapter(mResidence.getMatches().subList(0, 4), this);
 
         List<String> resources = new ArrayList<>();
         for (ResidenceImage ri : mResidence.getResidenceImages()) {
