@@ -3,6 +3,7 @@ package videira.ifc.edu.br.georent.activities;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,12 +11,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +40,7 @@ import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.FragmentPagerAdapter;
@@ -167,12 +171,21 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         mViewPager.setCurrentItem(0);
 
         /**    PICKUP IMAGE   **/
+
+        /*
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, 0);
+
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , 1);
+        */
+
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, REQUEST_CAMERA_IMAGE);
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, REQUEST_CAMERA_IMAGE);
             }
         });
 
@@ -199,6 +212,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     DateDialog dialog = new DateDialog(v);
+                    dialog.setAllowReturnTransitionOverlap(false);
                     android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                     dialog.show(ft,"DatePicker");
                 }
