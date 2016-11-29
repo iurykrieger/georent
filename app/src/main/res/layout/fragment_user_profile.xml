@@ -77,4 +77,12 @@
 
 
     </android.support.v4.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/pb_user_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
 </android.support.design.widget.CoordinatorLayout>

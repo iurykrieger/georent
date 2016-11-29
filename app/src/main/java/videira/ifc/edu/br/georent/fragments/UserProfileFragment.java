@@ -2,9 +2,7 @@ package videira.ifc.edu.br.georent.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 import java.net.UnknownHostException;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.interfaces.Bind;
-import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
-import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.CircularNetworkImageView;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
@@ -72,6 +66,7 @@ public class UserProfileFragment extends Fragment implements Bind<User>{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        mProgressBar = (ProgressBar) mView.findViewById(R.id.pb_user_profile);
 
         return mView;
     }
@@ -88,7 +83,7 @@ public class UserProfileFragment extends Fragment implements Bind<User>{
             }
 
             //mUserRepository.getEagerResidenceById(mIntent.getIntExtra("idResidence", 0)); //Bind Correto
-            doSingleBind(FakeGenerator.getInstance().getUser(0)); //Geração Fake!
+            doSingleBind(FakeGenerator.getInstance().getUsers().get(0)); //Geração Fake!
         } else {
             doError(new UnknownHostException());
         }
