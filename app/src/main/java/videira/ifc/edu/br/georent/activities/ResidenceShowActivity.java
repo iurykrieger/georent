@@ -293,8 +293,8 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
                 mResidence.getIdLocation().getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
         map.addMarker(new MarkerOptions()
-                .title(mResidence.getIdLocation().getIdCity().getName())
-                .snippet(mResidence.getAddress())
+                .title(mResidence.getTitle())
+                .snippet(mResidence.getDescription())
                 .position(location));
     }
 }

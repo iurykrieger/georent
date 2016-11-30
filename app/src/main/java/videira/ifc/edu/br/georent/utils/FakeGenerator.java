@@ -112,6 +112,8 @@ public class FakeGenerator {
                 u.setIdPreference(p);
                 u.setPassword("aosdihaosidh120398");
                 u.setPhone("(49) 8909-9777");
+                u.setType(User.LOCATOR);
+                u.setIdLocation(l);
 
                 UserImage ui = new UserImage();
                 ui.setIdUserImage(new Random().nextInt());

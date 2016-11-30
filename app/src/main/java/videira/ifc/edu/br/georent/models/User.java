@@ -48,6 +48,9 @@ public class User {
     @SerializedName("profileImage")
     private UserImage profileImage;
 
+    @SerializedName("location")
+    private Location idLocation;
+
     private Date createdAt;
 
     private Date updatedAt;
@@ -217,5 +220,13 @@ public class User {
 
     public void setUserImages(List<UserImage> userImages) {
         this.userImages = userImages;
+    }
+
+    public Location getIdLocation() {
+        return idLocation;
+    }
+
+    public void setIdLocation(Location idLocation) {
+        this.idLocation = idLocation;
     }
 }

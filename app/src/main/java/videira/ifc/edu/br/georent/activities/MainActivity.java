@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import videira.ifc.edu.br.georent.R;
@@ -18,7 +19,7 @@ import videira.ifc.edu.br.georent.fragments.ChatIndexFragment;
 import videira.ifc.edu.br.georent.fragments.ResidenceIndexFragment;
 import videira.ifc.edu.br.georent.fragments.UserProfileFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, MenuItem.OnMenuItemClickListener {
 
     private final int[] imageResId = {
             R.drawable.ic_home_black_24dp,
@@ -101,8 +102,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         String pageTitle = mViewPager.getAdapter().getPageTitle(mViewPager.getCurrentItem()).toString();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_search, menu);
+        inflater.inflate(R.menu.menu_main, menu);
         mMenu = menu;
+        mMenu.findItem(R.id.action_edit).setVisible(false);
+        mMenu.findItem(R.id.action_edit).setOnMenuItemClickListener(this);
         return true;
     }
 
@@ -119,10 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (pageTitle) {
                     case ResidenceIndexFragment.ARG_PAGE_RESIDENCE: {
                         intent = new Intent(MainActivity.this, MapsActivity.class);
-                    }
-                    break;
-                    case UserProfileFragment.ARG_PAGE_PROFILE: {
-                        intent = new Intent(MainActivity.this, UserRegisterActivity.class);
                     }
                     break;
                 }
@@ -149,16 +148,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mFloatingActionButton.setImageResource(R.drawable.ic_add_black_24dp);
                 mFloatingActionButton.setVisibility(View.VISIBLE);
                 mMenu.findItem(R.id.action_search).setVisible(true);
+                mMenu.findItem(R.id.action_edit).setVisible(false);
             }
             break;
             case UserProfileFragment.ARG_PAGE_PROFILE: {
-                mFloatingActionButton.setImageResource(R.drawable.ic_mode_edit_black_24dp);
-                mFloatingActionButton.setVisibility(View.VISIBLE);
+                mFloatingActionButton.setVisibility(View.GONE);
                 mMenu.findItem(R.id.action_search).setVisible(false);
+                mMenu.findItem(R.id.action_edit).setVisible(true);
             }
             break;
             default: {
                 mMenu.findItem(R.id.action_search).setVisible(false);
+                mMenu.findItem(R.id.action_edit).setVisible(false);
                 mFloatingActionButton.setVisibility(View.GONE);
             }
             break;
@@ -173,5 +174,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        Intent intent = new Intent(MainActivity.this, UserRegisterActivity.class);
+        startActivity(intent);
+        return true;
     }
 }

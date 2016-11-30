@@ -7,8 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -22,7 +26,7 @@ import videira.ifc.edu.br.georent.utils.CircularNetworkImageView;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class UserProfileFragment extends Fragment implements Bind<User>{
+public class UserProfileFragment extends Fragment implements Bind<User>, CompoundButton.OnCheckedChangeListener{
 
     //Parâmetros constantes do fragment
     public static final String ARG_PAGE_PROFILE = "PROFILE";
@@ -100,10 +104,25 @@ public class UserProfileFragment extends Fragment implements Bind<User>{
         final CircularNetworkImageView cnivUser = (CircularNetworkImageView) mView.findViewById(R.id.cniv_user_profile);
         final TextView tvName = (TextView) mView.findViewById(R.id.tv_name_user_profile);
         final TextView tvEmail = (TextView) mView.findViewById(R.id.tv_email_user_profile);
+        final Switch swType = (Switch) mView.findViewById(R.id.sw_type_user_profile);
+        final TextView tvSettings = (TextView) mView.findViewById(R.id.tv_settings_user_profile);
+        final TextView tvType = (TextView) mView.findViewById(R.id.tv_type_user_profile);
+        final TextView tvLocation = (TextView) mView.findViewById(R.id.tv_location_user_profile);
+        final TextView tvRange = (TextView) mView.findViewById(R.id.tv_range_user_profile);
 
         cnivUser.setImageUrl(mUser.getProfileImage().getPath(), NetworkConnection.getInstance(getActivity()).getImageLoader());
         tvName.setText(mUser.getName());
         tvEmail.setText(mUser.getEmail());
+        swType.setOnCheckedChangeListener(this);
+        swType.setChecked(mUser.getType().equals(1));
+        if(swType.isChecked()){
+            tvType.setText(getString(R.string.locator));
+        }else{
+            tvType.setText(getString(R.string.occupier));
+        }
+        tvLocation.setText(mUser.getIdLocation().getIdCity().getName() + " - " +
+            mUser.getIdLocation().getIdCity().getUf() + ". ");
+        tvRange.setText("Distância de busca : " + mUser.getDistance() + "Km");
     }
 
     @Override
@@ -114,5 +133,15 @@ public class UserProfileFragment extends Fragment implements Bind<User>{
     @Override
     public void doError(Exception ex) {
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        final TextView tvType = (TextView) mView.findViewById(R.id.tv_type_user_profile);
+        if(isChecked){
+            tvType.setText(getString(R.string.locator));
+        }else{
+            tvType.setText(getString(R.string.occupier));
+        }
     }
 }

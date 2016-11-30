@@ -16,11 +16,14 @@
     <string name="yes">Sim</string>
     <string name="no">Não</string>
     <string name="edit">Editar</string>
+    <string name="change_location">Alterar localização de busca</string>
 
     <!-- CADASTRO USUARIO -->
     <string name="new_user">Novo Usuário</string>
     <string name="range">Área De Busca</string>
     <string name="state">Estado</string>
+    <string name="locator">Locador</string>
+    <string name="occupier">Locatário</string>
     <string-array name="numbers">
         <item>1</item>
         <item>2</item>
