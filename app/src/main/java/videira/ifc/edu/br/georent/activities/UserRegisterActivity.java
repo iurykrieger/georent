@@ -1,59 +1,56 @@
 package videira.ifc.edu.br.georent.activities;
 
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import videira.ifc.edu.br.georent.R;
-import videira.ifc.edu.br.georent.adapters.FragmentPagerAdapter;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.City;
 import videira.ifc.edu.br.georent.models.Preference;
 import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.models.UserImage;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User>{
+public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User> {
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
@@ -90,13 +87,14 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private MaterialBetterSpinner spnState;
     private Button btRegister;
 
-    static final int DIALOG_ID = 0;
-
+    private List<String> mListUserImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
+
+        List<String> mListUserImage = new ArrayList<String>();
 
         etName = (EditText) findViewById(R.id.et_name_user);
         etEmail = (EditText) findViewById(R.id.et_email_user);
@@ -171,21 +169,49 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         mViewPager.setCurrentItem(0);
 
         /**    PICKUP IMAGE   **/
-
         /*
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture, 0);
-
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto , 1);
-        */
-
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, REQUEST_CAMERA_IMAGE);
+            }
+        });
+        */
+        final String[] items = new String[]{"Tirar foto", "Selecionar do Cartao"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecione uma opção");
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File file = new File(Environment.getExternalStorageDirectory(), "tmp_avatar" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+                    Uri imageCaptureUri = Uri.fromFile(file);
+                    try {
+                        getIntent().putExtra(MediaStore.EXTRA_OUTPUT, imageCaptureUri);
+                        getIntent().putExtra("return data", true);
+
+                        startActivityForResult(intent, REQUEST_CAMERA_IMAGE);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    dialog.cancel();
+                } else {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                     photoPickerIntent.setType("image/*");
-                    startActivityForResult(photoPickerIntent, REQUEST_CAMERA_IMAGE);
+                    startActivityForResult(photoPickerIntent, REQUEST_GALLERY_IMAGE);
+                }
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.show();
             }
         });
 
@@ -203,18 +229,20 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         });
     }
 
-    /** DATE PICKER **/
-    public void onStart(){
+    /**
+     * DATE PICKER
+     **/
+    public void onStart() {
         super.onStart();
         EditText mEtBirthDate = (EditText) findViewById(R.id.et_birth_date_user);
         mEtBirthDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     DateDialog dialog = new DateDialog(v);
                     dialog.setAllowReturnTransitionOverlap(false);
                     android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    dialog.show(ft,"DatePicker");
+                    dialog.show(ft, "DatePicker");
                 }
             }
         });
@@ -239,35 +267,39 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        Bitmap yourSelectedImage;
         switch (requestCode) {
             case REQUEST_GALLERY_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    InputStream imageStream = null;
                     try {
-                        imageStream = getContentResolver().openInputStream(selectedImage);
+                        final Uri imageUri = imageReturnedIntent.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        final Bitmap image = BitmapFactory.decodeStream(imageStream);
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        image.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                        byte[] byteFormat = stream.toByteArray();
+                        // get the base 64 string
+                        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+
+                        mImageAdapter.addListItem(imageUri);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-                    final Drawable imageDrawable = new BitmapDrawable(getResources(), yourSelectedImage);
                 }
                 break;
             case REQUEST_CAMERA_IMAGE: {
                 if (resultCode == RESULT_OK) {
                     try {
                         final Uri imageUri = imageReturnedIntent.getData();
-                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                        final Drawable imageDrawable = new BitmapDrawable(getResources(), selectedImage);
+                        final InputStream imgStream = getContentResolver().openInputStream(imageUri);
                         mImageAdapter.addListItem(imageUri);
+
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         }
@@ -281,6 +313,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         if (NetworkUtil.verifyConnection(this)) {
             mUser = new User();
             mPreference = new Preference();
+
+
             mUser.setName(etName.getText().toString());
             mUser.setEmail(etEmail.getText().toString());
             mUser.setBirthDate(new Date());
