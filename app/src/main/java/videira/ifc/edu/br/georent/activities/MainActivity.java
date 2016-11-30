@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = null;
                 switch (pageTitle) {
                     case ResidenceIndexFragment.ARG_PAGE_RESIDENCE: {
-                        intent = new Intent(MainActivity.this, ResidenceRegisterActivity.class);
+                        intent = new Intent(MainActivity.this, MapsActivity.class);
                     }
                     break;
                     case UserProfileFragment.ARG_PAGE_PROFILE: {

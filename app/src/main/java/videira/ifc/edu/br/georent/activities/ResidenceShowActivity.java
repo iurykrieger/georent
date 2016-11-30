@@ -20,6 +20,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.w3c.dom.Text;
+
 import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -36,7 +45,8 @@ import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.LayoutUtils;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class ResidenceShowActivity extends AppCompatActivity implements Bind<Residence>, ViewPager.OnPageChangeListener, View.OnClickListener {
+public class ResidenceShowActivity extends AppCompatActivity implements Bind<Residence>,
+        ViewPager.OnPageChangeListener, View.OnClickListener, OnMapReadyCallback {
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Toolbar mToolbar;
@@ -163,6 +173,11 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
         final RecyclerView rvMatch = (RecyclerView) findViewById(R.id.rv_match_residence);
         final MatchAdapter matchAdapter = new MatchAdapter(mResidence.getMatches().subList(0, 4), this);
 
+        /* Location */
+        final MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        final TextView tvCiyLocation = (TextView) findViewById(R.id.tv_city_location_residence_show);
+        final TextView tvAddressLocation = (TextView) findViewById(R.id.tv_address_location_residence_show);
+
         List<String> resources = new ArrayList<>();
         for (ResidenceImage ri : mResidence.getResidenceImages()) {
             resources.add(ri.getPath());
@@ -207,6 +222,11 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
         rvMatch.setHasFixedSize(true);
         rvMatch.setLayoutManager(linearLayoutManager);
         rvMatch.setAdapter(matchAdapter);
+
+        mapFragment.getMapAsync(this);
+        tvCiyLocation.setText(mResidence.getIdLocation().getIdCity().getName() + " - " +
+            mResidence.getIdLocation().getIdCity().getUf());
+        tvAddressLocation.setText(mResidence.getAddress());
     }
 
     @Override
@@ -240,7 +260,7 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
     }
 
     /*************************************************************************
-     * *                            VIEW PAGER                               **
+     * *                            VIEW PAGER                             * *
      *************************************************************************/
 
     @Override
@@ -261,5 +281,20 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
     @Override
     public void onClick(View v) {
 
+    }
+
+    /*************************************************************************
+     * *                                MAPA                               * *
+     *************************************************************************/
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        LatLng location = new LatLng(mResidence.getIdLocation().getLatitude(),
+                mResidence.getIdLocation().getLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
+        map.addMarker(new MarkerOptions()
+                .title(mResidence.getIdLocation().getIdCity().getName())
+                .snippet(mResidence.getAddress())
+                .position(location));
     }
 }
