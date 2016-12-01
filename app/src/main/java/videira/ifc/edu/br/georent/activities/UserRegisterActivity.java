@@ -354,9 +354,9 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 imageStream = getContentResolver().openInputStream(u);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 final Bitmap image = BitmapFactory.decodeStream(imageStream);
-                image.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 byte[] byteFormat = stream.toByteArray();
-                String imgString = Base64.encodeToString(byteFormat, Base64.URL_SAFE);
+                String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
 
                 ui.setPath(imgString);
                 uir.createUserImage(ui);
