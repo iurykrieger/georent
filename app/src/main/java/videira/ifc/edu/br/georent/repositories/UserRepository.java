@@ -63,16 +63,15 @@ public class UserRepository implements Transaction {
     public HashMap<String, String> doBefore() {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
-            if(!login) {
+            if (!login) {
                 //NetworkObject no = new NetworkObject(mUser);
                 params.put("jsonObject", gson.toJson(mUser));
                 Log.i("LOG", params.toString());
-            }else{
+            } else {
                 params.put("email", mUser.getEmail());
                 params.put("password", mUser.getPassword());
                 Log.i("LOG - login true", params.toString());
             }
-
             return params;
         }
         return null;
@@ -93,7 +92,7 @@ public class UserRepository implements Transaction {
                 String userToken = obj.get("api_token").getAsString();
                 mUser = gson.fromJson(jsonObject.toString(), User.class);
 
-                if(userToken != null) {
+                if (userToken != null) {
                     SharedPreferences pref = mContext.getSharedPreferences("MyPref", MODE_PRIVATE);
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putInt("idUser", mUser.getIdUser());
@@ -103,6 +102,7 @@ public class UserRepository implements Transaction {
                 /******************************/
 
                 bind.doSingleBind(mUser);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 bind.doError(e);
@@ -122,7 +122,7 @@ public class UserRepository implements Transaction {
         login = true;
         mUser = user;
         String url = NetworkUtil.getStringUrl(mContext, R.string.login);
-        url = String.format("/"+url);
+        url = String.format("/" + url);
         Log.i("URL", url);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, url);
     }

@@ -1,6 +1,7 @@
 package videira.ifc.edu.br.georent.activities;
 
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -174,16 +175,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         mViewPager.setCurrentItem(0);
 
         /**    PICKUP IMAGE   **/
-        /*
-        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
-        myFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, REQUEST_CAMERA_IMAGE);
-            }
-        });
-        */
         final String[] items = new String[]{"Tirar foto", "Selecionar do Cartao"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -370,13 +361,18 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 ui.setPath(imgString);
                 uir.createUserImage(ui);
 
-                Intent i = new Intent(this, LoginActivity.class);
-                startActivity(i);
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
+
+        ProgressDialog progress;
+        progress = ProgressDialog.show(this, "dialog title", "dialog message", true);
+
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+
+        progress.dismiss();
     }
 
     @Override

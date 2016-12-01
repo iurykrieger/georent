@@ -46,13 +46,9 @@ public class LoginActivity extends AppCompatActivity implements Bind<User> {
             etPassword.setTypeface(typeFace);
             tvLogo.setTypeface(typeFace);
 
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-
             btLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("LOG", "tentou logar");
                     User u = new User();
                     u.setEmail(etEmail.getText().toString());
                     u.setPassword(etPassword.getText().toString());
