@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements Bind<User> {
         final EditText etEmail = (EditText) findViewById(R.id.et_email);
         final EditText etPassword = (EditText) findViewById(R.id.et_password);
         final TextView tvLogo = (TextView) findViewById(R.id.tv_logo);
+        final Button btLogin = (Button) findViewById(R.id.bt_login);
         final Button btRegister = (Button) findViewById(R.id.bt_register);
 
         mUserRepository = new UserRepository(this,this);
@@ -44,14 +46,23 @@ public class LoginActivity extends AppCompatActivity implements Bind<User> {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
 
-        assert btRegister != null;
-        btRegister.setOnClickListener(new View.OnClickListener() {
+        btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
+                Log.i("LOG", "tentou logar");
                 User u = new User();
                 u.setEmail(etEmail.getText().toString());
                 u.setPassword(etPassword.getText().toString());
                 mUserRepository.login(u);
+            }
+        });
+
+        assert btRegister != null;
+        btRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this, UserRegisterActivity.class);
+                startActivity(i);
             }
         });
     }

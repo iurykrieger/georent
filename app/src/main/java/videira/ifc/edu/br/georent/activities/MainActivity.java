@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fb_action);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
+
         mToolbar.setTitle(R.string.app_name);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
