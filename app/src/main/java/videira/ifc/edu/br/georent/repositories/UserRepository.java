@@ -15,9 +15,11 @@ import java.net.ConnectException;
 import java.util.HashMap;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.enums.ActionEnum;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.network.JSONArrayRequest;
 import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.utils.AuthUtil;
@@ -37,8 +39,7 @@ public class UserRepository implements Transaction {
     private HashMap<String, String> params;
     private Gson gson;
     private Bind bind;
-    private Boolean login;
-
+    private ActionEnum action;
     private User mUser;
 
     public UserRepository(Context mContext, Bind b) {
@@ -46,11 +47,9 @@ public class UserRepository implements Transaction {
         this.mContext = mContext;
         this.params = new HashMap<>();
         this.service = NetworkUtil.getStringUrl(mContext, R.string.user_service);
-        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        this.login = false;
+        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         mUser = new User();
     }
-
 
     /**
      * Prepara a requisição do servidor
@@ -61,9 +60,11 @@ public class UserRepository implements Transaction {
     public HashMap<String, String> doBefore() {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
-            if (!login) {
+            if (action != ActionEnum.ACTION_LOGIN) {
                 params.put("jsonObject", gson.toJson(mUser));
-                //params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
+                if (action != ActionEnum.ACTION_STORE) {
+                    params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
+                }
                 Log.i("LOG", params.toString());
             } else {
                 params.put("email", mUser.getEmail());
@@ -106,18 +107,26 @@ public class UserRepository implements Transaction {
         }
     }
 
-    public void createUser(User u) {
-        mUser = u;
+    /****************************************************************************************
+     * *                             MÉTODOS PERSONALIZADOS                               * *
+     ****************************************************************************************/
+
+    public void createUser(User user) {
+        mUser = user;
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
     }
 
     public void login(User user) {
-        login = true;
         mUser = user;
-        String url = NetworkUtil.getStringUrl(mContext, R.string.login);
-        url = String.format("/" + url);
-        Log.i("URL", url);
-        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, url);
+        service = NetworkUtil.getStringUrl(mContext, R.string.login);
+        Log.i("URL", service);
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
+    }
+
+    public void getUserById(Integer idUser) {
+        service = String.format(service + "/" + idUser + "/eager");
+        Log.i("URL", service);
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
     }
 }

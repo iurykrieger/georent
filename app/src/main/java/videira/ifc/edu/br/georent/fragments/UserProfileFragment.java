@@ -1,6 +1,5 @@
 package videira.ifc.edu.br.georent.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,11 +19,11 @@ import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.CircularNetworkImageView;
-import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class UserProfileFragment extends Fragment implements Bind<User>, CompoundButton.OnCheckedChangeListener{
+public class UserProfileFragment extends Fragment implements Bind<User>, CompoundButton.OnCheckedChangeListener {
 
     //Parâmetros constantes do fragment
     public static final String ARG_PAGE_PROFILE = "PROFILE";
@@ -33,7 +32,6 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
     private int page;
     private ProgressBar mProgressBar;
     private UserRepository mUserRepository;
-    private Intent mIntent;
     private User mUser;
     private View mView;
 
@@ -66,15 +64,15 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
         mProgressBar = (ProgressBar) mView.findViewById(R.id.pb_user_profile);
+        mUserRepository = new UserRepository(getActivity(), this);
 
         return mView;
     }
 
     /*************************************************************************
-     **                            SERVIÇO                                  **
+     * *                            SERVIÇO                                * *
      *************************************************************************/
 
     @Override
@@ -83,9 +81,7 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
             if (mProgressBar.getVisibility() == View.GONE) {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
-
-            //mUserRepository.getEagerResidenceById(mIntent.getIntExtra("idResidence", 0)); //Bind Correto
-            doSingleBind(FakeGenerator.getInstance().getUsers().get(0)); //Geração Fake!
+            mUserRepository.getUserById(AuthUtil.getLoggedUserId(getActivity()));
         } else {
             doError(new UnknownHostException());
         }
@@ -113,13 +109,13 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
         tvEmail.setText(mUser.getEmail());
         swType.setOnCheckedChangeListener(this);
         swType.setChecked(mUser.getType().equals(1));
-        if(swType.isChecked()){
+        if (swType.isChecked()) {
             tvType.setText(getString(R.string.locator));
-        }else{
+        } else {
             tvType.setText(getString(R.string.occupier));
         }
         tvLocation.setText(mUser.getIdLocation().getIdCity().getName() + " - " +
-            mUser.getIdLocation().getIdCity().getUf() + ". ");
+                mUser.getIdLocation().getIdCity().getUf() + ". ");
         tvRange.setText("Distância de busca : " + mUser.getDistance() + "Km");
     }
 
@@ -133,12 +129,16 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
 
     }
 
+    /*************************************************************************
+     * *                            CHECK                                  * *
+     *************************************************************************/
+
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         final TextView tvType = (TextView) mView.findViewById(R.id.tv_type_user_profile);
-        if(isChecked){
+        if (isChecked) {
             tvType.setText(getString(R.string.locator));
-        }else{
+        } else {
             tvType.setText(getString(R.string.occupier));
         }
     }
