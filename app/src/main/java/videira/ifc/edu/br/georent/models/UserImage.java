@@ -21,7 +21,7 @@ public class UserImage {
 
     private Integer resource;
 
-    private Integer order;
+    private Integer orderImage;
 
     private Date createdAt;
 
@@ -43,7 +43,7 @@ public class UserImage {
         this.idUser = idUser;
         this.path = path;
         this.resource = resource;
-        this.order = order;
+        this.orderImage = order;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -91,12 +91,12 @@ public class UserImage {
         this.resource = resource;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getOrderImage() {
+        return orderImage;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setOrderImage(Integer orderImage) {
+        this.orderImage = orderImage;
     }
 
     public Date getCreatedAt() {

@@ -3,6 +3,7 @@ package videira.ifc.edu.br.georent.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -27,8 +28,9 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.ByteArrayOutputStream;
@@ -39,7 +41,6 @@ import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
@@ -53,8 +54,6 @@ import videira.ifc.edu.br.georent.repositories.UserImageRepository;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
-
-import static android.support.v7.mediarouter.R.id.image;
 
 public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User> {
 
@@ -351,12 +350,13 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     @Override
     public void doSingleBind(User result) {
         Log.i("LOG", "Usuario cadastrado = " + result.getName());
+
         UserImageRepository uir = new UserImageRepository(this);
 
         for (Uri u: mImageAdapter.getAll()) {
             UserImage ui = new UserImage();
             ui.setIdUser(result);
-            ui.setOrder(0);
+            ui.setOrderImage(0);
             Log.i("LOG", "Imagem enviada");
             final InputStream imageStream;
             try {
@@ -369,6 +369,9 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
                 ui.setPath(imgString);
                 uir.createUserImage(ui);
+
+                Intent i = new Intent(this, LoginActivity.class);
+                startActivity(i);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
