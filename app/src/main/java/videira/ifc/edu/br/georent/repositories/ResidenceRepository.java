@@ -17,11 +17,11 @@ import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.interfaces.Bind;
-import videira.ifc.edu.br.georent.models.NetworkObject;
+import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.network.JSONArrayRequest;
+import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
-import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
 /**
@@ -38,6 +38,7 @@ public class ResidenceRepository implements Transaction {
     private HashMap<String, String> params;
     private Gson gson;
     private Bind bind;
+    private Residence residence;
 
     /**
      * Construtor
@@ -51,17 +52,7 @@ public class ResidenceRepository implements Transaction {
         this.params = new HashMap<>();
         this.service = NetworkUtil.getStringUrl(mContext, R.string.residence_service);
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-    }
-
-    /**
-     * Seta os parametros necessários
-     *
-     * @param object
-     */
-    public void setParams(Object object) {
-        params.put("jsonObject", gson.toJson(object));
-        params.put("id_gte", String.valueOf(range));
-        params.put("id_lte", String.valueOf(range + 10));
+        this.residence = new Residence();
     }
 
     /**
@@ -73,9 +64,7 @@ public class ResidenceRepository implements Transaction {
     public HashMap<String, String> doBefore() {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
-            Residence residence = new Residence();
-            NetworkObject no = new NetworkObject(residence);
-            setParams(no);
+            params.put("jsonObject", gson.toJson(residence));
             return params;
         }
         return null;
@@ -110,10 +99,10 @@ public class ResidenceRepository implements Transaction {
     public void doAfterObject(JSONObject jsonObject) {
         Residence residence;
         if (jsonObject != null) {
-            try{
+            try {
                 residence = gson.fromJson(jsonObject.toString(), Residence.class);
                 bind.doSingleBind(residence);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 bind.doError(e);
             }
@@ -124,7 +113,7 @@ public class ResidenceRepository implements Transaction {
     }
 
     /****************************************************************************************
-     **                             MÉTODOS PERSONALIZADOS                                 **
+     * *                             MÉTODOS PERSONALIZADOS                               * *
      ****************************************************************************************/
     public void getResidences() {
         service = String.format(NetworkUtil.getStringUrl(mContext, R.string.residence_service)
@@ -139,10 +128,15 @@ public class ResidenceRepository implements Transaction {
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
     }
 
-    public void getEagerResidenceById(Integer idResidence){
+    public void getEagerResidenceById(Integer idResidence) {
         service = String.format(service + "/" + idResidence + "/eager");
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
+    }
+
+    public void createResidence(Residence residence) {
+        this.residence = residence;
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
     }
 
     public void cancelRequests() {

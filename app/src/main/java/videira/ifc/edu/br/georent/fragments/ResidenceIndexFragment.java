@@ -175,7 +175,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void onClickListener(View view, int position) {
         //Joga uma mensagem curta com a posição na tela.
-        int index = mResidenceImageAdapter.getListItem(position).getResidence().getIdResidence();
+        int index = mResidenceImageAdapter.getListItem(position).getIdResidence().getIdResidence();
         Intent i = new Intent(getActivity(), ResidenceShowActivity.class);
         i.putExtra("idResidence", index);
         startActivity(i);

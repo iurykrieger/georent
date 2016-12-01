@@ -78,8 +78,8 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
                 }
             }
         });
-        holder.tvTitle.setText(mResidenceImageList.get(position).getResidence().getTitle());
-        holder.tvAddress.setText(mResidenceImageList.get(position).getResidence().getAddress());
+        holder.tvTitle.setText(mResidenceImageList.get(position).getIdResidence().getTitle());
+        holder.tvAddress.setText(mResidenceImageList.get(position).getIdResidence().getAddress());
     }
 
     /**

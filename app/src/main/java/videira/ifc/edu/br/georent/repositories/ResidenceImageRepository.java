@@ -81,7 +81,7 @@ public class ResidenceImageRepository implements Transaction {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ResidenceImage r = gson.fromJson(jsonArray.getJSONObject(i).toString(), ResidenceImage.class);
                     residenceImages.add(r);
-                    Log.i("LOG",r.getResidence().getTitle());
+                    Log.i("LOG",r.getIdResidence().getTitle());
                 }
                 this.range += jsonArray.length();
                 bind.doMultipleBind(residenceImages);

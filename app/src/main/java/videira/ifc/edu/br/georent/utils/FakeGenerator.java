@@ -97,7 +97,7 @@ public class FakeGenerator {
                 ri.setCreatedAt(new Date());
                 ri.setOrder(i);
                 ri.setUpdatedAt(new Date());
-                ri.setResidence(r);
+                ri.setIdResidence(r);
                 ri.setPath(s);
                 ris.add(ri);
 

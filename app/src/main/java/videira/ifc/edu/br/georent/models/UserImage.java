@@ -18,9 +18,13 @@ public class UserImage {
     private User idUser;
 
     private String path;
+
     private Integer resource;
+
     private Integer order;
+
     private Date createdAt;
+
     private Date updatedAt;
 
     /**

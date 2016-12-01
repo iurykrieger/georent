@@ -1,5 +1,7 @@
 package videira.ifc.edu.br.georent.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -11,11 +13,18 @@ public class ResidenceImage {
      * Atributos
      */
     private Integer idResidenceImage;
-    private Residence residence;
+
+    @SerializedName("residence")
+    private Residence idResidence;
+
     private String path;
+
     private Integer resource;
+
     private Integer order;
+
     private Date createdAt;
+
     private Date updatedAt;
 
     /**
@@ -31,7 +40,7 @@ public class ResidenceImage {
      */
     public ResidenceImage(Integer idResidenceImage, Residence idResidence, String path, Integer resource, Integer order, Date createdAt, Date updatedAt) {
         this.idResidenceImage = idResidenceImage;
-        this.residence = idResidence;
+        this.idResidence = idResidence;
         this.path = path;
         this.resource = resource;
         this.order = order;
@@ -58,12 +67,12 @@ public class ResidenceImage {
         this.idResidenceImage = idResidenceImage;
     }
 
-    public Residence getResidence() {
-        return residence;
+    public Residence getIdResidence() {
+        return idResidence;
     }
 
-    public void setResidence(Residence residence) {
-        this.residence = residence;
+    public void setIdResidence(Residence idResidence) {
+        this.idResidence = idResidence;
     }
 
     public String getPath() {
