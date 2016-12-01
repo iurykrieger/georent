@@ -1,5 +1,7 @@
 package videira.ifc.edu.br.georent.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -11,7 +13,10 @@ public class UserImage {
      * Atributos
      */
     private Integer idUserImage;
+
+    @SerializedName("user")
     private User idUser;
+
     private String path;
     private Integer resource;
     private Integer order;

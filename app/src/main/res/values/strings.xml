@@ -18,6 +18,8 @@
     <string name="edit">Editar</string>
     <string name="change_location">Alterar localização de busca</string>
 
+
+
     <!-- CADASTRO USUARIO -->
     <string name="new_user">Novo Usuário</string>
     <string name="range">Área De Busca</string>
@@ -97,13 +99,14 @@
 
     <!-- CONSTANTES DE CONEXÃO -->
     <string name="port">8000</string>
-    <string name="ip">http://172.31.4.222</string>
+    <string name="ip">http://192.168.1.102</string>
 
     <!-- SERVIÇOS DO SERVIDOR -->
     <string name="user_service">user</string>
     <string name="residence_service">residence</string>
     <string name="residence_image_service">residenceImage</string>
-    <string name="auth_service">auth</string>
+    <string name="login">login</string>
+    <string name="user_image_service">userImage</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

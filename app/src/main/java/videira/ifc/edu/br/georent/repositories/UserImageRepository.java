@@ -15,7 +15,7 @@ import java.util.HashMap;
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
-import videira.ifc.edu.br.georent.models.User;
+import videira.ifc.edu.br.georent.models.UserImage;
 import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
@@ -24,7 +24,7 @@ import videira.ifc.edu.br.georent.utils.NetworkUtil;
  * Created by Aluno on 18/11/2016.
  */
 
-public class UserRepository implements Transaction {
+public class UserImageRepository implements Transaction {
 
     /**
      * Atributos
@@ -33,21 +33,17 @@ public class UserRepository implements Transaction {
     private Context mContext;
     private HashMap<String, String> params;
     private Gson gson;
-    private Bind bind;
-    private Boolean login;
 
-    private User mUser;
+    private UserImage mUserImage;
 
-    public UserRepository(Context mContext, Bind b) {
-        this.bind = b;
+    public UserImageRepository(Context mContext) {
         this.mContext = mContext;
         this.params = new HashMap<>();
-        this.service = NetworkUtil.getStringUrl(mContext, R.string.user_service);
+        this.service = NetworkUtil.getStringUrl(mContext, R.string.user_image_service);
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
-        mUser = new User();
+        mUserImage = new UserImage();
     }
-
 
     /**
      * Prepara a requisição do servidor
@@ -58,16 +54,10 @@ public class UserRepository implements Transaction {
     public HashMap<String, String> doBefore() {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
-            if(!login) {
-                //NetworkObject no = new NetworkObject(mUser);
-                params.put("jsonObject", gson.toJson(mUser));
-                Log.i("LOG", params.toString());
-            }else{
-                params.put("email", mUser.getEmail());
-                params.put("password", mUser.getPassword());
-                Log.i("LOG - login true", params.toString());
-            }
-
+            //NetworkObject no = new NetworkObject(mUserImage);
+            params.put("jsonObject", gson.toJson(mUserImage));
+            //Log.i("LOG", params.toString());
+            System.out.println(params.toString());
             return params;
         }
         return null;
@@ -82,29 +72,17 @@ public class UserRepository implements Transaction {
     public void doAfterObject(JSONObject jsonObject) {
         if (jsonObject != null) {
             try {
-                mUser = gson.fromJson(jsonObject.toString(), User.class);
-                bind.doSingleBind(mUser);
+                mUserImage = gson.fromJson(jsonObject.toString(), UserImage.class);
             } catch (Exception e) {
                 e.printStackTrace();
-                bind.doError(e);
             }
-        } else {
-            bind.doError(new ConnectException());
         }
     }
 
-    public void createUser(User u) {
-        mUser = u;
+    public void createUserImage(UserImage u) {
+        mUserImage = u;
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
     }
 
-    public void login(User user) {
-        login = true;
-        mUser = user;
-        String url = NetworkUtil.getStringUrl(mContext, R.string.login);
-        url = String.format("/"+url);
-        Log.i("URL", url);
-        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, url);
-    }
 }

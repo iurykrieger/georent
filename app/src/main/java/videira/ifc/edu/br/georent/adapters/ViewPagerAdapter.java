@@ -119,6 +119,10 @@ public class ViewPagerAdapter extends PagerAdapter {
             }
         }
     }
+
+    public List<Uri> getAll(){
+        return mResources;
+    }
 }
 
 

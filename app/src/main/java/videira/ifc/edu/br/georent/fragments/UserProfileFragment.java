@@ -12,8 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.net.UnknownHostException;
 import java.util.List;
 

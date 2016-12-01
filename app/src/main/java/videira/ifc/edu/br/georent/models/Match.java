@@ -1,6 +1,5 @@
 package videira.ifc.edu.br.georent.models;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;

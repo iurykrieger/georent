@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -35,6 +36,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,9 +49,12 @@ import videira.ifc.edu.br.georent.models.City;
 import videira.ifc.edu.br.georent.models.Preference;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.models.UserImage;
+import videira.ifc.edu.br.georent.repositories.UserImageRepository;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
+
+import static android.support.v7.mediarouter.R.id.image;
 
 public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User> {
 
@@ -278,12 +284,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         final Bitmap image = BitmapFactory.decodeStream(imageStream);
 
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-                        byte[] byteFormat = stream.toByteArray();
-                        // get the base 64 string
-                        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
-
                         mImageAdapter.addListItem(imageUri);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -317,7 +317,12 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
             mUser.setName(etName.getText().toString());
             mUser.setEmail(etEmail.getText().toString());
-            mUser.setBirthDate(new Date());
+
+            try {
+                mUser.setBirthDate(new SimpleDateFormat("MM/dd/yyyy").parse(etBirthDate.getText().toString()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             mUser.setPhone(etTel.getText().toString());
             mUser.setPassword(etPassword.getText().toString());
             mUser.setDistance(skDistance.getProgress());
@@ -345,6 +350,30 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     @Override
     public void doSingleBind(User result) {
+        Log.i("LOG", "Usuario cadastrado = " + result.getName());
+        UserImageRepository uir = new UserImageRepository(this);
+
+        for (Uri u: mImageAdapter.getAll()) {
+            UserImage ui = new UserImage();
+            ui.setIdUser(result);
+            ui.setOrder(0);
+            Log.i("LOG", "Imagem enviada");
+            final InputStream imageStream;
+            try {
+                imageStream = getContentResolver().openInputStream(u);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                final Bitmap image = BitmapFactory.decodeStream(imageStream);
+                image.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                byte[] byteFormat = stream.toByteArray();
+                String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+
+                ui.setPath(imgString);
+                uir.createUserImage(ui);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
