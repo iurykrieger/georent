@@ -48,7 +48,8 @@ import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class ResidenceRegisterActivity extends AppCompatActivity implements Bind<Residence>, ViewPager.OnPageChangeListener {
+public class ResidenceRegisterActivity extends AppCompatActivity implements Bind<Residence>,
+        ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener {
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
@@ -63,13 +64,12 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     private Residence mResidence;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ResidenceRepository mResidenceRepository;
-    private EditText etName;
-    private EditText etEmail;
-    private EditText etBirthDate;
-    private EditText etTel;
-    private EditText etPassword;
-    private SeekBar skDistance;
-    private TextView tvDistance;
+    private EditText etTitle;
+    private EditText etDescription;
+    private EditText etObservation;
+    private EditText etAddress;
+    private SeekBar sbRent;
+    private TextView tvRent;
     private SwitchCompat scSponsor;
     private SwitchCompat scCondominium;
     private SwitchCompat scPet;
@@ -88,13 +88,12 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_residence_register);
 
-        etName = (EditText) findViewById(R.id.et_name_user);
-        etEmail = (EditText) findViewById(R.id.et_email_user);
-        etBirthDate = (EditText) findViewById(R.id.et_birth_date_user);
-        etTel = (EditText) findViewById(R.id.et_tel_user);
-        etPassword = (EditText) findViewById(R.id.et_password_user);
-        skDistance = (SeekBar) findViewById(R.id.sb_distance_user);
-        tvDistance = (TextView) findViewById(R.id.tv_range_number_user);
+        etTitle = (EditText) findViewById(R.id.et_title_residence_register);
+        etDescription = (EditText) findViewById(R.id.et_description_residence_register);
+        etObservation = (EditText) findViewById(R.id.et_observation_residence_register);
+        etAddress = (EditText) findViewById(R.id.et_address_residence_register);
+        sbRent = (SeekBar) findViewById(R.id.sb_rent_residence_register);
+        tvRent = (TextView) findViewById(R.id.tv_rent_residence_register);
         scSponsor = (SwitchCompat) findViewById(R.id.sc_sponsor);
         scCondominium = (SwitchCompat) findViewById(R.id.sc_condominium);
         scPet = (SwitchCompat) findViewById(R.id.sc_pet);
@@ -120,6 +119,9 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                 onBackPressed();
             }
         });
+
+        /*     CHANGE DISTANCE    */
+        sbRent.setOnSeekBarChangeListener(this);
 
         /**     ViewPager    **/
         mImageAdapter = new ViewPagerAdapter(this, mPagerIndicator);
@@ -254,10 +256,11 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             mResidence = new Residence();
             Preference preference = new Preference();
 
-            /*mResidence.setTitle(etTitle.getText().toString());
+            mResidence.setTitle(etTitle.getText().toString());
             mResidence.setDescription(etDescription.getText().toString());
             mResidence.setObservation(etObservation.getText().toString());
-            mResidence.setAddress(etAddress.getText().getString());*/
+            mResidence.setAddress(etAddress.getText().toString());
+            mResidence.setRent((float) sbRent.getProgress());
 
             preference.setSponsor(scSponsor.isChecked());
             preference.setCondominium(scCondominium.isChecked());
@@ -316,5 +319,28 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
 
     }
 
+    /*************************************************************************
+     * *                            SEEK BAR                               * *
+     *************************************************************************/
 
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser) {
+            if (progress >= 0 && progress <= sbRent.getMax()) {
+                String progressString = String.valueOf(progress + 1);
+                tvRent.setText(progressString + " $");
+                seekBar.setSecondaryProgress(progress);
+            }
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
 }

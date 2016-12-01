@@ -17,8 +17,8 @@
     <string name="no">Não</string>
     <string name="edit">Editar</string>
     <string name="change_location">Alterar localização de busca</string>
-
-
+    <string name="userToken">userToken</string>
+    <string name="sharedPreferences">MainSharedPrefs</string>
 
     <!-- CADASTRO USUARIO -->
     <string name="new_user">Novo Usuário</string>
@@ -75,6 +75,7 @@
     <string name="location">Localização</string>
     <string name="likes">Curtidas</string>
     <string name="new_residence">Nova Residência</string>
+    <string name="rent">Alugel</string>
 
     <!-- USUÁRIO -->
     <string name="name">Nome</string>

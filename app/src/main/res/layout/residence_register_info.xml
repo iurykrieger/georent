@@ -88,6 +88,49 @@
                 android:hint="@string/hint_state" />
         </android.support.design.widget.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:id="@+id/tv_rent_description_residence_register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="@string/rent"
+                android:textAlignment="viewStart"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_rent_residence_register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="0 $"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/accent"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/sb_rent_residence_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="10000"
+            android:padding="15dp"
+            android:progressTint="@color/accent"
+            android:thumbTint="@color/accent" />
+
         <!-- Description -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
