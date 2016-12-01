@@ -95,7 +95,7 @@ public class FakeGenerator {
                 ResidenceImage ri = new ResidenceImage();
                 ri.setIdResidenceImage(new Random().nextInt());
                 ri.setCreatedAt(new Date());
-                ri.setOrder(i);
+                ri.setOrderImage(i);
                 ri.setUpdatedAt(new Date());
                 ri.setIdResidence(r);
                 ri.setPath(s);
@@ -117,7 +117,7 @@ public class FakeGenerator {
 
                 UserImage ui = new UserImage();
                 ui.setIdUserImage(new Random().nextInt());
-                ui.setOrder(i);
+                ui.setOrderImage(i);
                 ui.setIdUser(u);
                 ui.setPath(s);
 

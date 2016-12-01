@@ -1,10 +1,13 @@
 package videira.ifc.edu.br.georent.repositories;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +22,8 @@ import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Aluno on 18/11/2016.
@@ -44,7 +49,7 @@ public class UserRepository implements Transaction {
         this.params = new HashMap<>();
         this.service = NetworkUtil.getStringUrl(mContext, R.string.user_service);
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
+        this.login = false;
         mUser = new User();
     }
 
@@ -82,7 +87,21 @@ public class UserRepository implements Transaction {
     public void doAfterObject(JSONObject jsonObject) {
         if (jsonObject != null) {
             try {
+                /**  GET USER LOGIN TOKEN **/
+                JsonParser parser = new JsonParser();
+                JsonObject obj = parser.parse(String.valueOf(jsonObject)).getAsJsonObject();
+                String userToken = obj.get("api_token").getAsString();
                 mUser = gson.fromJson(jsonObject.toString(), User.class);
+
+                if(userToken != null) {
+                    SharedPreferences pref = mContext.getSharedPreferences("MyPref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putInt("idUser", mUser.getIdUser());
+                    editor.putString("userToken", userToken);
+                    editor.commit();
+                }
+                /******************************/
+
                 bind.doSingleBind(mUser);
             } catch (Exception e) {
                 e.printStackTrace();

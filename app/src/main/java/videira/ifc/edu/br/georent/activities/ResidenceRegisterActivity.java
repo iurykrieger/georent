@@ -288,7 +288,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             try {
                 ResidenceImage residenceImage = new ResidenceImage();
                 residenceImage.setIdResidence(result);
-                residenceImage.setOrder(mImageAdapter.getCount() - mImageAdapter.getItemPosition(u));
+                residenceImage.setOrderImage(mImageAdapter.getCount() - mImageAdapter.getItemPosition(u));
                 Log.i("LOG", "Imagem enviada");
 
                 InputStream imageStream = getContentResolver().openInputStream(u);
