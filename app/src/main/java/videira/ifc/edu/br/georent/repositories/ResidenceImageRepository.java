@@ -21,6 +21,7 @@ import videira.ifc.edu.br.georent.models.NetworkObject;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.network.JSONArrayRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
 /**
@@ -63,6 +64,7 @@ public class ResidenceImageRepository implements Transaction {
             NetworkObject no = new NetworkObject(residenceImage);
             HashMap<String, String> params = new HashMap<>();
             params.put("jsonObject", gson.toJson(no));
+            params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
             return params;
         }
         return null;

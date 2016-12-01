@@ -16,6 +16,7 @@ import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 
 public class LoginActivity extends AppCompatActivity implements Bind<User> {
 
@@ -27,8 +28,7 @@ public class LoginActivity extends AppCompatActivity implements Bind<User> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        String userToken = getSharedPreferences("MyPref", MODE_PRIVATE).getString("userToken", null);
-        if (userToken != null) {
+        if (AuthUtil.getLoggedUserToken(this) != null) {
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(i);
         } else {

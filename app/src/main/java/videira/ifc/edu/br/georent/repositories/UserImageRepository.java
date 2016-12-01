@@ -18,6 +18,7 @@ import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.UserImage;
 import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
 /**
@@ -54,10 +55,9 @@ public class UserImageRepository implements Transaction {
     public HashMap<String, String> doBefore() {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
-            //NetworkObject no = new NetworkObject(mUserImage);
             params.put("jsonObject", gson.toJson(mUserImage));
-            //Log.i("LOG", params.toString());
-            System.out.println(params.toString());
+            params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
+            Log.i("LOG", params.toString());
             return params;
         }
         return null;

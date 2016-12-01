@@ -328,7 +328,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             mPreference.setBathroom(java.lang.Integer.getInteger(sBathroom.getSelectedItem().toString()));
 
             mUser.setIdPreference(mPreference);
-            City c = FakeGenerator.getResidences().get(0).getIdLocation().getIdCity();
+            City c = FakeGenerator.getInstance().getResidences().get(0).getIdLocation().getIdCity();
             c.setIdCity(1);
             mUser.setIdCity(c);
 
@@ -356,7 +356,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 final Bitmap image = BitmapFactory.decodeStream(imageStream);
                 image.compress(Bitmap.CompressFormat.JPEG, 70, stream);
                 byte[] byteFormat = stream.toByteArray();
-                String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+                String imgString = Base64.encodeToString(byteFormat, Base64.URL_SAFE);
 
                 ui.setPath(imgString);
                 uir.createUserImage(ui);

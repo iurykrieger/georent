@@ -1,7 +1,6 @@
 package videira.ifc.edu.br.georent.repositories;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -21,9 +20,8 @@ import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Aluno on 18/11/2016.
@@ -64,8 +62,8 @@ public class UserRepository implements Transaction {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
             if (!login) {
-                //NetworkObject no = new NetworkObject(mUser);
                 params.put("jsonObject", gson.toJson(mUser));
+                //params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
                 Log.i("LOG", params.toString());
             } else {
                 params.put("email", mUser.getEmail());
@@ -73,8 +71,9 @@ public class UserRepository implements Transaction {
                 Log.i("LOG - login true", params.toString());
             }
             return params;
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override
@@ -93,14 +92,9 @@ public class UserRepository implements Transaction {
                 mUser = gson.fromJson(jsonObject.toString(), User.class);
 
                 if (userToken != null) {
-                    SharedPreferences pref = mContext.getSharedPreferences("MyPref", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putInt("idUser", mUser.getIdUser());
-                    editor.putString("userToken", userToken);
-                    editor.commit();
+                    AuthUtil.setLoggedUser(mContext, mUser, userToken);
                 }
                 /******************************/
-
                 bind.doSingleBind(mUser);
 
             } catch (Exception e) {

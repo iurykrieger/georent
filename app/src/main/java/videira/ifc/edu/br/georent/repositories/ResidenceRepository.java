@@ -22,6 +22,7 @@ import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.network.JSONArrayRequest;
 import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
 /**
@@ -65,6 +66,7 @@ public class ResidenceRepository implements Transaction {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
             params.put("jsonObject", gson.toJson(residence));
+            params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
             return params;
         }
         return null;

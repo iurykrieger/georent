@@ -17,8 +17,9 @@
     <string name="no">Não</string>
     <string name="edit">Editar</string>
     <string name="change_location">Alterar localização de busca</string>
-    <string name="userToken">userToken</string>
-    <string name="sharedPreferences">MainSharedPrefs</string>
+    <string name="user_token">userToken</string>
+    <string name="shared_preferences">MainSharedPrefs</string>
+    <string name="id_user">idUser</string>
 
     <!-- CADASTRO USUARIO -->
     <string name="new_user">Novo Usuário</string>
