@@ -145,7 +145,6 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         fabAddPlace = (FloatingActionButton) findViewById(R.id.fab_location_residence_register);
         tvCityLocation = (TextView) findViewById(R.id.tv_city_location_residence_show);
         tvAddressLocation = (TextView) findViewById(R.id.tv_address_location_residence_show);
-        cvLocation = (CardView) findViewById(R.id.cv_location_residence_show);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 
         mResidence = new Residence();
