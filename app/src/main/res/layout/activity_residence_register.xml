@@ -50,7 +50,7 @@
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/tb_residence_register"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
@@ -74,10 +74,27 @@
         app:layout_anchor="@id/abl_residence_register"
         app:layout_anchorGravity="bottom|right|end" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_location_residence_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:clickable="true"
+        android:src="@drawable/ic_place_black_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/accent"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_anchor="@id/abl_residence_register"
+        app:layout_anchorGravity="bottom|right|end" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_anchorGravity="bottom|end">
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"

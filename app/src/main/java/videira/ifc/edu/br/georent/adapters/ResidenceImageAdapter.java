@@ -13,6 +13,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 
@@ -24,18 +25,18 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
     /**
      * Atributos
      */
-    private List<ResidenceImage> mResidenceImageList;
+    private List<Residence> mResidenceList;
     private LayoutInflater mLayoutInflater;
     private Context mContext;
 
     /**
      * Construtor
      *
-     * @param mResidenceImageList
+     * @param mResidenceList
      * @param mContext
      */
-    public ResidenceImageAdapter(List<ResidenceImage> mResidenceImageList, Context mContext) {
-        this.mResidenceImageList = mResidenceImageList;
+    public ResidenceImageAdapter(List<Residence> mResidenceList, Context mContext) {
+        this.mResidenceList = mResidenceList;
         this.mContext = mContext;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -68,8 +69,10 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
         /**
          * Preenche os valores do objeto no holder baseado na posição da lista
          */
-        holder.nivResidence.setImageUrl(mResidenceImageList.get(position).getPath(),
-                NetworkConnection.getInstance(mContext).getImageLoader());
+        if(mResidenceList.get(position).getProfileImage() != null){
+            holder.nivResidence.setImageUrl(mResidenceList.get(position).getProfileImage().getPath(),
+                    NetworkConnection.getInstance(mContext).getImageLoader());
+        }
         holder.nivResidence.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -78,8 +81,8 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
                 }
             }
         });
-        holder.tvTitle.setText(mResidenceImageList.get(position).getIdResidence().getTitle());
-        holder.tvAddress.setText(mResidenceImageList.get(position).getIdResidence().getAddress());
+        holder.tvTitle.setText(mResidenceList.get(position).getTitle());
+        holder.tvAddress.setText(mResidenceList.get(position).getAddress());
     }
 
     /**
@@ -89,17 +92,17 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
      */
     @Override
     public int getItemCount() {
-        return mResidenceImageList.size();
+        return mResidenceList.size();
     }
 
     /**
      * Adiciona um novo item na lista
      *
-     * @param residenceImage
+     * @param residence
      * @param position
      */
-    public void addListItem(ResidenceImage residenceImage, int position) {
-        mResidenceImageList.add(residenceImage);
+    public void addListItem(Residence residence, int position) {
+        mResidenceList.add(residence);
         notifyItemInserted(position);
     }
 
@@ -108,8 +111,8 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
      * @param position
      * @return
      */
-    public ResidenceImage getListItem(int position){
-        return mResidenceImageList.get(position);
+    public Residence getListItem(int position){
+        return mResidenceList.get(position);
     }
 
     /**
@@ -118,7 +121,7 @@ public class ResidenceImageAdapter extends RecyclerView.Adapter<ResidenceImageAd
      * @param position
      */
     public void removeListItem(int position) {
-        mResidenceImageList.remove(position);
+        mResidenceList.remove(position);
         notifyItemRemoved(position);
     }
 

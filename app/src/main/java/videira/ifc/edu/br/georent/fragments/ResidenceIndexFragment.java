@@ -26,12 +26,15 @@ import videira.ifc.edu.br.georent.adapters.ResidenceImageAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.RecyclerViewOnClickListener;
 import videira.ifc.edu.br.georent.listeners.RecyclerViewTouchListener;
+import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.repositories.ResidenceImageRepository;
+import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnClickListener, Bind<ResidenceImage> {
+public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnClickListener, Bind<Residence> {
     //Parâmetros constantes do fragment
     public static final String ARG_PAGE_RESIDENCE = "HOME";
 
@@ -39,10 +42,10 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     private int page;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private List<ResidenceImage> mResidenceImageList;
+    private List<Residence> mResidenceList;
     private LinearLayoutManager mLinearLayoutManager;
-    private ResidenceImageAdapter mResidenceImageAdapter;
-    private ResidenceImageRepository mResidenceImageRepository;
+    private ResidenceImageAdapter mResidenceAdapter;
+    private ResidenceRepository mResidenceRepository;
     private View mView;
     protected ProgressBar mProgressBar;
 
@@ -74,8 +77,8 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
          */
         mView = inflater.inflate(R.layout.fragment_index_residence, container, false);
 
-        mResidenceImageRepository = new ResidenceImageRepository(this.getActivity(), this);
-        mResidenceImageList = new ArrayList<>();
+        mResidenceRepository = new ResidenceRepository(this.getActivity(), this);
+        mResidenceList = new ArrayList<>();
         mProgressBar = (ProgressBar) mView.findViewById(R.id.pb_residence_index);
 
         /**
@@ -94,8 +97,8 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
         /**
          * Cria o adapter para amarrar a view aos objetos e seta ele na view
          */
-        mResidenceImageAdapter = new ResidenceImageAdapter(mResidenceImageList, getActivity());
-        mRecyclerView.setAdapter(mResidenceImageAdapter);
+        mResidenceAdapter = new ResidenceImageAdapter(mResidenceList, getActivity());
+        mRecyclerView.setAdapter(mResidenceAdapter);
         //Adiciona os eventos na lista
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
 
@@ -119,7 +122,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
                 /**
                  * Carrega mais itens se o último já foi exibido
                  */
-                if (mResidenceImageList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
+                if (mResidenceList.size() == mLinearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
                     mProgressBar.setVisibility(View.VISIBLE);
                     doLoad();
                 }
@@ -147,7 +150,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
 
     @Override
     public void onStop() {
-        mResidenceImageRepository.cancelRequests();
+        mResidenceRepository.cancelRequests();
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         super.onStop();
@@ -155,7 +158,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
 
     @Override
     public void onStart() {
-        if (mResidenceImageList.isEmpty()) {
+        if (mResidenceList.isEmpty()) {
             mProgressBar.setVisibility(View.VISIBLE);
             doLoad();
         }
@@ -175,7 +178,7 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void onClickListener(View view, int position) {
         //Joga uma mensagem curta com a posição na tela.
-        int index = mResidenceImageAdapter.getListItem(position).getIdResidence().getIdResidence();
+        int index = mResidenceAdapter.getListItem(position).getIdResidence();
         Intent i = new Intent(getActivity(), ResidenceShowActivity.class);
         i.putExtra("idResidence", index);
         startActivity(i);
@@ -201,30 +204,29 @@ public class ResidenceIndexFragment extends Fragment implements RecyclerViewOnCl
     @Override
     public void doLoad() {
         if (NetworkUtil.verifyConnection(getActivity())) {
-            //mResidenceImageRepository.getTopImages(); //Bind Correto
-            doMultipleBind(FakeGenerator.getInstance().getResidenceImages(10));
+            mResidenceRepository.getResidencesByUser(AuthUtil.getLoggedUserId(getActivity())); //Bind Correto
         } else {
             doError(new UnknownHostException());
         }
     }
 
     @Override
-    public void doSingleBind(ResidenceImage result) {
+    public void doSingleBind(Residence result) {
 
     }
 
     @Override
-    public void doMultipleBind(List<ResidenceImage> result) {
+    public void doMultipleBind(List<Residence> result) {
         boolean isNewer = mSwipeRefreshLayout.isRefreshing();
 
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
 
-        for (ResidenceImage residenceImage : result) {
+        for (Residence residence : result) {
             if (isNewer) {
-                mResidenceImageAdapter.addListItem(residenceImage, 0);
+                mResidenceAdapter.addListItem(residence, 0);
             } else {
-                mResidenceImageAdapter.addListItem(residenceImage, mResidenceImageAdapter.getItemCount());
+                mResidenceAdapter.addListItem(residence, mResidenceAdapter.getItemCount());
             }
         }
     }

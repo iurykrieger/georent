@@ -1,5 +1,6 @@
 package videira.ifc.edu.br.georent.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,8 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,15 +50,19 @@ import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.repositories.ResidenceImageRepository;
 import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
+import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
+import static android.R.attr.data;
+
 public class ResidenceRegisterActivity extends AppCompatActivity implements Bind<Residence>,
-        ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener {
+        ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener, View.OnClickListener {
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
-    private String[] numbers;
+    private static final int REQUEST_PLACE_PICKER = 3;
+
     private Toolbar mToolbar;
     /**
      * ViewPager
@@ -68,6 +77,8 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     private EditText etDescription;
     private EditText etObservation;
     private EditText etAddress;
+    private EditText etCity;
+    private EditText etState;
     private SeekBar sbRent;
     private TextView tvRent;
     private SwitchCompat scSponsor;
@@ -78,8 +89,9 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     private Spinner sVacancy;
     private Spinner sRoom;
     private Spinner sBathroom;
-    private MaterialBetterSpinner spnState;
     private Button btRegister;
+    private FloatingActionButton fabAddPhoto;
+    private FloatingActionButton fabAddPlace;
 
     private List<String> mListUserImage;
 
@@ -87,6 +99,8 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_residence_register);
+
+        mResidenceRepository = new ResidenceRepository(this, this);
 
         etTitle = (EditText) findViewById(R.id.et_title_residence_register);
         etDescription = (EditText) findViewById(R.id.et_description_residence_register);
@@ -102,12 +116,15 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         sVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
         sRoom = (Spinner) findViewById(R.id.spinner_rooms);
         sBathroom = (Spinner) findViewById(R.id.spinner_bathroom);
-        spnState = (MaterialBetterSpinner) findViewById(R.id.spn_state_user_register);
-        btRegister = (Button) findViewById(R.id.bt_register_user);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mViewPager = (ViewPager) findViewById(R.id.vp_user);
-        mPagerIndicator = (LinearLayout) findViewById(R.id.vp_user_count_dots);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        etState = (EditText) findViewById(R.id.et_state_residence_register);
+        etCity = (EditText) findViewById(R.id.et_city_residence_register);
+        btRegister = (Button) findViewById(R.id.bt_residence_register);
+        mToolbar = (Toolbar) findViewById(R.id.tb_residence_register);
+        mViewPager = (ViewPager) findViewById(R.id.vp_residence_register);
+        mPagerIndicator = (LinearLayout) findViewById(R.id.vp_dots_residence_register);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.ctl_residence_register);
+        fabAddPhoto = (FloatingActionButton) findViewById(R.id.fab_photo_residence_register);
+        fabAddPlace = (FloatingActionButton) findViewById(R.id.fab_location_residence_register);
 
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
@@ -160,19 +177,12 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         });
 
         final AlertDialog dialog = builder.create();
-        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
-        myFab.setOnClickListener(new View.OnClickListener() {
+        fabAddPhoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dialog.show();
             }
         });
-
-        /** SPINNERS   **/
-        numbers = getResources().getStringArray(R.array.numbers);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.states));
-        spnState.setAdapter(arrayAdapter);
-
+        fabAddPlace.setOnClickListener(this);
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,23 +191,8 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         });
     }
 
-    /**
-     * DATE PICKER
-     **/
     public void onStart() {
         super.onStart();
-        EditText mEtBirthDate = (EditText) findViewById(R.id.et_birth_date_user);
-        mEtBirthDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    DateDialog dialog = new DateDialog(v);
-                    dialog.setAllowReturnTransitionOverlap(false);
-                    android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    dialog.show(ft, "DatePicker");
-                }
-            }
-        });
     }
 
     @Override
@@ -215,11 +210,10 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         switch (requestCode) {
-            case REQUEST_GALLERY_IMAGE:
+            case REQUEST_GALLERY_IMAGE: {
                 if (resultCode == RESULT_OK) {
                     try {
                         final Uri imageUri = imageReturnedIntent.getData();
@@ -231,7 +225,8 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                         e.printStackTrace();
                     }
                 }
-                break;
+            }
+            break;
             case REQUEST_CAMERA_IMAGE: {
                 if (resultCode == RESULT_OK) {
                     try {
@@ -244,6 +239,15 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                     }
                 }
             }
+            break;
+            case REQUEST_PLACE_PICKER: {
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(this, imageReturnedIntent);
+                    String toastMsg = String.format("Place: %s", place.getName());
+                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+            break;
         }
     }
 
@@ -256,6 +260,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             mResidence = new Residence();
             Preference preference = new Preference();
 
+            mResidence.setIdUser(AuthUtil.getInstance().getLoggedUser(this));
             mResidence.setTitle(etTitle.getText().toString());
             mResidence.setDescription(etDescription.getText().toString());
             mResidence.setObservation(etObservation.getText().toString());
@@ -267,11 +272,12 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             preference.setPet(scPet.isChecked());
             preference.setChild(scChild.isChecked());
             preference.setLaundry(scLaundry.isChecked());
-            preference.setVacancy(java.lang.Integer.getInteger(sVacancy.getSelectedItem().toString()));
-            preference.setRoom(java.lang.Integer.getInteger(sRoom.getSelectedItem().toString()));
-            preference.setBathroom(java.lang.Integer.getInteger(sBathroom.getSelectedItem().toString()));
+            preference.setVacancy(Integer.parseInt(sVacancy.getSelectedItem().toString()));
+            preference.setRoom(Integer.parseInt(sRoom.getSelectedItem().toString()));
+            preference.setBathroom(Integer.parseInt(sBathroom.getSelectedItem().toString()));
 
-            Location l = FakeGenerator.getResidences().get(0).getIdLocation();
+            Location l = FakeGenerator.getInstance().getResidences().get(0).getIdLocation();
+            l.setIdLocation(null);
 
             mResidence.setIdPreference(preference);
             mResidence.setIdLocation(l);
@@ -327,7 +333,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
             if (progress >= 0 && progress <= sbRent.getMax()) {
-                String progressString = String.valueOf(progress + 1);
+                String progressString = String.valueOf(progress);
                 tvRent.setText(progressString + " $");
                 seekBar.setSecondaryProgress(progress);
             }
@@ -342,5 +348,22 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_location_residence_register: {
+                try {
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    startActivityForResult(builder.build(this), REQUEST_PLACE_PICKER);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+        }
     }
 }

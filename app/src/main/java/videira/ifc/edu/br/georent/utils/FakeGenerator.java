@@ -50,6 +50,7 @@ public class FakeGenerator {
             c.setName("Fraiburgo");
             c.setUf("SC");
             c.setUpdatedAt(new Date());
+            c.setIdCity(1);
 
             Location l = new Location();
             l.setIdCity(c);

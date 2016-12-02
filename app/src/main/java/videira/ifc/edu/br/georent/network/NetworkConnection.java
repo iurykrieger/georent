@@ -151,7 +151,7 @@ public class NetworkConnection {
      */
     public void executeJSONObjectRequest(final Transaction transaction, String tag, int method, String url) {
         HashMap<String, String> params = transaction.doBefore();
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
         if (params == null) {
             return;

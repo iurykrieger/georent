@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.adapters.GsonAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.NetworkObject;
@@ -48,7 +49,10 @@ public class ResidenceImageRepository implements Transaction {
         this.bind = bind;
         this.range = 0;
         this.service = NetworkUtil.getStringUrl(mContext, R.string.residence_image_service);
-        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd")
+                .registerTypeAdapter(Boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .registerTypeAdapter(boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .create();
     }
 
     /**
@@ -61,9 +65,8 @@ public class ResidenceImageRepository implements Transaction {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
             ResidenceImage residenceImage = new ResidenceImage();
-            NetworkObject no = new NetworkObject(residenceImage);
             HashMap<String, String> params = new HashMap<>();
-            params.put("jsonObject", gson.toJson(no));
+            params.put("jsonObject", gson.toJson(residenceImage));
             params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
             return params;
         }
