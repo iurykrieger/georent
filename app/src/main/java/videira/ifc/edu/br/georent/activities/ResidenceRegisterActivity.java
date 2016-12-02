@@ -1,6 +1,5 @@
 package videira.ifc.edu.br.georent.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,12 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -33,6 +35,12 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,10 +62,9 @@ import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-import static android.R.attr.data;
-
 public class ResidenceRegisterActivity extends AppCompatActivity implements Bind<Residence>,
-        ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener, View.OnClickListener {
+        ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener, View.OnClickListener,
+        OnMapReadyCallback {
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
@@ -92,6 +99,10 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     private Button btRegister;
     private FloatingActionButton fabAddPhoto;
     private FloatingActionButton fabAddPlace;
+    private CardView cvLocation;
+    private TextView tvCityLocation;
+    private TextView tvAddressLocation;
+    private MapFragment mapFragment;
 
     private List<String> mListUserImage;
 
@@ -125,7 +136,13 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.ctl_residence_register);
         fabAddPhoto = (FloatingActionButton) findViewById(R.id.fab_photo_residence_register);
         fabAddPlace = (FloatingActionButton) findViewById(R.id.fab_location_residence_register);
+        tvCityLocation = (TextView) findViewById(R.id.tv_city_location_residence_show);
+        tvAddressLocation = (TextView) findViewById(R.id.tv_address_location_residence_show);
+        cvLocation = (CardView) findViewById(R.id.cv_location_residence_show);
+        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 
+        mResidence = new Residence();
+        cvLocation.setVisibility(View.GONE);
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
@@ -243,8 +260,16 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             case REQUEST_PLACE_PICKER: {
                 if (resultCode == RESULT_OK) {
                     Place place = PlacePicker.getPlace(this, imageReturnedIntent);
-                    String toastMsg = String.format("Place: %s", place.getName());
-                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                    Location location = new Location();
+                    location.setLongitude(place.getLatLng().longitude);
+                    location.setLatitude(place.getLatLng().latitude);
+                    location.setIdCity(FakeGenerator.getInstance().getResidences().get(0).getIdLocation().getIdCity());
+                    mResidence.setIdLocation(location);
+                    mapFragment.getMapAsync(this);
+                    tvAddressLocation.setText(place.getAddress());
+                    tvCityLocation.setText(place.getName());
+                    cvLocation.setVisibility(View.VISIBLE);
+                    Toast.makeText(this, "Localização adicionada!", Toast.LENGTH_SHORT);
                 }
             }
             break;
@@ -257,7 +282,6 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     @Override
     public void doLoad() {
         if (NetworkUtil.verifyConnection(this)) {
-            mResidence = new Residence();
             Preference preference = new Preference();
 
             mResidence.setIdUser(AuthUtil.getInstance().getLoggedUser(this));
@@ -276,11 +300,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             preference.setRoom(Integer.parseInt(sRoom.getSelectedItem().toString()));
             preference.setBathroom(Integer.parseInt(sBathroom.getSelectedItem().toString()));
 
-            Location l = FakeGenerator.getInstance().getResidences().get(0).getIdLocation();
-            l.setIdLocation(null);
-
             mResidence.setIdPreference(preference);
-            mResidence.setIdLocation(l);
 
             mResidenceRepository.createResidence(mResidence);
         } else {
@@ -313,6 +333,11 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                 e.printStackTrace();
             }
         }
+
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.id_residence), mResidence.getIdResidence());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
@@ -322,7 +347,26 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
 
     @Override
     public void doError(Exception ex) {
+        Snackbar snackbar = null;
 
+        if (ex instanceof UnknownHostException) {
+            snackbar = Snackbar
+                    .make(findViewById(R.id.cl_residence_show), R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Conectar", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent it = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                            startActivity(it);
+                        }
+                    })
+                    .setActionTextColor(ContextCompat.getColor(this, R.color.accent));
+        } else {
+            snackbar = Snackbar
+                    .make(findViewById(R.id.cl_residence_show), R.string.unknown_error, Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(ContextCompat.getColor(this, R.color.accent));
+        }
+
+        snackbar.show();
     }
 
     /*************************************************************************
@@ -365,5 +409,16 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             }
             break;
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        LatLng location = new LatLng(mResidence.getIdLocation().getLatitude(),
+                mResidence.getIdLocation().getLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
+        map.addMarker(new MarkerOptions()
+                .title(mResidence.getTitle())
+                .snippet(mResidence.getDescription())
+                .position(location));
     }
 }

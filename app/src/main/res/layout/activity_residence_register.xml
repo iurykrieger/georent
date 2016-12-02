@@ -117,6 +117,9 @@
                 <!-- CardView Preference -->
                 <include layout="@layout/user_register_preference" />
 
+                <!-- CardView Location -->
+                <include layout="@layout/residence_show_location" />
+
                 <Button
                     android:id="@+id/bt_residence_register"
                     android:layout_width="match_parent"

@@ -66,6 +66,8 @@
 
 
     <!-- RESIDÊNCIA -->
+    <string name="created_residence">Residência criada!</string>
+    <string name="id_residence">idResidence</string>
     <string name="title">Título</string>
     <string name="info">Informações</string>
     <string name="description">Descrição</string>

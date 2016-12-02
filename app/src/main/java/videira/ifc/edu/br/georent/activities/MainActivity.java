@@ -3,6 +3,7 @@ package videira.ifc.edu.br.georent.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,8 @@ import videira.ifc.edu.br.georent.fragments.ResidenceIndexFragment;
 import videira.ifc.edu.br.georent.fragments.UserProfileFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, MenuItem.OnMenuItemClickListener {
+
+    private static Integer ACTION_CREATE_RESIDENCE = 1;
 
     private final int[] imageResId = {
             R.drawable.ic_home_black_24dp,
@@ -127,11 +130,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
                 if (intent != null) {
-                    startActivity(intent);
+                    startActivityForResult(intent, ACTION_CREATE_RESIDENCE);
                 }
             }
             break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == RESULT_OK && data.getExtras().getInt(getString(R.string.id_residence)) != 0){
+            Snackbar.make(findViewById(R.id.cl_residence_show), R.string.created_residence, Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(ContextCompat.getColor(this, R.color.accent))
+                    .show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
