@@ -118,6 +118,7 @@ public class UserRepository implements Transaction {
     public void createUser(User user) {
         action = ActionEnum.ACTION_STORE;
         mUser = user;
+        action = ActionEnum.ACTION_STORE;
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
     }
@@ -125,12 +126,14 @@ public class UserRepository implements Transaction {
     public void login(User user) {
         action = ActionEnum.ACTION_LOGIN;
         mUser = user;
+        action = ActionEnum.ACTION_LOGIN;
         service = NetworkUtil.getStringUrl(mContext, R.string.login);
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
     }
 
     public void getUserById(Integer idUser) {
+        action = ActionEnum.ACTION_INDEX;
         service = String.format(service + "/" + idUser + "/eager");
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);

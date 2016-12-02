@@ -20,7 +20,7 @@ public class User {
     /**
      * Atributos
      */
-    private java.lang.Integer idUser;
+    private Integer idUser;
 
     private String name;
 
@@ -182,7 +182,7 @@ public class User {
         this.idPreference = idPreference;
     }
 
-    public City getIdCity() {
+    public City getIdCity(long itemIdAtPosition) {
         return idCity;
     }
 

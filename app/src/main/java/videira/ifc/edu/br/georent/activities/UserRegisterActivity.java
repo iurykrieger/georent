@@ -4,7 +4,6 @@ package videira.ifc.edu.br.georent.activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -14,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,17 +22,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,21 +45,23 @@ import java.util.List;
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
+import videira.ifc.edu.br.georent.interfaces.BindCity;
 import videira.ifc.edu.br.georent.models.City;
 import videira.ifc.edu.br.georent.models.Preference;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.models.UserImage;
+import videira.ifc.edu.br.georent.repositories.CityRepository;
 import videira.ifc.edu.br.georent.repositories.UserImageRepository;
 import videira.ifc.edu.br.georent.repositories.UserRepository;
 import videira.ifc.edu.br.georent.utils.FakeGenerator;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
-public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, Bind<User> {
+public class UserRegisterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
+        View.OnClickListener, Bind<User>, BindCity {
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
     String[] numbers;
-    private Integer[] imgs = {R.drawable.new_image, R.drawable.photo2, R.drawable.user};
     private Toolbar mToolbar;
     /**
      * ViewPager
@@ -74,6 +74,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private List<Integer> mImageResources;
     private EditText mEtBirthDate;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private CityRepository mCityRepository;
     private UserRepository mUserRepository;
     private EditText etName;
     private EditText etEmail;
@@ -90,10 +91,14 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private Spinner sVacancy;
     private Spinner sRoom;
     private Spinner sBathroom;
-    private MaterialBetterSpinner spnState;
     private Button btRegister;
+    private List<City> cities;
+
+    private AutoCompleteTextView actvState;
+    private AutoCompleteTextView actvCity;
 
     private List<String> mListUserImage;
+    private List<String> mNameCities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +106,10 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         setContentView(R.layout.activity_user_register);
 
         List<String> mListUserImage = new ArrayList<String>();
+
+        mCityRepository = new CityRepository(this, this);
+        mUserRepository = new UserRepository(this, this);
+        mUser = new User();
 
         etName = (EditText) findViewById(R.id.et_name_user);
         etEmail = (EditText) findViewById(R.id.et_email_user);
@@ -119,12 +128,11 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         sVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
         sRoom = (Spinner) findViewById(R.id.spinner_rooms);
         sBathroom = (Spinner) findViewById(R.id.spinner_bathroom);
-        spnState = (MaterialBetterSpinner) findViewById(R.id.spn_state_user_register);
+
+        actvState = (AutoCompleteTextView) findViewById(R.id.acet_state_user_register);
+        actvCity = (AutoCompleteTextView) findViewById(R.id.acet_city_user_register);
 
         btRegister = (Button) findViewById(R.id.bt_register_user);
-
-
-        mUserRepository = new UserRepository(this, this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.vp_user);
@@ -142,8 +150,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             }
         });
 
-
-        /*     CHANGE DISTANCE    */
+        /**     Change Distance    **/
         skDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -174,7 +181,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setCurrentItem(0);
 
-        /**    PICKUP IMAGE   **/
+        /**    PickUp Image   **/
         final String[] items = new String[]{"Tirar foto", "Selecionar do Cartao"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -211,11 +218,29 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             }
         });
 
-        /** SPINNERS   **/
+        /** Auto Complete State **/
+        String[] states = getResources().getStringArray(R.array.states);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, states);
+        actvState.setAdapter(adapter);
+        actvState.setThreshold(1);
+
+        actvState.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mCityRepository.getCity(parent.getItemAtPosition(position).toString());
+            }
+        });
+
+        actvCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mUser.setIdCity(cities.get(position));
+                Log.i("LOG",cities.get(position).toString());
+            }
+        });
+
+        /** Spinners   **/
         numbers = getResources().getStringArray(R.array.numbers);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.states));
-        spnState.setAdapter(arrayAdapter);
 
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,9 +250,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         });
     }
 
-    /**
-     * DATE PICKER
-     **/
+
     public void onStart() {
         super.onStart();
         EditText mEtBirthDate = (EditText) findViewById(R.id.et_birth_date_user);
@@ -263,7 +286,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         switch (requestCode) {
@@ -301,9 +323,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     @Override
     public void doLoad() {
         if (NetworkUtil.verifyConnection(this)) {
-            mUser = new User();
             mPreference = new Preference();
-
 
             mUser.setName(etName.getText().toString());
             mUser.setEmail(etEmail.getText().toString());
@@ -328,10 +348,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             mPreference.setBathroom(java.lang.Integer.getInteger(sBathroom.getSelectedItem().toString()));
 
             mUser.setIdPreference(mPreference);
-            City c = FakeGenerator.getInstance().getResidences().get(0).getIdLocation().getIdCity();
-            c.setIdCity(1);
-            mUser.setIdCity(c);
-
             mUserRepository.createUser(mUser);
         } else {
             doError(new UnknownHostException());
@@ -344,7 +360,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
         UserImageRepository uir = new UserImageRepository(this);
 
-        for (Uri u: mImageAdapter.getAll()) {
+        for (Uri u : mImageAdapter.getAll()) {
             UserImage ui = new UserImage();
             ui.setIdUser(result);
             ui.setOrderImage(0);
@@ -354,9 +370,9 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                 imageStream = getContentResolver().openInputStream(u);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 final Bitmap image = BitmapFactory.decodeStream(imageStream);
-                image.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 byte[] byteFormat = stream.toByteArray();
-                String imgString = Base64.encodeToString(byteFormat, Base64.URL_SAFE);
+                String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
 
                 ui.setPath(imgString);
                 uir.createUserImage(ui);
@@ -381,9 +397,21 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     }
 
     @Override
+    public void bindCities(List<City> cities) {
+        mNameCities = new ArrayList<String>();
+        this.cities = cities;
+
+        for (City city : cities) {
+            mNameCities.add(city.getName().toString());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mNameCities);
+        actvCity.setAdapter(adapter);
+        actvCity.setThreshold(1);
+    }
+
+    @Override
     public void doError(Exception ex) {
 
     }
-
-
 }

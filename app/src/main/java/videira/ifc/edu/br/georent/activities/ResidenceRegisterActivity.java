@@ -127,6 +127,13 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         sVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
         sRoom = (Spinner) findViewById(R.id.spinner_rooms);
         sBathroom = (Spinner) findViewById(R.id.spinner_bathroom);
+
+        btRegister = (Button) findViewById(R.id.bt_register_user);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mViewPager = (ViewPager) findViewById(R.id.vp_user);
+        mPagerIndicator = (LinearLayout) findViewById(R.id.vp_user_count_dots);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
         etState = (EditText) findViewById(R.id.et_state_residence_register);
         etCity = (EditText) findViewById(R.id.et_city_residence_register);
         btRegister = (Button) findViewById(R.id.bt_residence_register);
@@ -199,7 +206,14 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                 dialog.show();
             }
         });
+
+        /** SPINNERS   **/
+        String[] numbers = getResources().getStringArray(R.array.numbers);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.states));
+
         fabAddPlace.setOnClickListener(this);
+
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
