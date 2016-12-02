@@ -45,7 +45,7 @@ public class User {
     @SerializedName("city")
     private City idCity;
 
-    @SerializedName("profileImage")
+    @SerializedName("profile_image_user")
     private UserImage profileImage;
 
     @SerializedName("location")
@@ -182,7 +182,7 @@ public class User {
         this.idPreference = idPreference;
     }
 
-    public City getIdCity(long itemIdAtPosition) {
+    public City getIdCity() {
         return idCity;
     }
 

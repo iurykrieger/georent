@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,7 +21,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -47,15 +48,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
+import videira.ifc.edu.br.georent.interfaces.BindCity;
+import videira.ifc.edu.br.georent.models.City;
 import videira.ifc.edu.br.georent.models.Location;
 import videira.ifc.edu.br.georent.models.Preference;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
+import videira.ifc.edu.br.georent.repositories.CityRepository;
 import videira.ifc.edu.br.georent.repositories.ResidenceImageRepository;
 import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
 import videira.ifc.edu.br.georent.utils.AuthUtil;
@@ -64,7 +69,7 @@ import videira.ifc.edu.br.georent.utils.NetworkUtil;
 
 public class ResidenceRegisterActivity extends AppCompatActivity implements Bind<Residence>,
         ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener, View.OnClickListener,
-        OnMapReadyCallback {
+        OnMapReadyCallback, BindCity {
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
@@ -80,12 +85,13 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     private Residence mResidence;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ResidenceRepository mResidenceRepository;
+    private CityRepository mCityRepository;
     private EditText etTitle;
     private EditText etDescription;
     private EditText etObservation;
     private EditText etAddress;
-    private EditText etCity;
-    private EditText etState;
+    private AutoCompleteTextView actvState;
+    private AutoCompleteTextView actvCity;
     private SeekBar sbRent;
     private TextView tvRent;
     private SwitchCompat scSponsor;
@@ -104,7 +110,9 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     private TextView tvAddressLocation;
     private MapFragment mapFragment;
 
-    private List<String> mListUserImage;
+    private List<String> nameCities;
+    private List<City> cities;
+    private City selectedCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +120,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         setContentView(R.layout.activity_residence_register);
 
         mResidenceRepository = new ResidenceRepository(this, this);
+        mCityRepository = new CityRepository(this, this);
 
         etTitle = (EditText) findViewById(R.id.et_title_residence_register);
         etDescription = (EditText) findViewById(R.id.et_description_residence_register);
@@ -134,8 +143,8 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         mPagerIndicator = (LinearLayout) findViewById(R.id.vp_user_count_dots);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
-        etState = (EditText) findViewById(R.id.et_state_residence_register);
-        etCity = (EditText) findViewById(R.id.et_city_residence_register);
+        actvState = (AutoCompleteTextView) findViewById(R.id.acet_state_state_register);
+        actvCity = (AutoCompleteTextView) findViewById(R.id.acet_city_residence_register);
         btRegister = (Button) findViewById(R.id.bt_residence_register);
         mToolbar = (Toolbar) findViewById(R.id.tb_residence_register);
         mViewPager = (ViewPager) findViewById(R.id.vp_residence_register);
@@ -218,6 +227,26 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             @Override
             public void onClick(View view) {
                 doLoad();
+            }
+        });
+
+        /** Auto Complete State **/
+        String[] states = getResources().getStringArray(R.array.states);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, states);
+        actvState.setAdapter(adapter);
+        actvState.setThreshold(1);
+
+        actvState.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mCityRepository.getCity(parent.getItemAtPosition(position).toString());
+            }
+        });
+
+        actvCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedCity = cities.get(position);
             }
         });
     }
@@ -315,6 +344,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
             preference.setBathroom(Integer.parseInt(sBathroom.getSelectedItem().toString()));
 
             mResidence.setIdPreference(preference);
+            mResidence.getIdLocation().setIdCity(selectedCity);
 
             mResidenceRepository.createResidence(mResidence);
         } else {
@@ -342,7 +372,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                 String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
 
                 residenceImage.setPath(imgString);
-                //residenceImageRepository.createResidenceImage(residenceImage);
+                residenceImageRepository.createResidenceImage(residenceImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -360,10 +390,24 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     }
 
     @Override
+    public void bindCities(List<City> cities) {
+        nameCities = new ArrayList<String>();
+        this.cities = cities;
+
+        for (City city : cities) {
+            nameCities.add(city.getName().toString());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, nameCities);
+        actvCity.setAdapter(adapter);
+        actvCity.setThreshold(1);
+    }
+
+    @Override
     public void doError(Exception ex) {
         Snackbar snackbar = null;
 
-        if (ex instanceof UnknownHostException) {
+        /*if (ex instanceof UnknownHostException) {
             snackbar = Snackbar
                     .make(findViewById(R.id.cl_residence_show), R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
                     .setAction("Conectar", new View.OnClickListener() {
@@ -380,7 +424,7 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                     .setActionTextColor(ContextCompat.getColor(this, R.color.accent));
         }
 
-        snackbar.show();
+        snackbar.show();*/
     }
 
     /*************************************************************************

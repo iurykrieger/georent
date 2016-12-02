@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +30,12 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,6 +52,7 @@ import videira.ifc.edu.br.georent.adapters.ViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.BindCity;
 import videira.ifc.edu.br.georent.models.City;
+import videira.ifc.edu.br.georent.models.Location;
 import videira.ifc.edu.br.georent.models.Preference;
 import videira.ifc.edu.br.georent.models.User;
 import videira.ifc.edu.br.georent.models.UserImage;
@@ -61,6 +67,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     private static final int REQUEST_GALLERY_IMAGE = 1;
     private static final int REQUEST_CAMERA_IMAGE = 2;
+    private static final int REQUEST_PLACE_PICKER = 3;
     String[] numbers;
     private Toolbar mToolbar;
     /**
@@ -212,6 +219,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
         final AlertDialog dialog = builder.create();
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fabPlace = (FloatingActionButton) findViewById(R.id.fab_location_user_register);
+        fabPlace.setOnClickListener(this);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dialog.show();
@@ -235,7 +244,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mUser.setIdCity(cities.get(position));
-                Log.i("LOG",cities.get(position).toString());
+                Log.i("LOG", cities.get(position).toString());
             }
         });
 
@@ -282,6 +291,19 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_location_user_register: {
+                try {
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    startActivityForResult(builder.build(this), REQUEST_PLACE_PICKER);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+        }
     }
 
     @Override
@@ -289,7 +311,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         switch (requestCode) {
-            case REQUEST_GALLERY_IMAGE:
+            case REQUEST_GALLERY_IMAGE: {
                 if (resultCode == RESULT_OK) {
                     try {
                         final Uri imageUri = imageReturnedIntent.getData();
@@ -301,7 +323,8 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                         e.printStackTrace();
                     }
                 }
-                break;
+            }
+            break;
             case REQUEST_CAMERA_IMAGE: {
                 if (resultCode == RESULT_OK) {
                     try {
@@ -314,6 +337,23 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
                     }
                 }
             }
+            break;
+            case REQUEST_PLACE_PICKER: {
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(this, imageReturnedIntent);
+                    Location location = new Location();
+                    location.setLongitude(place.getLatLng().longitude);
+                    location.setLatitude(place.getLatLng().latitude);
+                    location.setIdCity(FakeGenerator.getInstance().getResidences().get(0).getIdLocation().getIdCity());
+                    mUser.setIdLocation(location);
+                    //mapFragment.getMapAsync(this);
+                    //tvAddressLocation.setText(place.getAddress());
+                    //tvCityLocation.setText(place.getName());
+                    //cvLocation.setVisibility(View.VISIBLE);
+                    Toast.makeText(this, "Localização adicionada!", Toast.LENGTH_SHORT);
+                }
+            }
+            break;
         }
     }
 
@@ -348,6 +388,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             mPreference.setBathroom(java.lang.Integer.getInteger(sBathroom.getSelectedItem().toString()));
 
             mUser.setIdPreference(mPreference);
+            mUser.getIdLocation().setIdCity(mUser.getIdCity());
             mUserRepository.createUser(mUser);
         } else {
             doError(new UnknownHostException());

@@ -74,6 +74,22 @@
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|right|end" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_location_user_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:clickable="true"
+        android:src="@drawable/ic_place_black_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/accent"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|right|end" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
