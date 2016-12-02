@@ -104,7 +104,9 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
         final TextView tvLocation = (TextView) mView.findViewById(R.id.tv_location_user_profile);
         final TextView tvRange = (TextView) mView.findViewById(R.id.tv_range_user_profile);
 
-        cnivUser.setImageUrl(mUser.getProfileImage().getPath(), NetworkConnection.getInstance(getActivity()).getImageLoader());
+        if (mUser.getProfileImage() != null) {
+            cnivUser.setImageUrl(mUser.getProfileImage().getPath(), NetworkConnection.getInstance(getActivity()).getImageLoader());
+        }
         tvName.setText(mUser.getName());
         tvEmail.setText(mUser.getEmail());
         swType.setOnCheckedChangeListener(this);

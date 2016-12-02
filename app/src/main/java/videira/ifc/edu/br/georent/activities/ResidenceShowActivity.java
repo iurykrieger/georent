@@ -38,6 +38,7 @@ import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.MatchAdapter;
 import videira.ifc.edu.br.georent.adapters.NetworkViewPagerAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
+import videira.ifc.edu.br.georent.models.Match;
 import videira.ifc.edu.br.georent.models.Residence;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
 import videira.ifc.edu.br.georent.repositories.ResidenceRepository;
@@ -129,9 +130,7 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
             }
             mCollapsingToolbarLayout.setTitle(getString(R.string.loading));
 
-            //mResidenceRepository.getEagerResidenceById(mIntent.getIntExtra("idResidence", 0)); //Bind Correto
-            doSingleBind(FakeGenerator.getInstance().getResidence(
-                    mIntent.getIntExtra("idResidence", 0))); //Geração Fake!
+            mResidenceRepository.getEagerResidenceById(mIntent.getIntExtra("idResidence", 0)); //Bind Correto
         } else {
             doError(new UnknownHostException());
         }
@@ -145,6 +144,10 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
             mProgressBar.setVisibility(View.GONE);
         }
         mCollapsingToolbarLayout.setTitle(mResidence.getTitle());
+        List<Match> matches = new ArrayList<>();
+        if(!mResidence.getMatches().isEmpty()){
+            matches = mResidence.getMatches().subList(0, 4);
+        }
 
         /* Cabeçalho */
         //final NetworkImageView nivResidence = (NetworkImageView) findViewById(R.id.niv_residence);
@@ -171,7 +174,7 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
         /* Matches */
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         final RecyclerView rvMatch = (RecyclerView) findViewById(R.id.rv_match_residence);
-        final MatchAdapter matchAdapter = new MatchAdapter(mResidence.getMatches().subList(0, 4), this);
+        final MatchAdapter matchAdapter = new MatchAdapter(matches, this);
 
         /* Location */
         final MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -195,9 +198,9 @@ public class ResidenceShowActivity extends AppCompatActivity implements Bind<Res
         tvDescription.setText(mResidence.getDescription());
         tvObservation.setText(mResidence.getObservation());
         tvRoom.setText(mResidence.getIdPreference().getRoom().toString());
-        tvIncome.setText("$ " + new DecimalFormat("0.00").format(mResidence.getIdPreference().getIncome()));
-        tvIncome.setTextColor(ContextCompat.getColor(this, R.color.accent));
-        tvStay.setText(mResidence.getIdPreference().getStay().toString() + " " + getString(R.string.months));
+        //tvIncome.setText("$ " + new DecimalFormat("0.00").format(mResidence.getIdPreference().getIncome()));
+        //tvIncome.setTextColor(ContextCompat.getColor(this, R.color.accent));
+        //tvStay.setText(mResidence.getIdPreference().getStay().toString() + " " + getString(R.string.months));
         tvVacancy.setText(mResidence.getIdPreference().getVacancy().toString());
 
         LayoutUtils.setTextViewColorByBoolean(this, tvSponsor, mResidence.getIdPreference().getSponsor());

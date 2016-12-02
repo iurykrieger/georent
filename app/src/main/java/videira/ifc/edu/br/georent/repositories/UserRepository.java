@@ -15,6 +15,7 @@ import java.net.ConnectException;
 import java.util.HashMap;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.adapters.GsonAdapter;
 import videira.ifc.edu.br.georent.enums.ActionEnum;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
@@ -47,7 +48,10 @@ public class UserRepository implements Transaction {
         this.mContext = mContext;
         this.params = new HashMap<>();
         this.service = NetworkUtil.getStringUrl(mContext, R.string.user_service);
-        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd")
+                .registerTypeAdapter(Boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .registerTypeAdapter(boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .create();
         mUser = new User();
     }
 
@@ -93,7 +97,7 @@ public class UserRepository implements Transaction {
                 mUser = gson.fromJson(jsonObject.toString(), User.class);
 
                 if (userToken != null) {
-                    AuthUtil.setLoggedUser(mContext, mUser, userToken);
+                    AuthUtil.getInstance().setLoggedUser(mContext, mUser, userToken);
                 }
                 /******************************/
                 bind.doSingleBind(mUser);
@@ -112,6 +116,7 @@ public class UserRepository implements Transaction {
      ****************************************************************************************/
 
     public void createUser(User user) {
+        action = ActionEnum.ACTION_STORE;
         mUser = user;
         action = ActionEnum.ACTION_STORE;
         Log.i("URL", service);
@@ -119,6 +124,7 @@ public class UserRepository implements Transaction {
     }
 
     public void login(User user) {
+        action = ActionEnum.ACTION_LOGIN;
         mUser = user;
         action = ActionEnum.ACTION_LOGIN;
         service = NetworkUtil.getStringUrl(mContext, R.string.login);

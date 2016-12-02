@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.adapters.GsonAdapter;
+import videira.ifc.edu.br.georent.enums.ActionEnum;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.Residence;
@@ -40,6 +42,7 @@ public class ResidenceRepository implements Transaction {
     private Gson gson;
     private Bind bind;
     private Residence residence;
+    private ActionEnum action;
 
     /**
      * Construtor
@@ -52,7 +55,10 @@ public class ResidenceRepository implements Transaction {
         this.range = 0;
         this.params = new HashMap<>();
         this.service = NetworkUtil.getStringUrl(mContext, R.string.residence_service);
-        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd")
+                .registerTypeAdapter(Boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .registerTypeAdapter(boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .create();
         this.residence = new Residence();
     }
 
@@ -67,6 +73,7 @@ public class ResidenceRepository implements Transaction {
         if (NetworkUtil.verifyConnection(mContext)) {
             params.put("jsonObject", gson.toJson(residence));
             params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
+            Log.i("LOG",params.toString());
             return params;
         }
         return null;
@@ -118,27 +125,40 @@ public class ResidenceRepository implements Transaction {
      * *                             MÉTODOS PERSONALIZADOS                               * *
      ****************************************************************************************/
     public void getResidences() {
-        service = String.format(NetworkUtil.getStringUrl(mContext, R.string.residence_service)
+        String url = String.format(NetworkUtil.getStringUrl(mContext, R.string.residence_service)
                 + "/limit/" + String.valueOf(range) + "/" + String.valueOf(range + 10));
-        Log.i("URL", service);
-        NetworkConnection.getInstance(mContext).executeJSONArrayRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
+        Log.i("URL", url);
+        NetworkConnection.getInstance(mContext).executeJSONArrayRequest(this,
+                mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
     }
 
     public void getResidenceById(Integer idResidence) {
-        service = String.format(service + "/" + idResidence);
-        Log.i("URL", service);
-        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
+        String url = String.format(service + "/" + idResidence);
+        Log.i("URL", url);
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this,
+                mContext.getClass().getName(), JSONArrayRequest.Method.GET, url);
     }
 
     public void getEagerResidenceById(Integer idResidence) {
-        service = String.format(service + "/" + idResidence + "/eager");
-        Log.i("URL", service);
-        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONArrayRequest.Method.GET, service);
+        String url = String.format(service + "/" + idResidence + "/eager");
+        Log.i("URL", url);
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this,
+                mContext.getClass().getName(), JSONArrayRequest.Method.GET, url);
+    }
+
+    public void getResidencesByUser(Integer idUser) {
+        String url = String.format(service + "/user/" + String.valueOf(idUser) + "/"
+                + String.valueOf(range) + "/" + String.valueOf(range + 10));
+        Log.i("URL", url);
+        NetworkConnection.getInstance(mContext).executeJSONArrayRequest(this,
+                mContext.getClass().getName(), JSONArrayRequest.Method.GET, url);
     }
 
     public void createResidence(Residence residence) {
+        this.action = ActionEnum.ACTION_STORE;
         this.residence = residence;
-        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this,
+                mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
     }
 
     public void cancelRequests() {

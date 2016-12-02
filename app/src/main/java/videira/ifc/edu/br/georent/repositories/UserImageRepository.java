@@ -13,6 +13,7 @@ import java.net.ConnectException;
 import java.util.HashMap;
 
 import videira.ifc.edu.br.georent.R;
+import videira.ifc.edu.br.georent.adapters.GsonAdapter;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.UserImage;
@@ -41,7 +42,10 @@ public class UserImageRepository implements Transaction {
         this.mContext = mContext;
         this.params = new HashMap<>();
         this.service = NetworkUtil.getStringUrl(mContext, R.string.user_image_service);
-        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd")
+                .registerTypeAdapter(Boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .registerTypeAdapter(boolean.class, GsonAdapter.booleanAsIntAdapter)
+                .create();
 
         mUserImage = new UserImage();
     }
