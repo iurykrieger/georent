@@ -116,13 +116,13 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         sVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
         sRoom = (Spinner) findViewById(R.id.spinner_rooms);
         sBathroom = (Spinner) findViewById(R.id.spinner_bathroom);
-<<<<<<< HEAD
+
         btRegister = (Button) findViewById(R.id.bt_register_user);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.vp_user);
         mPagerIndicator = (LinearLayout) findViewById(R.id.vp_user_count_dots);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-=======
+
         etState = (EditText) findViewById(R.id.et_state_residence_register);
         etCity = (EditText) findViewById(R.id.et_city_residence_register);
         btRegister = (Button) findViewById(R.id.bt_residence_register);
@@ -132,7 +132,6 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.ctl_residence_register);
         fabAddPhoto = (FloatingActionButton) findViewById(R.id.fab_photo_residence_register);
         fabAddPlace = (FloatingActionButton) findViewById(R.id.fab_location_residence_register);
->>>>>>> f8053c288acffa83bbe6e26d889c11ca2570f62d
 
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
@@ -190,15 +189,14 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
                 dialog.show();
             }
         });
-<<<<<<< HEAD
 
         /** SPINNERS   **/
-        numbers = getResources().getStringArray(R.array.numbers);
+        String[] numbers = getResources().getStringArray(R.array.numbers);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.states));
-=======
+
         fabAddPlace.setOnClickListener(this);
->>>>>>> f8053c288acffa83bbe6e26d889c11ca2570f62d
+
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

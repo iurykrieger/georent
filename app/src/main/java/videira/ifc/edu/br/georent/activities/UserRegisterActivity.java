@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -91,6 +92,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     private Spinner sRoom;
     private Spinner sBathroom;
     private Button btRegister;
+    private List<City> cities;
 
     private AutoCompleteTextView actvState;
     private AutoCompleteTextView actvCity;
@@ -104,10 +106,10 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         setContentView(R.layout.activity_user_register);
 
         List<String> mListUserImage = new ArrayList<String>();
-        List<String> mNameCities = new ArrayList<String>();
 
         mCityRepository = new CityRepository(this, this);
         mUserRepository = new UserRepository(this, this);
+        mUser = new User();
 
         etName = (EditText) findViewById(R.id.et_name_user);
         etEmail = (EditText) findViewById(R.id.et_email_user);
@@ -225,9 +227,15 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
         actvState.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("Cidade Selecionada ->", parent.getItemAtPosition(position).toString());
                 mCityRepository.getCity(parent.getItemAtPosition(position).toString());
+            }
+        });
 
+        actvCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mUser.setIdCity(cities.get(position));
+                Log.i("LOG",cities.get(position).toString());
             }
         });
 
@@ -315,7 +323,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     @Override
     public void doLoad() {
         if (NetworkUtil.verifyConnection(this)) {
-            mUser = new User();
             mPreference = new Preference();
 
             mUser.setName(etName.getText().toString());
@@ -341,10 +348,6 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
             mPreference.setBathroom(java.lang.Integer.getInteger(sBathroom.getSelectedItem().toString()));
 
             mUser.setIdPreference(mPreference);
-            City c = FakeGenerator.getInstance().getResidences().get(0).getIdLocation().getIdCity();
-            c.setIdCity(1);
-            mUser.setIdCity(c);
-
             mUserRepository.createUser(mUser);
         } else {
             doError(new UnknownHostException());
@@ -396,6 +399,7 @@ public class UserRegisterActivity extends AppCompatActivity implements ViewPager
     @Override
     public void bindCities(List<City> cities) {
         mNameCities = new ArrayList<String>();
+        this.cities = cities;
 
         for (City city : cities) {
             mNameCities.add(city.getName().toString());

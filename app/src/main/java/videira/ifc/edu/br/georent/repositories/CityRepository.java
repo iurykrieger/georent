@@ -51,6 +51,7 @@ public class CityRepository implements Transaction {
     public HashMap<String, String> doBefore() {
         if (NetworkUtil.verifyConnection(mContext)) {
             params.put("jsonObject", gson.toJson(mCity));
+            params.put("idCity", String.valueOf(mCity.getIdCity()));
             params.put("name", mCity.getName());
         }
         return params;
