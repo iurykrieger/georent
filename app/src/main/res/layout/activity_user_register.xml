@@ -170,22 +170,25 @@
                                 android:hint="@string/hint_birthDate" />
                         </android.support.design.widget.TextInputLayout>
 
-                        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                            android:id="@+id/spn_state_user_register"
+                        //Estado
+                        <AutoCompleteTextView
+                            android:id="@+id/acet_state_user_register"
+                            android:hint="@string/hint_state"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/state"
-                            android:textColorHint="@color/primary_text"
-                            app:met_floatingLabel="normal"/>
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:ems="10" />
 
-                        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                            android:id="@+id/spn_cities_user_register"
+                        //Cidade
+                        <AutoCompleteTextView
+                            android:id="@+id/acet_city_user_register"
+                            android:hint="@string/hint_city"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/city"
-                            android:textColorHint="@color/primary_text"
-                            app:met_floatingLabel="normal"/>
-
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:ems="10" />
 
                         //Tel
                         <android.support.design.widget.TextInputLayout

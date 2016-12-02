@@ -78,7 +78,6 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
     private Spinner sVacancy;
     private Spinner sRoom;
     private Spinner sBathroom;
-    private MaterialBetterSpinner spnState;
     private Button btRegister;
 
     private List<String> mListUserImage;
@@ -102,7 +101,6 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         sVacancy = (Spinner) findViewById(R.id.spinner_vacancy);
         sRoom = (Spinner) findViewById(R.id.spinner_rooms);
         sBathroom = (Spinner) findViewById(R.id.spinner_bathroom);
-        spnState = (MaterialBetterSpinner) findViewById(R.id.spn_state_user_register);
         btRegister = (Button) findViewById(R.id.bt_register_user);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.vp_user);
@@ -171,8 +169,6 @@ public class ResidenceRegisterActivity extends AppCompatActivity implements Bind
         numbers = getResources().getStringArray(R.array.numbers);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.states));
-        spnState.setAdapter(arrayAdapter);
-
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

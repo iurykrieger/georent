@@ -109,6 +109,7 @@
     <string name="residence_image_service">residenceImage</string>
     <string name="login">login</string>
     <string name="user_image_service">userImage</string>
+    <string name="city_service">city</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
