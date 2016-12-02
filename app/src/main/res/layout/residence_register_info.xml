@@ -56,37 +56,25 @@
                 android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
-        <!-- City -->
-        <android.support.design.widget.TextInputLayout
+        //Estado
+        <AutoCompleteTextView
+            android:id="@+id/acet_state_state_register"
+            android:hint="@string/hint_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:ems="10" />
 
-            <EditText
-                android:id="@+id/et_city_residence_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/hint_city" />
-        </android.support.design.widget.TextInputLayout>
-
-        <!-- State -->
-        <android.support.design.widget.TextInputLayout
+        //Cidade
+        <AutoCompleteTextView
+            android:id="@+id/acet_city_residence_register"
+            android:hint="@string/hint_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/et_state_residence_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/hint_state" />
-        </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="10dp"
+            android:ems="10" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -16,11 +16,14 @@ import java.util.List;
 
 import videira.ifc.edu.br.georent.R;
 import videira.ifc.edu.br.georent.adapters.GsonAdapter;
+import videira.ifc.edu.br.georent.enums.ActionEnum;
 import videira.ifc.edu.br.georent.interfaces.Bind;
 import videira.ifc.edu.br.georent.interfaces.Transaction;
 import videira.ifc.edu.br.georent.models.NetworkObject;
 import videira.ifc.edu.br.georent.models.ResidenceImage;
+import videira.ifc.edu.br.georent.models.UserImage;
 import videira.ifc.edu.br.georent.network.JSONArrayRequest;
+import videira.ifc.edu.br.georent.network.JSONObjectRequest;
 import videira.ifc.edu.br.georent.network.NetworkConnection;
 import videira.ifc.edu.br.georent.utils.AuthUtil;
 import videira.ifc.edu.br.georent.utils.NetworkUtil;
@@ -38,6 +41,8 @@ public class ResidenceImageRepository implements Transaction {
     private Context mContext;
     private Gson gson;
     private Bind bind;
+    private ResidenceImage mResidenceImage;
+    private ActionEnum action;
     private int range;
 
     /**
@@ -48,6 +53,7 @@ public class ResidenceImageRepository implements Transaction {
         this.mContext = mContext;
         this.bind = bind;
         this.range = 0;
+        this.mResidenceImage = new ResidenceImage();
         this.service = NetworkUtil.getStringUrl(mContext, R.string.residence_image_service);
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd")
                 .registerTypeAdapter(Boolean.class, GsonAdapter.booleanAsIntAdapter)
@@ -64,10 +70,10 @@ public class ResidenceImageRepository implements Transaction {
     public HashMap<String, String> doBefore() {
         //Verifica conexão com a internet
         if (NetworkUtil.verifyConnection(mContext)) {
-            ResidenceImage residenceImage = new ResidenceImage();
             HashMap<String, String> params = new HashMap<>();
-            params.put("jsonObject", gson.toJson(residenceImage));
+            params.put("jsonObject", gson.toJson(mResidenceImage));
             params.put("api_token", AuthUtil.getLoggedUserToken(mContext));
+            Log.i("JSONRi",params.toString());
             return params;
         }
         return null;
@@ -123,6 +129,13 @@ public class ResidenceImageRepository implements Transaction {
         Log.i("URL", service);
         NetworkConnection.getInstance(mContext).executeJSONArrayRequest(this, mContext.getClass().getName(),
                 JSONArrayRequest.Method.GET, service);
+    }
+
+    public void createResidenceImage(ResidenceImage residenceImage) {
+        mResidenceImage = residenceImage;
+        action = ActionEnum.ACTION_STORE;
+        Log.i("URL", service);
+        NetworkConnection.getInstance(mContext).executeJSONObjectRequest(this, mContext.getClass().getName(), JSONObjectRequest.Method.POST, service);
     }
 
     public void cancelRequests() {

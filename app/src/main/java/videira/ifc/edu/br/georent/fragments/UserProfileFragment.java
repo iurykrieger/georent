@@ -105,7 +105,8 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
         final TextView tvRange = (TextView) mView.findViewById(R.id.tv_range_user_profile);
 
         if (mUser.getProfileImage() != null) {
-            cnivUser.setImageUrl(mUser.getProfileImage().getPath(), NetworkConnection.getInstance(getActivity()).getImageLoader());
+            String url = NetworkUtil.getStringUrl(getActivity(), R.string.user_image_service) + "/" + mUser.getProfileImage().getIdUserImage() + "/medium";
+            cnivUser.setImageUrl(url, NetworkConnection.getInstance(getActivity()).getImageLoader());
         }
         tvName.setText(mUser.getName());
         tvEmail.setText(mUser.getEmail());
@@ -116,9 +117,11 @@ public class UserProfileFragment extends Fragment implements Bind<User>, Compoun
         } else {
             tvType.setText(getString(R.string.occupier));
         }
-        tvLocation.setText(mUser.getIdLocation().getIdCity().getName() + " - " +
-                mUser.getIdLocation().getIdCity().getUf() + ". ");
-        tvRange.setText("Distância de busca : " + mUser.getDistance() + "Km");
+        if (mUser.getIdLocation() != null) {
+            tvLocation.setText(mUser.getIdLocation().getIdCity().getName() + " - " +
+                    mUser.getIdLocation().getIdCity().getUf() + ". ");
+            tvRange.setText("Distância de busca : " + mUser.getDistance() + "Km");
+        }
     }
 
     @Override
